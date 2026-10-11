@@ -20,7 +20,7 @@ export async function initialize() {
   const state={schema_version:1,title:'The Autonomous Observatory',created_at:at,updated_at:at,revision:0,schedule:{factory_minutes:60,loop_minutes:5,status:'preparing',requires:'Mac awake and Codex running',next_launch_at:after(at,60),next_tick_at:at},experiments:[experiment],launches:[{id:experiment.id,type:experiment.type,title:experiment.title,at,reason:'An organizational autonomy demonstration: operations, purchasing and accounting under one real set of simulated rules.'}]};
   await atomic(STATE,state); return state;
 }
-export async function publicState() { const state=await read(STATE); const {_last_commit_token,...publicRoot}=state; return {...publicRoot,experiments:state.experiments.map(e=>{const p=toPublicExperiment(e);return {...p,timeline:p.timeline.slice(-120)};})}; }
+export async function publicState() { const state=await read(STATE); const {_last_commit_token,...publicRoot}=state; return {...publicRoot,experiments:state.experiments.map(e=>{const p=toPublicExperiment(e);return {...p,timeline:p.timeline.slice(-12)};})}; }
 export async function publicEventsAfter(existing) { const state=await read(STATE);return Object.fromEntries(state.experiments.map(e=>{const old=existing.experiments?.find(x=>x.id===e.id);const p=toPublicExperiment(e);return [e.id,p.timeline.filter(event=>event.turn>(old?.turn||0))];})); }
 export async function begin({force=false}={}) {
   const state=await initialize(), at=now();

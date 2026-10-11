@@ -73,7 +73,7 @@ function validateState(state, expectedRevision) {
     if (!object(e) || e.schema_version !== 1 || !short(e.id, 120) || ids.has(e.id) || !short(e.type, 120) || !short(e.title) || !short(e.description, 10000)) throw new Error('Invalid experiment identity');
     ids.add(e.id);
     if (!iso(e.created_at) || !iso(e.updated_at) || !['active', 'insolvent', 'completed'].includes(e.status)) throw new Error('Invalid experiment metadata');
-    if (!Array.isArray(e.timeline) || !integer(e.turn) || e.timeline.length !== Math.min(e.turn, 120)) throw new Error('Invalid bounded experiment timeline');
+    if (!Array.isArray(e.timeline) || !integer(e.turn) || e.timeline.length > Math.min(e.turn, 120) || (e.turn > 0 ? e.timeline.length < 1 : e.timeline.length !== 0)) throw new Error('Invalid bounded experiment timeline');
     if (!Array.isArray(e.roles) || !Array.isArray(e.metrics) || !object(e.memory) || !object(e.world) || !Array.isArray(e.allowed_actions)) throw new Error('Invalid experiment public state');
     for (let i = 0; i < e.timeline.length; i++) {
       const t = e.timeline[i];
