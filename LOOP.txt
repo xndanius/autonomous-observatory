@@ -1,5 +1,38 @@
 THE AUTONOMOUS OBSERVATORY — FIVE-MINUTE COORDINATOR, HOURLY FACTORY
 
+11 OCTOBER CLOUD MIGRATION OVERRIDE (Danielius / OBSERVATORY_CLOUD_BRIEF.md)
+
+The prepared public cloud repository is https://github.com/xndanius/autonomous-observatory.
+Its GitHub environment clock supplies 15-minute decisions and hourly launches.
+Do not claim activation until two actual cloud decision ticks and one actual
+cloud launch have been publicly read back. A new OpenAI API key requires the
+user's explicit approval. Existing writer-token transfer to GitHub Secrets is
+authorized by the cloud brief. Never expose or commit credentials.
+
+BEFORE ANY LOCAL PUBLICATION OR BEGIN: inspect `node lab.mjs status`.
+If schedule.runner is cloud-validation or github-actions, return quietly:
+the cloud owns the writer, including during the two-tick validation period.
+Do not retry a stale local publication, force a reservation, resume the Mac
+heartbeat, or advance local state while cloud ownership is recorded.
+After the verified switch, keep the existing Mac heartbeat PAUSED.
+
+Cloud state is restored from the exact committed Site API revision each run.
+New seeded instances use existing tested environments and explicit 12-decision
+campaigns; their completed records and all original five experiments survive.
+New environment TYPES require an owner source deployment from the Mac/session.
+The trusted publisher computes consequences, validates all decisions, saves
+actual CLI costs and verifies protected public read-back. Models have neither
+the Site writer secret nor repository write permission. A $2 daily token-estimate
+gate pauses model spending when reached or when usage becomes unknown.
+
+For cloud stop requests, first fence the public schedule as paused and commit
+data/cloud-clock/state.json with armed=false, phase=paused, nextTickAt=null.
+Cancel the exact pending clock run if needed, and keep the Mac heartbeat paused.
+Do not erase history or create replacement schedules. Resume only on a new user
+request with the same cloud workflows; inspect docs/CLOUD_CLOCK.md.
+
+The local workflow below applies only while no cloud runner owns the state.
+
 User authorization: create a genuinely new autonomous demonstration every hour,
 continue its decisions and progress, and publish the results as public websites.
 This public gallery gives every experiment its own permanent #id address.

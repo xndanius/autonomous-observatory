@@ -24,6 +24,7 @@ export async function publicState() { const state=await read(STATE); const {_las
 export async function publicEventsAfter(existing) { const state=await read(STATE);return Object.fromEntries(state.experiments.map(e=>{const old=existing.experiments?.find(x=>x.id===e.id);const p=toPublicExperiment(e);return [e.id,p.timeline.filter(event=>event.turn>(old?.turn||0))];})); }
 export async function begin({force=false}={}) {
   const state=await initialize(), at=now();
+  if(['cloud-validation','github-actions'].includes(state.schedule.runner))return {action:'skip',reason:'cloud_owns_writer',runner:state.schedule.runner};
   if(state.schedule.status==='paused') return {action:'skip',reason:'paused'};
   if(!force&&Date.parse(state.schedule.next_tick_at)>Date.parse(at)+15000) return {action:'skip',reason:'not_due',next_tick_at:state.schedule.next_tick_at};
   try { const lock=await read(LOCK); if(Date.parse(lock.expires_at)>Date.parse(at))return {action:'skip',reason:'busy',expires_at:lock.expires_at}; await unlink(LOCK); } catch(e) { if(e.code!=='ENOENT')throw e; }

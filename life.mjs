@@ -4,6 +4,11 @@ const HISTORY_LIMIT = 12;
 const GUIDE_LIMIT = 64;
 const clone = value => JSON.parse(JSON.stringify(value));
 const record = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+// Public storage sorts object keys. Compare their values semantically while
+// retaining array order, including the exact order of measured generations.
+const canonical = value => Array.isArray(value) ? `[${value.map(canonical).join(',')}]`
+  : record(value) ? `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonical(value[key])}`).join(',')}}`
+    : JSON.stringify(value);
 const mod = n => ((n % LIFE_SIZE) + LIFE_SIZE) % LIFE_SIZE;
 const metric = (label, value, unit = '') => ({ label, value, unit });
 const kinds = ['fixed', 'oscillator', 'traveller', 'extinction', 'unknown'];
@@ -281,18 +286,18 @@ export function validateLifeWorld(world) {
       for (let i = 1; i < frames.length; i += 1) if (packLifeFrame(stepLife(frames[i - 1])) !== trial.frames[i]) { errors.push(`Forged B3/S23 generation in ${trial.id}.`); break; }
       if (!kinds.includes(trial.actual?.kind) || !['confirmed', 'rejected', 'unassessed'].includes(trial.claim?.status)) errors.push('Invalid life result.');
       const computedActual = classifyLifeFrames(trial.frames);
-      if (JSON.stringify(trial.actual) !== JSON.stringify(computedActual)) errors.push('Forged life classification.');
-      if (JSON.stringify(trial.hypothesis) !== JSON.stringify(p.hypothesis) || JSON.stringify(trial.claim) !== JSON.stringify(compareClaim(p.hypothesis, computedActual))) errors.push('Forged life hypothesis outcome.');
+      if (canonical(trial.actual) !== canonical(computedActual)) errors.push('Forged life classification.');
+      if (canonical(trial.hypothesis) !== canonical(p.hypothesis) || canonical(trial.claim) !== canonical(compareClaim(p.hypothesis, computedActual))) errors.push('Forged life hypothesis outcome.');
       if (trial.seed_signature !== signature(frames[0])) errors.push('Forged life seed signature.');
       if (trial.alive_initial !== frames[0].length || trial.alive_final !== frames.at(-1).length) errors.push('Life alive-cell counts do not reconcile.');
       if (!record(trial.replication) || trial.replication.passed !== true || trial.replication.compared_frames !== frames.length) errors.push('Missing verified translated life reproduction.');
       if (JSON.stringify(trial.replication?.shift) !== '[5,7]' || trial.replication?.steps !== p.steps || trial.replication?.first_mismatch !== null) errors.push('Invalid translated life replication inputs.');
       const repeated = simulate(translateLifeCells(frames[0], 5, 7), p.steps);
-      if (JSON.stringify(trial.replication?.actual) !== JSON.stringify(classifyLifeFrames(repeated))) errors.push('Forged independent life classification.');
+      if (canonical(trial.replication?.actual) !== canonical(classifyLifeFrames(repeated))) errors.push('Forged independent life classification.');
       if (trial.replication?.passed && (trial.replication.seed_frame !== packLifeFrame(translateLifeCells(frames[0], ...trial.replication.shift)) || trial.replication.final_frame !== packLifeFrame(translateLifeCells(frames.at(-1), ...trial.replication.shift)))) errors.push('Life reproduction endpoints do not match.');
     }
     if (world.experiments_tested === 0 && world.latest_record !== null) errors.push('Untested life world has a trial record.');
-    if (world.experiments_tested > 0 && (JSON.stringify(world.latest_record) !== JSON.stringify(world.records.at(-1)) || packLifeFrame(world.cells) !== world.latest_record.frames.at(-1))) errors.push('Latest life record or cells do not reconcile.');
+    if (world.experiments_tested > 0 && (canonical(world.latest_record) !== canonical(world.records.at(-1)) || packLifeFrame(world.cells) !== world.latest_record.frames.at(-1))) errors.push('Latest life record or cells do not reconcile.');
   } catch (error) { errors.push(`Malformed life world: ${error.message}`); }
   return { valid: errors.length === 0, errors };
 }

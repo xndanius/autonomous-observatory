@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "armed": false,
+  "phase": "paused",
+  "chainId": null,
+  "generation": 0,
+  "expectedRunId": null,
+  "expectedRunAttempt": 0,
+  "parentRunId": null,
+  "parentRunAttempt": 0,
+  "claimedAt": null,
+  "lastTickAt": null,
+  "nextTickAt": null,
+  "clockRunUrl": null,
+  "lastTickRunUrl": null,
+  "lastDecisionRunUrl": null,
+  "waitMinutes": 15
+}

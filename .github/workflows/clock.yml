@@ -1,0 +1,106 @@
+name: Observatory environment clock
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: Owner starts, pauses or resets; successors use continue
+        type: choice
+        options: [start, continue, pause, reset]
+        default: start
+      chain_id:
+        description: Exact authorized chain; leave blank for an owner command
+        type: string
+        default: ''
+      parent_run_id:
+        description: Exact preceding clock run from its receipt
+        type: string
+        default: ''
+      parent_run_attempt:
+        description: Exact preceding clock attempt
+        type: string
+        default: ''
+      generation:
+        description: Exact successor generation from the committed state
+        type: string
+        default: ''
+permissions:
+  contents: read
+concurrency:
+  group: observatory-clock
+  cancel-in-progress: false
+  queue: max
+env:
+  CLOCK_COMMAND: ${{ inputs.command }}
+  CLOCK_CHAIN_ID: ${{ inputs.chain_id }}
+  CLOCK_PARENT_RUN_ID: ${{ inputs.parent_run_id }}
+  CLOCK_PARENT_RUN_ATTEMPT: ${{ inputs.parent_run_attempt }}
+  CLOCK_GENERATION: ${{ inputs.generation }}
+jobs:
+  claim:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      actions: read
+    concurrency:
+      group: observatory-record
+      cancel-in-progress: false
+      queue: max
+    outputs:
+      claimed: ${{ steps.claim.outputs.claimed }}
+      phase: ${{ steps.claim.outputs.phase }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - id: claim
+        name: Claim the singleton before the environment wait
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/cloud-clock.mjs claim
+  timer:
+    needs: claim
+    if: needs.claim.outputs.claimed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    environment:
+      name: clock
+      deployment: false
+    steps:
+      - name: The environment wait released this job
+        run: echo 'The fifteen-minute environment wait released this job.'
+  tick:
+    needs: [claim, timer]
+    if: needs.claim.outputs.claimed == 'true' && needs.timer.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      actions: write
+    concurrency:
+      group: observatory-record
+      cancel-in-progress: false
+      queue: max
+    outputs:
+      ticked: ${{ steps.tick.outputs.ticked }}
+      child_run_id: ${{ steps.tick.outputs.child_run_id }}
+      decision_run_id: ${{ steps.tick.outputs.decision_run_id }}
+      last_tick_at: ${{ steps.tick.outputs.last_tick_at }}
+      next_tick_at: ${{ steps.tick.outputs.next_tick_at }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - id: tick
+        name: Dispatch the exact decision run, commit its receipt and chain once
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/cloud-clock.mjs tick

@@ -194,6 +194,33 @@ function hash(value) {
   return h >>> 0;
 }
 
+/** Seeds select starting conditions, never an existing experiment's history. */
+export function normalizeExperimentSeed(seed) {
+  if (!isRecord(seed)) throw new TypeError('seed must be an object.');
+  for (const key of Object.keys(seed)) if (!['version', 'value'].includes(key)) throw new RangeError(`Unknown seed parameter: ${key}.`);
+  if (seed.version !== 1) throw new RangeError('Unknown seed version; only version 1 is supported.');
+  return { version: 1, value: boundedString(seed.value, 'seed.value', 160) };
+}
+
+function seededRandom(experiment, namespace) {
+  let state = hash(`${experiment.type}:v${experiment.seed.version}:${experiment.seed.value}:${namespace}`) || 1;
+  return limit => {
+    state ^= state << 13;
+    state ^= state >>> 17;
+    state ^= state << 5;
+    return (state >>> 0) % limit;
+  };
+}
+
+function shuffled(values, random) {
+  const result = [...values];
+  for (let i = result.length - 1; i > 0; i -= 1) {
+    const j = random(i + 1);
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 function canonical(value) {
   if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
   if (isRecord(value)) return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonical(value[key])}`).join(',')}}`;
@@ -223,8 +250,8 @@ function companyOrder(id, turn, service, price) {
   };
 }
 
-function initializeCompany() {
-  return {
+function initializeCompany(experiment) {
+  const world = {
     cash_cents: 120000,
     inventory: {
       tube: { quantity: 6, book_value_cents: 6000 },
@@ -240,6 +267,20 @@ function initializeCompany() {
       revenue_cents: 0, expense_cents: 0, ledger: [], archived_ledger: { entries: 0, last_turn: 0,
         cash_delta_cents: 0, inventory_delta_cents: 0, revenue_delta_cents: 0, expense_delta_cents: 0 } },
   };
+  if (experiment.seed !== undefined) {
+    const random = seededRandom(experiment, 'company-opening');
+    world.cash_cents = 90000 + random(61) * 1000;
+    for (const [i, part] of PARTS.entries()) {
+      const quantity = [3, 2, 2][i] + random([8, 5, 7][i]);
+      world.inventory[part] = { quantity, book_value_cents: quantity * BASE_PART_COSTS[part] };
+    }
+    for (const [service, settings] of Object.entries(SERVICES)) world.prices_cents[service] = settings.base_price_cents + (random(11) - 5) * 100;
+    world.orders = Object.keys(SERVICES).map((service, i) => companyOrder(i + 1, 0, service, world.prices_cents[service]));
+    world.accounting.opening_cash_cents = world.cash_cents;
+    world.accounting.opening_inventory_cents = inventoryValue(world);
+    world.accounting.opening_equity_cents = world.cash_cents + inventoryValue(world);
+  }
+  return world;
 }
 
 function compactCompany(world) {
@@ -397,6 +438,14 @@ function languageOracle(id) {
   };
 }
 
+function experimentLanguageOracle(experiment) {
+  if (experiment.seed === undefined) return languageOracle(experiment.id);
+  const random = seededRandom(experiment, 'language-oracle');
+  const words = shuffled(['mi', 'tu', 'na', 'vek', 'lom', 'sir', 'esh', 'dor', 'ilu'], random);
+  return { lexicon: Object.fromEntries(LANGUAGE_WORDS.map((word, i) => [word, words[i]])),
+    word_order: ['SOV', 'SVO', 'VSO'][random(3)], past_marker: ['ka', 'zo', 'ri'][random(3)] };
+}
+
 function languageFixture(subject, verb, object, tense) { return { subject, verb, object, tense }; }
 function withheldLanguageFixtures(id) {
   const offset = hash(`${id}:withheld`) % 3;
@@ -404,6 +453,21 @@ function withheldLanguageFixtures(id) {
     LANGUAGE_SUBJECTS[(i + offset) % 3], LANGUAGE_VERBS[Math.floor(i / 3)],
     LANGUAGE_OBJECTS[(i * 2 + Math.floor(i / 3)) % 3], i % 2 ? 'past' : 'present',
   ));
+}
+
+function experimentLanguageFixtures(experiment) {
+  if (experiment.seed === undefined) return withheldLanguageFixtures(experiment.id);
+  const fixtures = LANGUAGE_SUBJECTS.flatMap(subject => LANGUAGE_VERBS.flatMap(verb => LANGUAGE_OBJECTS.flatMap(object =>
+    ['present', 'past'].map(tense => languageFixture(subject, verb, object, tense))))).filter(fixture =>
+    !(fixture.subject === 'I' && fixture.verb === 'see' && fixture.object === 'star' && fixture.tense === 'present') &&
+    !(fixture.subject === 'you' && fixture.verb === 'carry' && fixture.object === 'stone' && fixture.tense === 'past'));
+  const random = seededRandom(experiment, 'language-holdout');
+  for (let attempt = 0; attempt < 64; attempt += 1) {
+    const selected = shuffled(fixtures, random).slice(0, 9);
+    const covered = new Set(selected.flatMap(fixture => [fixture.subject, fixture.verb, fixture.object]));
+    if (LANGUAGE_WORDS.every(word => covered.has(word)) && selected.some(fixture => fixture.tense === 'past')) return selected;
+  }
+  throw new Error('Could not generate a covered seeded language holdout.');
 }
 
 function sentenceEnglish(fixture) {
@@ -419,9 +483,9 @@ function translate(fixture, grammar) {
 }
 
 function initializeLanguage(experiment) {
-  const oracle = languageOracle(experiment.id);
+  const oracle = experimentLanguageOracle(experiment);
   const initial = [languageFixture('I', 'see', 'star', 'present'), languageFixture('you', 'carry', 'stone', 'past')];
-  experiment._private = { language_oracle: oracle, withheld_sentences: withheldLanguageFixtures(experiment.id) };
+  experiment._private = { language_oracle: oracle, withheld_sentences: experimentLanguageFixtures(experiment) };
   return {
     examples: initial.map((fixture, i) => ({ id: `example-${i + 1}`, turn: 0, kind: 'seed', ...fixture,
       english: sentenceEnglish(fixture), alien: translate(fixture, oracle) })),
@@ -456,8 +520,8 @@ function transitionLanguage(experiment, decision, turn) {
   const world = experiment.world;
   // Public browser forks can reconstruct a deterministic oracle without publishing
   // its full answer sheet as data. This puzzle is educational, not cryptographic.
-  const oracle = experiment._private?.language_oracle ?? languageOracle(experiment.id);
-  const withheld = experiment._private?.withheld_sentences ?? withheldLanguageFixtures(experiment.id);
+  const oracle = experiment._private?.language_oracle ?? experimentLanguageOracle(experiment);
+  const withheld = experiment._private?.withheld_sentences ?? experimentLanguageFixtures(experiment);
   const { action: chosen, params } = decision;
   const result = { observation: `${world.examples_observed ?? world.examples.length} observed examples, ${world.hypotheses.length} proposed rules, ${world.validation_runs ?? world.validations.length} completed tests.`,
     consequences: [], evidence: [], learned: [], actor: 'Researcher' };
@@ -564,8 +628,31 @@ function warehouse() {
     objective: 'Visit all pick cells and return to the depot with the fewest grid steps.' };
 }
 
-function routingFixtures() {
+function routingFixtures(experiment) {
   const fixture = (id, cells) => ({ id, picks: cells.map(([x, y]) => ({ x, y })) });
+  if (experiment?.seed !== undefined) {
+    const grid = warehouse();
+    const walls = new Set(grid.walls.map(cellKey));
+    const cells = [];
+    for (let y = 0; y < grid.height; y += 1) for (let x = 0; x < grid.width; x += 1) {
+      const cell = { x, y };
+      if (!walls.has(cellKey(cell)) && cellKey(cell) !== cellKey(grid.depot)) cells.push([x, y]);
+    }
+    const random = seededRandom(experiment, 'warehouse-fixtures');
+    const used = new Set();
+    const makeFixture = (id, count) => {
+      for (let attempt = 0; attempt < 64; attempt += 1) {
+        const picks = shuffled(cells, random).slice(0, count);
+        const signature = picks.map(cell => cell.join(',')).sort().join(';');
+        if (used.has(signature)) continue;
+        used.add(signature);
+        return fixture(id, picks);
+      }
+      throw new Error('Could not generate distinct seeded routing fixtures.');
+    };
+    return { training: [6, 7, 6, 7].map((count, i) => makeFixture(`training-${i + 1}`, count)),
+      holdout: [6, 7, 7].map((count, i) => makeFixture(`withheld-${i + 1}`, count)) };
+  }
   return {
     training: [
       fixture('training-1', [[1, 1], [10, 7], [4, 6], [8, 1], [2, 7], [11, 2]]),
@@ -655,7 +742,7 @@ function evaluateCandidate(grid, fixtures, candidate) {
 
 function initializeLeague(experiment) {
   const grid = warehouse();
-  const fixtures = routingFixtures();
+  const fixtures = routingFixtures(experiment);
   experiment._private = { routing_holdout: fixtures.holdout };
   const champion = { name: 'Column order baseline', heuristic: 'axis', params: {}, adopted_turn: 0 };
   const training = evaluateCandidate(grid, fixtures.training, champion);
@@ -687,7 +774,7 @@ function transitionLeague(experiment, decision, turn) {
     const candidate = { id: `candidate-${(world.candidates_tested ?? world.candidates.length) + 1}`, name, heuristic: params.heuristic,
       params: clone(weights), turn };
     const training = evaluateCandidate(world.challenge, world.fixtures, candidate);
-    const withheld = experiment._private?.routing_holdout ?? routingFixtures().holdout;
+    const withheld = experiment._private?.routing_holdout ?? routingFixtures(experiment).holdout;
     const heldout = evaluateCandidate(world.challenge, withheld, candidate);
     const before = world.champion;
     const promoted = training.steps < before.training_steps && heldout.steps <= before.unseen_steps;
@@ -754,11 +841,30 @@ function cityForcing(turn, extraRain = 0, debrisDistrict = 'none') {
     debris_district, overrides: { extra_rain: extraRain, debris_district: debrisDistrict }, debris_penalties, crises };
 }
 
-function initializeCity() {
-  return { districts: CITY_SEED.map(district => ({ ...district, upgrades: 0, cumulative_unserved: 0 })),
+function initializeCity(experiment) {
+  const world = { districts: CITY_SEED.map(district => ({ ...district, upgrades: 0, cumulative_unserved: 0 })),
     budget: 12, opening_budget: 12, cumulative_spent: 0, cumulative_income: 0, cumulative_clipped_income: 0,
     forcing_turn: 0, next_forcing: cityForcing(1), latest_receipt: null, receipts: [], total_unserved: 0, equity_gap: 0,
     agent_memory: { planner: null, residents: null, auditor: null } };
+  if (experiment.seed !== undefined) {
+    const random = seededRandom(experiment, 'city-opening');
+    for (const district of world.districts) {
+      district.water = random(district.storage_cap + 1);
+      district.wear = random(4);
+    }
+  }
+  return world;
+}
+
+function initializeSeededLife(experiment) {
+  const world = initializeLife();
+  if (experiment.seed !== undefined) {
+    const random = seededRandom(experiment, 'life-opening');
+    // Bounded custom patterns change the initial experiment, not the B3/S23 rule.
+    const cells = Array.from({ length: world.width * world.height }, (_, index) => [index % world.width, Math.floor(index / world.width)]);
+    world.cells = shuffled(cells, random).slice(0, 5 + random(12)).sort((a, b) => a[1] - b[1] || a[0] - b[0]);
+  }
+  return world;
 }
 
 function cityParams(params) {
@@ -941,7 +1047,16 @@ function transitionLife(experiment, decision) {
 const snapshots = { 'bicycle-company': companySnapshot, 'alien-language': languageSnapshot, 'invention-league': leagueSnapshot, 'flood-city': citySnapshot, 'life-research': lifeSnapshot };
 const transitions = { 'bicycle-company': transitionCompany, 'alien-language': transitionLanguage, 'invention-league': transitionLeague, 'flood-city': transitionCity, 'life-research': transitionLife };
 
-export function createExperiment({ id, type, createdAt = new Date().toISOString(), title, description } = {}) {
+function initializeExperimentWorld(experiment) {
+  if (experiment.type === 'bicycle-company') return initializeCompany(experiment);
+  if (experiment.type === 'alien-language') return initializeLanguage(experiment);
+  if (experiment.type === 'invention-league') return initializeLeague(experiment);
+  if (experiment.type === 'flood-city') return initializeCity(experiment);
+  if (experiment.type === 'life-research') return initializeSeededLife(experiment);
+  throw new RangeError(`Unknown experiment type: ${experiment.type}.`);
+}
+
+export function createExperiment({ id, type, createdAt = new Date().toISOString(), title, description, goal, seed, campaign_turn_limit } = {}) {
   boundedString(id, 'id', 120);
   if (!/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(id)) throw new RangeError('id must contain letters, digits, dots, underscores or hyphens.');
   if (!Object.hasOwn(TYPE_CATALOG, type)) throw new RangeError(`Unknown experiment type: ${type}.`);
@@ -953,11 +1068,18 @@ export function createExperiment({ id, type, createdAt = new Date().toISOString(
     created_at: at, updated_at: at, turn: 0, status: 'active', roles: clone(catalog.roles),
     metrics: [], timeline: [], memory: { observations: [], facts: clone(catalog.rules), last_decision: null },
     world: null, allowed_actions: clone(catalog.allowed_actions) };
-  if (type === 'bicycle-company') experiment.world = initializeCompany();
-  if (type === 'alien-language') experiment.world = initializeLanguage(experiment);
-  if (type === 'invention-league') experiment.world = initializeLeague(experiment);
-  if (type === 'flood-city') experiment.world = initializeCity();
-  if (type === 'life-research') experiment.world = initializeLife();
+  if (goal !== undefined) experiment.goal = boundedString(goal, 'goal', 2000);
+  if (seed !== undefined) experiment.seed = normalizeExperimentSeed(seed);
+  if (campaign_turn_limit !== undefined) {
+    assertNumber(campaign_turn_limit, 1, 10000, 'campaign_turn_limit', true);
+    experiment.campaign_turn_limit = campaign_turn_limit;
+  }
+  experiment.world = initializeExperimentWorld(experiment);
+  if (seed !== undefined) {
+    if (type === 'bicycle-company') experiment.memory.facts[0] = `Seeded opening: ${money(experiment.world.cash_cents)} cash, ${PARTS.map(part => `${experiment.world.inventory[part].quantity} ${part} parts`).join(', ')}; all opening accounts reconcile.`;
+    experiment.memory.facts.push(`Starting conditions use deterministic seed version ${experiment.seed.version}, value ${experiment.seed.value}.`);
+    if (goal !== undefined) experiment.memory.facts.push(`Goal: ${experiment.goal}`);
+  }
   updateMetrics(experiment);
   const validation = validateExperiment(experiment);
   if (!validation.valid) throw new Error(`Invalid initializer: ${validation.errors.join('; ')}`);
@@ -1062,6 +1184,12 @@ function validateCity(experiment, errors) {
 
 function validateCompany(experiment, errors) {
   const world = experiment.world;
+  if (experiment.seed !== undefined) {
+    const expected = initializeCompany(experiment).accounting;
+    for (const field of ['opening_cash_cents', 'opening_inventory_cents', 'opening_equity_cents']) {
+      if (world.accounting?.[field] !== expected[field]) errors.push(`Company ${field} does not match its seed.`);
+    }
+  }
   for (const part of PARTS) {
     const stock = world.inventory?.[part];
     if (!stock || !Number.isInteger(stock.quantity) || stock.quantity < 0 || !Number.isInteger(stock.book_value_cents) || stock.book_value_cents < 0) errors.push(`Invalid ${part} stock.`);
@@ -1098,7 +1226,13 @@ function validateLanguage(experiment, errors) {
   if (world.validation_runs !== undefined && world.validation_runs !== (world.archived_validations ?? 0) + world.validations.length) errors.push('Validation count does not reconcile.');
   if (world.hypotheses.some(hypothesis => !LANGUAGE_RULES.includes(hypothesis.rule) || !Number.isFinite(hypothesis.confidence) || hypothesis.confidence < 0 || hypothesis.confidence > 1 || !Number.isInteger(hypothesis.tested) || hypothesis.tested < hypothesis.passed || hypothesis.passed < 0)) errors.push('Invalid hypothesis evidence.');
   if (world.translation_accuracy !== null && (!Number.isFinite(world.translation_accuracy) || world.translation_accuracy < 0 || world.translation_accuracy > 1)) errors.push('Invalid translation accuracy.');
-  const oracle = experiment._private?.language_oracle ?? languageOracle(experiment.id);
+  const expectedOracle = experimentLanguageOracle(experiment);
+  const oracle = experiment._private?.language_oracle ?? expectedOracle;
+  if (experiment.seed !== undefined) {
+    if (world.withheld_sentence_count !== 9) errors.push('Invalid seeded language withheld count.');
+    if (canonical(oracle) !== canonical(expectedOracle)) errors.push('Private language oracle does not match its seed.');
+    if (experiment._private?.withheld_sentences !== undefined && canonical(experiment._private.withheld_sentences) !== canonical(experimentLanguageFixtures(experiment))) errors.push('Private language fixtures do not match their seed.');
+  }
   if (world.examples.some(example => !LANGUAGE_SUBJECTS.includes(example.subject) || !LANGUAGE_VERBS.includes(example.verb) || !LANGUAGE_OBJECTS.includes(example.object) || !['present', 'past'].includes(example.tense) || example.alien !== translate(example, oracle))) errors.push('Observed example contradicts the language oracle.');
 }
 
@@ -1118,6 +1252,15 @@ function validRoute(grid, route) {
 function validateLeague(experiment, errors) {
   const world = experiment.world;
   if (!isRecord(world.challenge) || !Array.isArray(world.fixtures) || !isRecord(world.champion) || !Array.isArray(world.candidates) || !Array.isArray(world.leaderboard)) { errors.push('Missing routing state.'); return; }
+  if (experiment.seed !== undefined) {
+    const expected = routingFixtures(experiment);
+    if (canonical(world.challenge) !== canonical(warehouse()) || canonical(world.fixtures) !== canonical(expected.training)) errors.push('Routing challenge or fixtures do not match their seed.');
+    if (world.withheld_fixture_count !== expected.holdout.length) errors.push('Invalid seeded routing withheld count.');
+    if (experiment._private?.routing_holdout !== undefined && canonical(experiment._private.routing_holdout) !== canonical(expected.holdout)) errors.push('Private routing fixtures do not match their seed.');
+    const training = evaluateCandidate(world.challenge, expected.training, world.champion);
+    const heldout = evaluateCandidate(world.challenge, expected.holdout, world.champion);
+    if (canonical(world.champion.routes) !== canonical(training.routes) || world.champion.unseen_steps !== heldout.steps) errors.push('Champion routes or withheld score do not match seeded fixtures.');
+  }
   if (!validRoute(world.challenge, world.replay)) errors.push('Invalid replay path.');
   if (!Array.isArray(world.champion.routes) || world.champion.routes.some(route => !validRoute(world.challenge, route))) errors.push('Invalid champion route.');
   if (world.champion.training_steps !== sum(world.champion.routes.map(route => route.steps))) errors.push('Champion training score does not match route paths.');
@@ -1131,7 +1274,12 @@ function validateLeague(experiment, errors) {
   }
 }
 
-/** Returns a report; malformed data is reported instead of throwing. */
+/**
+ * Returns a report; malformed data is reported instead of throwing.
+ * Legacy experiments require the complete timeline. A checkpoint may explicitly
+ * declare timeline_start_turn for a contiguous suffix ending at the current turn;
+ * its omitted events must remain in the caller's immutable history archive.
+ */
 export function validateExperiment(experiment) {
   const errors = [];
   try {
@@ -1141,14 +1289,20 @@ export function validateExperiment(experiment) {
     if (!Object.hasOwn(TYPE_CATALOG, experiment.type)) errors.push('Unknown experiment type.');
     if (!['active', 'completed', 'insolvent'].includes(experiment.status)) errors.push('Invalid status.');
     if (!Number.isInteger(experiment.turn) || experiment.turn < 0) errors.push('Invalid turn number.');
+    if (experiment.seed !== undefined && canonical(normalizeExperimentSeed(experiment.seed)) !== canonical(experiment.seed)) errors.push('Invalid seed metadata.');
+    if (experiment.goal !== undefined && boundedString(experiment.goal, 'goal', 2000) !== experiment.goal) errors.push('Invalid goal metadata.');
+    if (experiment.campaign_turn_limit !== undefined) assertNumber(experiment.campaign_turn_limit, 1, 10000, 'campaign_turn_limit', true);
     if (!Number.isFinite(Date.parse(experiment.created_at)) || !Number.isFinite(Date.parse(experiment.updated_at)) || Date.parse(experiment.updated_at) < Date.parse(experiment.created_at)) errors.push('Invalid experiment timestamps.');
-    if (!Array.isArray(experiment.timeline) || experiment.timeline.length !== experiment.turn) errors.push('Timeline length does not match turn.');
+    const timelineStart = experiment.timeline_start_turn === undefined ? 1 : experiment.timeline_start_turn;
+    if (!Number.isInteger(timelineStart) || timelineStart < 1 || timelineStart > Math.max(1, experiment.turn)) errors.push('Invalid timeline_start_turn.');
+    if (!Array.isArray(experiment.timeline) || experiment.timeline.length !== experiment.turn - timelineStart + 1 || (experiment.turn > 0 && experiment.timeline.length === 0)) errors.push('Timeline length does not match turn and timeline_start_turn.');
     if (!Array.isArray(experiment.metrics) || !Array.isArray(experiment.roles) || !Array.isArray(experiment.allowed_actions) || !isRecord(experiment.memory) || !isRecord(experiment.world)) errors.push('Missing experiment fields.');
     if (errors.length) return { valid: false, errors };
+    if (experiment.seed !== undefined && experiment.turn === 0 && canonical(experiment.world) !== canonical(initializeExperimentWorld({ ...experiment }))) errors.push('Starting world does not match its seed.');
     let previousTime = Date.parse(experiment.created_at);
     const decisionIds = new Set();
     for (const [i, event] of experiment.timeline.entries()) {
-      if (!isRecord(event) || event.turn !== i + 1 || !Number.isFinite(Date.parse(event.at)) || Date.parse(event.at) < previousTime) { errors.push(`Invalid timeline sequence at index ${i}.`); continue; }
+      if (!isRecord(event) || event.turn !== timelineStart + i || !Number.isFinite(Date.parse(event.at)) || Date.parse(event.at) < previousTime) { errors.push(`Invalid timeline sequence at index ${i}.`); continue; }
       previousTime = Date.parse(event.at);
       if (!isRecord(event.decision) || typeof event.decision.action !== 'string' || !isRecord(event.decision.params) || typeof event.reason !== 'string' || typeof event.observation !== 'string' || typeof event.consequence !== 'string' || !Array.isArray(event.evidence) || !Array.isArray(event.alternatives) || !isRecord(event.snapshot) || !isRecord(event.memory)) errors.push(`Missing timeline event fields at turn ${event.turn}.`);
       if (event.decision_id) { if (decisionIds.has(event.decision_id)) errors.push('Duplicate decision ID.'); decisionIds.add(event.decision_id); }

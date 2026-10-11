@@ -7,6 +7,33 @@ const experiment = (seed_template, hypothesis, extra = {}) => ({ action: 'experi
   name: `Test ${seed_template}`, seed_template, steps: 8, hypothesis, ...extra } });
 const run = decision => applyLifeDecision(initializeLife(), decision).world;
 
+test('canonical public storage preserves Life validation and deterministic replay without weakening evidence checks', () => {
+  const sortKeys = value => Array.isArray(value) ? value.map(sortKeys)
+    : value !== null && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map(key => [key, sortKeys(value[key])])) : value;
+  const reverseKeys = value => Array.isArray(value) ? value.map(reverseKeys)
+    : value !== null && typeof value === 'object' ? Object.fromEntries(Object.keys(value).reverse().map(key => [key, reverseKeys(value[key])])) : value;
+  let world = run(experiment('glider', { kind: 'traveller', period: 4, dx: 1, dy: 1 }, { steps: 16 }));
+  world = applyLifeDecision(world, experiment('blinker', { kind: 'fixed' })).world;
+  world = applyLifeDecision(world, experiment('r-pentomino', { kind: 'unknown' }, { steps: 4 })).world;
+  const restored = JSON.parse(JSON.stringify(sortKeys(world)));
+  // The latest-record copy may independently preserve a different key order.
+  restored.latest_record = reverseKeys(restored.latest_record);
+  assert.deepEqual(validateLifeWorld(restored), { valid: true, errors: [] });
+  const next = experiment('beacon', { kind: 'oscillator', period: 2 });
+  assert.deepEqual(applyLifeDecision(restored, next), applyLifeDecision(world, next));
+  for (const corrupt of [
+    w => { w.records[0].actual.period += 1; },
+    w => { w.records[0].hypothesis.dx = -1; },
+    w => { w.records[0].claim.status = 'rejected'; },
+    w => { w.records[0].replication.actual.dy = -1; },
+    w => { w.records[0].frames[1] = w.records[0].frames[0]; },
+  ]) {
+    const forged = JSON.parse(JSON.stringify(restored));
+    corrupt(forged);
+    assert.equal(validateLifeWorld(forged).valid, false);
+  }
+});
+
 test('still block, blinker and beacon classifications are measured from actual generations', () => {
   const block = run(experiment('block', { kind: 'fixed' }));
   assert.equal(new Set(block.latest_record.frames).size, 1);
