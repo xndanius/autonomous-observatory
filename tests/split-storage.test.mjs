@@ -95,6 +95,32 @@ test('staging is idempotent, content addressed, and invisible until a successful
   assert.deepEqual(await (await get(runtime, '/api/experiments/life-001/state')).json(), e);
 });
 
+test('experiment complexity is independently bounded while legacy roots and depth retain their limits', async () => {
+  const runtime = env(), full = state(), large = full.experiments[0];
+  large.world.measured_grid = Array.from({ length: 30 }, () => Array(10000).fill(0));
+  assert(Buffer.byteLength(JSON.stringify({ experiment: large })) < 4 * 1024 * 1024);
+  const ref = await stage(runtime, large);
+  assert.match(ref, /^[a-f0-9]{64}$/);
+  const legacy = await put(runtime, '/api/state', { expected_revision: 0, state: full });
+  assert.equal(legacy.status, 400);
+  assert.equal((await legacy.json()).error, 'Public state is too complex');
+  const before = runtime.BUCKET.objects.size;
+  const excessive = clone(large);
+  excessive.world.measured_grid.push(...Array.from({ length: 6 }, () => Array(10000).fill(0)));
+  const rejected = await put(runtime, `/api/experiments/${large.id}/state`, { experiment: excessive });
+  assert.equal(rejected.status, 400);
+  assert.equal((await rejected.json()).error, 'Public state is too complex');
+  assert.equal(runtime.BUCKET.objects.size, before);
+  const deep = clone(large);
+  delete deep.world.measured_grid;
+  deep.world.probe = Array.from({ length: 26 }).reduce(value => ({ nested: value }), {});
+  assert.equal((await put(runtime, `/api/experiments/${large.id}/state`, { experiment: deep })).status, 400);
+  assert.equal(runtime.BUCKET.objects.size, before);
+  const index = await indexed(runtime, full);
+  assert.equal((await publish(runtime, index)).status, 200);
+  assert.deepEqual(await (await get(runtime, `/api/experiments/${large.id}/state`)).json(), large);
+});
+
 test('compact index and status read no experiment blobs; individual and event reads load only the selected world', async () => {
   const runtime = env(), index = await indexed(runtime, state());
   await publish(runtime, index);

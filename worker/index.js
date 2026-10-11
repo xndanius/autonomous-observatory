@@ -5,6 +5,9 @@ const MUSEUM="/** A fictional museum with reproducible consistency checks. No ex
 // Public reads and an authenticated, conditional publication pointer in R2.
 const STATE_KEY = 'observatory/state.json';
 const MAX_BYTES = 4 * 1024 * 1024;
+// Experiment blobs have their own bounded tree budget. Compact publication
+// indexes and legacy combined writes retain the smaller root budget.
+const MAX_EXPERIMENT_NODES = 350000;
 const headers = {
   'cache-control': 'no-store',
   'x-content-type-options': 'nosniff',
@@ -50,10 +53,10 @@ async function authenticated(request, configured) {
   for (let n = 0; n < a.length; n++) different |= a.charCodeAt(n) ^ b.charCodeAt(n);
   return different === 0;
 }
-function validatePublicTree(value) {
+function validatePublicTree(value, maxNodes = 150000) {
   let nodes = 0;
   const visit = (x, depth) => {
-    if (++nodes > 150000 || depth > 24) throw new Error('Public state is too complex');
+    if (++nodes > maxNodes || depth > 24) throw new Error('Public state is too complex');
     if (typeof x === 'string' && x.length > 60000) throw new Error('Public text is too long');
     if (Array.isArray(x)) {
       if (x.length > 10000) throw new Error('Public arrays are too long');
@@ -99,7 +102,7 @@ function validateExperiment(e) {
     const t = e.timeline[i];
     if (!object(t) || t.turn !== e.turn - e.timeline.length + i + 1 || !iso(t.at) || !short(t.actor, 200) || !object(t.decision) || !short(t.decision.action, 120) || !object(t.decision.params) || !Array.isArray(t.evidence)) throw new Error('Invalid timeline entry');
   }
-  validatePublicTree(e);
+  validatePublicTree(e, MAX_EXPERIMENT_NODES);
 }
 function validateIndex(state, expected) {
   if (!object(state) || state.storage_format !== 'split-v1' || Object.keys(state).some(k => !ROOT_KEYS.includes(k))) throw new Error('Invalid compact index');
