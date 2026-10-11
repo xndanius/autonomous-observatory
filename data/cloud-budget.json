@@ -1,4 +1,13 @@
 {
   "schema_version": 1,
-  "runs": []
+  "runs": [
+    {
+      "id": "tick-38163966982-1",
+      "day": "2026-10-11",
+      "at": "2026-10-11T18:28:55.698Z",
+      "status": "reserved",
+      "charged_usd": 0.1,
+      "cost_usd": null
+    }
+  ]
 }
