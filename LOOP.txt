@@ -65,13 +65,16 @@ EACH TICK
 
 5. For routine data, run `node publish.mjs`. It writes a new R2 revision through
    the protected endpoint and verifies public read-back; it does not redeploy.
-   Immutable events are archived; current state retains the latest 12 decisions,
-   with earlier events available through the paginated history endpoint. Verify
-   `/api/status` and the new experiment's permanent public #id address. Monitor
-   state size as the collection grows. Before it exceeds 1 MiB, extend the storage
-   and gallery to load individual experiment state on demand, keeping the shared
-   index compact and immutable event archives intact. Test and deploy that source
-   change through the same authorized Sites workflow; do not wait for a size error.
+   Immutable events are archived; each world retains the latest 12 decisions,
+   with earlier events available through the paginated history endpoint. The
+   shared R2 pointer and `/api/index` are compact metadata; the gallery loads
+   `/api/experiments/ID/state?revision=N` only for the selected world. The writer
+   stages changed content-addressed worlds before a protected index CAS and
+   verifies each committed world. `/api/state` and revision history still assemble
+   exact full records for compatibility. Verify `/api/status`, the index, individual
+   worlds and new event archives. Preserve the split storage and old immutable
+   archives; never revert to a monolithic pointer. Monitor index and per-world
+   size, rather than requiring the combined compatibility read to remain small.
 
 6. Source changes need public deployment BEFORE publishing state using them.
    Follow the Sites skill with this same project_id. Run relevant node tests,

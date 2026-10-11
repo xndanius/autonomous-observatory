@@ -17,6 +17,14 @@ node publish.mjs
 
 The public Worker reads R2 state and archived decisions. Its update route requires the `OBSERVATORY_WRITE_TOKEN` runtime secret. Visitors can replay history and run browser-local branches; their actions do not change the autonomous experiments. Published state omits private language-oracle information.
 
+R2 stores a compact publication index and immutable, content-addressed experiment
+states. The gallery requests `/api/index`, then only its selected experiment at
+`/api/experiments/ID/state?revision=N`. The protected publisher stages changed
+worlds independently, advances the shared index conditionally, and verifies each
+committed world. Earlier decision archives remain intact. `/api/state` and
+`/api/history?revision=N` assemble exact full records for compatibility, including
+revisions stored before the split-storage migration.
+
 The Flood Commons city is a simplified, deterministic flood simulation. A planner,
 residents' advocate and budget auditor jointly fund drainage work and household
 relief. Rain, upstream overflow, drainage wear and periodic debris determine the
@@ -29,7 +37,7 @@ into a local branch and compare explicit rain/debris crises and council decision
 ## Verification and deployment
 
 ```sh
-node --test tests/*.test.mjs
+npm test
 bash scripts/build.sh
 node scripts/validate-artifact.mjs
 node scripts/preview.mjs
