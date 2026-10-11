@@ -43,6 +43,15 @@ accepted artifacts and rejected interpretations both remain visible. Curator
 approval means internal consistency with those premises, not historical
 authenticity.
 
+The Autonomous Repair Café contains four working calculator applications with
+defective original programs. Agents supply replacement arithmetic-expression
+source; independent fixtures measure its outputs and accept a repair only when
+every case passes. Rejected programs keep their measured receipts and return to
+the queue. Visitors can enter their own values and run the original and any
+saved candidate side by side. This is a finite regression suite, not proof that
+a program handles every possible input. Expressions have a bounded parser and
+cannot execute arbitrary JavaScript or access external systems.
+
 ## Verification and deployment
 
 ```sh

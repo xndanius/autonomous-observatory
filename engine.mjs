@@ -9,6 +9,7 @@
 
 import { initializeLife, applyLifeDecision, lifeMetrics, lifeSnapshot, validateLifeWorld, LIFE_ACTIONS } from './life.mjs';
 import { initializeMuseum, applyMuseumDecision, museumMetrics, museumSnapshot, validateMuseumWorld, validateMuseumParams, MUSEUM_ACTIONS } from './museum.mjs';
+import { initializeRepair, applyRepairDecision, repairMetrics, repairSnapshot, validateRepairWorld, validateRepairParams, REPAIR_ACTIONS } from './repair.mjs';
 
 const PARTS = ['tube', 'chain', 'brake'];
 const SERVICES = {
@@ -172,6 +173,20 @@ export const TYPE_CATALOG = Object.freeze({
       'Revision tests a replacement interpretation of a proposal in the twelve-record memory. Accepted objects keep reproducible provenance and useful deterministic SVG geometry; retired working records remain in the parent event archive.',
     ],
     allowed_actions: MUSEUM_ACTIONS,
+  },
+  'repair-cafe': {
+    title: 'The Autonomous Repair Café',
+    description: 'A manager chooses a broken calculator, a developer writes a bounded executable expression, and an independent fixture runner accepts or rejects the repair. Visitors can run original and candidate programs side by side.',
+    roles: ['Repair manager', 'Developer', 'Independent fixture reviewer'],
+    memory_window: 12,
+    rules: [
+      'Four small calculator applications start with actual defective expression programs. Their inputs, intended behavior and test receipts are observable.',
+      'A repair supplies real executable expression source in a bounded arithmetic language, interpreted without eval or access to files, network or browser globals.',
+      'The independent runner compares candidate outputs with fixed expected outputs. Every fixture must pass before the current application changes; rejected patches remain queued.',
+      'Every attempt saves its source and measured outputs. Original and candidate versions remain runnable in the public viewer and immutable decision history.',
+      'Passing this finite regression suite supports these tested cases; it is not proof for every possible input. Working memory stays bounded while event archives preserve prior repairs.',
+    ],
+    allowed_actions: REPAIR_ACTIONS,
   },
 });
 
@@ -1033,6 +1048,7 @@ function transitionCity(experiment, decision) {
 
 function updateMetrics(experiment) {
   const world = experiment.world;
+  if (experiment.type === 'repair-cafe') experiment.metrics = repairMetrics(world);
   if (experiment.type === 'civilization-museum') experiment.metrics = museumMetrics(world);
   if (experiment.type === 'life-research') experiment.metrics = lifeMetrics(world);
   if (experiment.type === 'flood-city') experiment.metrics = cityMetrics(world);
@@ -1066,10 +1082,16 @@ function transitionMuseum(experiment, decision) {
   experiment.world = world;
   return result;
 }
-const snapshots = { 'bicycle-company': companySnapshot, 'alien-language': languageSnapshot, 'invention-league': leagueSnapshot, 'flood-city': citySnapshot, 'life-research': lifeSnapshot, 'civilization-museum': museumSnapshot };
-const transitions = { 'bicycle-company': transitionCompany, 'alien-language': transitionLanguage, 'invention-league': transitionLeague, 'flood-city': transitionCity, 'life-research': transitionLife, 'civilization-museum': transitionMuseum };
+function transitionRepair(experiment, decision) {
+  const { world, ...result } = applyRepairDecision(experiment.world, decision);
+  experiment.world = world;
+  return result;
+}
+const snapshots = { 'bicycle-company': companySnapshot, 'alien-language': languageSnapshot, 'invention-league': leagueSnapshot, 'flood-city': citySnapshot, 'life-research': lifeSnapshot, 'civilization-museum': museumSnapshot, 'repair-cafe': repairSnapshot };
+const transitions = { 'bicycle-company': transitionCompany, 'alien-language': transitionLanguage, 'invention-league': transitionLeague, 'flood-city': transitionCity, 'life-research': transitionLife, 'civilization-museum': transitionMuseum, 'repair-cafe': transitionRepair };
 
 function initializeExperimentWorld(experiment) {
+  if (experiment.type === 'repair-cafe') return initializeRepair();
   if (experiment.type === 'bicycle-company') return initializeCompany(experiment);
   if (experiment.type === 'alien-language') return initializeLanguage(experiment);
   if (experiment.type === 'invention-league') return initializeLeague(experiment);
@@ -1084,6 +1106,7 @@ export function createExperiment({ id, type, createdAt = new Date().toISOString(
   if (!/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(id)) throw new RangeError('id must contain letters, digits, dots, underscores or hyphens.');
   if (!Object.hasOwn(TYPE_CATALOG, type)) throw new RangeError(`Unknown experiment type: ${type}.`);
   if (type === 'civilization-museum' && seed !== undefined) throw new RangeError('civilization-museum uses explicit fictional premises and does not support seeded starting worlds.');
+  if (type === 'repair-cafe' && seed !== undefined) throw new RangeError('repair-cafe uses explicit broken applications and does not support seeded starting worlds.');
   const catalog = TYPE_CATALOG[type];
   const at = timestamp(createdAt, 'createdAt');
   const experiment = { schema_version: 1, id, type,
@@ -1340,6 +1363,24 @@ export function validateExperiment(experiment) {
     if (experiment.type === 'life-research') {
       const report = validateLifeWorld(experiment.world);
       if (!report.valid) errors.push(...report.errors);
+    }
+    if (experiment.type === 'repair-cafe') {
+      if (experiment.seed !== undefined) errors.push('Repair café seeds are unsupported; broken applications are explicit.');
+      const report = validateRepairWorld(experiment.world);
+      if (!report.valid) errors.push(...report.errors);
+      if (experiment.world.decisions !== experiment.turn) errors.push('Repair café decisions do not match experiment turns.');
+      if (canonical(experiment.allowed_actions) !== canonical(REPAIR_ACTIONS)) errors.push('Repair action schema differs from the public bounded contract.');
+      if (canonical(experiment.metrics) !== canonical(repairMetrics(experiment.world))) errors.push('Repair metrics differ from measured fixture results.');
+      if (experiment.timeline.length && canonical(experiment.timeline.at(-1).snapshot) !== canonical(repairSnapshot(experiment.world))) errors.push('Repair latest snapshot does not match current test evidence.');
+      for (const event of experiment.timeline) {
+        const snapshot = event.snapshot;
+        const savedWorld = snapshot.world;
+        const check = validateRepairWorld(savedWorld);
+        if (!check.valid) errors.push(`Invalid repair snapshot at turn ${event.turn}: ${check.errors.join('; ')}`);
+        if (savedWorld?.decisions !== event.turn || canonical(snapshot) !== canonical(repairSnapshot(savedWorld))) errors.push('Repair snapshot turn or metrics differ from measured history.');
+        const trial = savedWorld?.latest_record;
+        if (!trial || trial.id !== `repair-${event.turn}` || trial.action !== event.decision.action || canonical(trial.params) !== canonical(validateRepairParams(event.decision.action, event.decision.params))) errors.push('Repair history differs from tested candidate input.');
+      }
     }
     if (experiment.type === 'civilization-museum') {
       if (experiment.seed !== undefined) errors.push('Museum seeds are unsupported; fictional premises are explicit.');
