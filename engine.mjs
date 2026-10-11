@@ -21,6 +21,13 @@ const LANGUAGE_VERBS = ['see', 'carry', 'find'];
 const LANGUAGE_OBJECTS = ['star', 'stone', 'water'];
 const LANGUAGE_WORDS = [...LANGUAGE_SUBJECTS, ...LANGUAGE_VERBS, ...LANGUAGE_OBJECTS];
 const LANGUAGE_RULES = ['word-order', 'past-marker', ...LANGUAGE_WORDS.map(word => `lexicon:${word}`)];
+const CITY_IDS = ['hill', 'canal', 'marsh'];
+const CITY_RAIN = [4, 1, 3, 6, 2, 2];
+const CITY_SEED = [
+  { id: 'hill', name: 'Hill Ward', x: 24, y: 24, population: 12, vulnerable: 4, base_drain: 2, wear: 1, water: 0, safe_water: 2, storage_cap: 4 },
+  { id: 'canal', name: 'Canal Ward', x: 52, y: 50, population: 10, vulnerable: 2, base_drain: 3, wear: 2, water: 1, safe_water: 2, storage_cap: 5 },
+  { id: 'marsh', name: 'Marsh Ward', x: 77, y: 76, population: 8, vulnerable: 4, base_drain: 2, wear: 2, water: 2, safe_water: 1, storage_cap: 6 },
+];
 
 const action = (name, label, description, params = {}) => ({ action: name, label, description, params });
 const enumeration = (values, required = true) => ({ type: 'string', enum: values, required });
@@ -112,6 +119,27 @@ export const TYPE_CATALOG = Object.freeze({
       }),
       action('rest', 'Review the champion', 'Retain the champion and review its measured results.'),
     ],
+  },
+  'flood-city': {
+    title: 'Flood Commons',
+    description: 'A planner, residents’ advocate and budget auditor govern a flood town. Drainage, household relief and unequal exposure produce measured civic tradeoffs.',
+    roles: ['Town planner', 'Residents’ advocate', 'Budget auditor'],
+    memory_window: 12,
+    rules: [
+      'This is a simplified deterministic simulation: one rain unit adds one water unit per district; money is civic credits and harm is repeatable unserved household-events, not unique people.',
+      'The planner requests clear (3 credits, wear becomes 0) or expand (6 credits, +2 drain capacity, at most 3 upgrades). Residents request relief (2 credits, protects at most 4 actually exposed households this turn).',
+      'The auditor releases 0, 4 or 8 credits up to the treasury, processes requests in the chosen priority, and declines requests that do not fit in full. Works happen before rain; funded relief costs money even in a dry district.',
+      'Water flows Hill → Canal → Marsh → river. Drain capacity is max(0, base + 2×upgrades − wear − debris); remaining water above the safe threshold exposes min(population, 2×flood units + vulnerable households). Storage overflow passes downstream.',
+      'Rain repeats [4,1,3,6,2,2]; every eighth forcing turn adds 4 rain units, and every fifth blocks 3 drain units in a rotating district. Next forcing is public. Optional extra rain (0–6) and extra debris are explicit simulation inputs.',
+      'After water and relief, all wear rises by 1 up to 6 and income adds 4 credits, with a treasury cap of 24. Every receipt conserves water and reconciles the treasury. Cumulative household histories start at zero; the city keeps running without a turn cap.',
+    ],
+    allowed_actions: [action('govern', 'Govern one town turn', 'Coordinate drainage, household relief and the spending envelope against the announced rain.', {
+      planner_action: enumeration(['hold', 'clear', 'expand']), planner_district: enumeration(['none', ...CITY_IDS]),
+      residents_action: enumeration(['hold', 'relief']), residents_district: enumeration(['none', ...CITY_IDS]),
+      spend_limit: { type: 'integer', enum: [0, 4, 8], min: 0, max: 8, required: true },
+      priority: enumeration(['infrastructure', 'relief']),
+      extra_rain: { ...number(0, 6, false), type: 'integer' }, debris_district: enumeration(['none', ...CITY_IDS], false),
+    })],
   },
 });
 
@@ -696,8 +724,178 @@ function leagueSnapshot(world) {
     candidates_tested: world.candidates_tested ?? world.candidates.length, promotions: world.promotions, replay: clone(world.replay) };
 }
 
+function cityForcing(turn, extraRain = 0, debrisDistrict = 'none') {
+  const base_rain = CITY_RAIN[(turn - 1) % CITY_RAIN.length];
+  const cloudburst_extra = turn % 8 === 0 ? 4 : 0;
+  const debris_district = turn % 5 === 0 ? CITY_IDS[(turn / 5 - 1) % CITY_IDS.length] : 'none';
+  const debris_penalties = Object.fromEntries(CITY_IDS.map(id => [id, (id === debris_district ? 3 : 0) + (id === debrisDistrict ? 3 : 0)]));
+  const crises = [];
+  if (cloudburst_extra) crises.push('Scheduled cloudburst: +4 rain.');
+  if (debris_district !== 'none') crises.push(`Scheduled debris: ${debris_district} drain −3.`);
+  if (extraRain) crises.push(`Explicit simulation input: +${extraRain} rain.`);
+  if (debrisDistrict !== 'none') crises.push(`Explicit simulation input: ${debrisDistrict} drain −3.`);
+  return { turn, base_rain, cloudburst_extra, rain: base_rain + cloudburst_extra + extraRain,
+    debris_district, overrides: { extra_rain: extraRain, debris_district: debrisDistrict }, debris_penalties, crises };
+}
+
+function initializeCity() {
+  return { districts: CITY_SEED.map(district => ({ ...district, upgrades: 0, cumulative_unserved: 0 })),
+    budget: 12, opening_budget: 12, cumulative_spent: 0, cumulative_income: 0, cumulative_clipped_income: 0,
+    forcing_turn: 0, next_forcing: cityForcing(1), latest_receipt: null, receipts: [], total_unserved: 0, equity_gap: 0,
+    agent_memory: { planner: null, residents: null, auditor: null } };
+}
+
+function cityParams(params) {
+  exactKeys(params, ['planner_action', 'planner_district', 'residents_action', 'residents_district', 'spend_limit', 'priority', 'extra_rain', 'debris_district']);
+  assertEnum(params.planner_action, ['hold', 'clear', 'expand'], 'planner_action');
+  assertEnum(params.residents_action, ['hold', 'relief'], 'residents_action');
+  assertEnum(params.planner_district, ['none', ...CITY_IDS], 'planner_district');
+  assertEnum(params.residents_district, ['none', ...CITY_IDS], 'residents_district');
+  if ((params.planner_action === 'hold') !== (params.planner_district === 'none')) throw new RangeError('planner_district must be none exactly when planner_action is hold.');
+  if ((params.residents_action === 'hold') !== (params.residents_district === 'none')) throw new RangeError('residents_district must be none exactly when residents_action is hold.');
+  assertEnum(params.spend_limit, [0, 4, 8], 'spend_limit');
+  assertEnum(params.priority, ['infrastructure', 'relief'], 'priority');
+  const extra_rain = params.extra_rain === undefined ? 0 : params.extra_rain;
+  const debris_district = params.debris_district === undefined ? 'none' : params.debris_district;
+  assertNumber(extra_rain, 0, 6, 'extra_rain', true);
+  assertEnum(debris_district, ['none', ...CITY_IDS], 'debris_district');
+  return { ...clone(params), extra_rain, debris_district };
+}
+
+function cityEquity(districts) {
+  const rates = districts.map(district => 100 * district.cumulative_unserved / district.population);
+  return Math.max(...rates) - Math.min(...rates);
+}
+
+/** Pure forecast: explicit options replace the corresponding action overrides. */
+export function forecastCityTurn(world, params, options = {}) {
+  const chosen = cityParams(params);
+  exactKeys(options, ['extraRain', 'debrisDistrict']);
+  const extraRain = options.extraRain === undefined ? chosen.extra_rain : options.extraRain;
+  const debrisDistrict = options.debrisDistrict === undefined ? chosen.debris_district : options.debrisDistrict;
+  assertNumber(extraRain, 0, 6, 'extraRain', true);
+  assertEnum(debrisDistrict, ['none', ...CITY_IDS], 'debrisDistrict');
+  const errors = [];
+  validateCity({ world }, errors);
+  if (errors.length) throw new Error(`Invalid city world: ${errors.join('; ')}`);
+  const next = clone(world);
+  const forcing = cityForcing(next.forcing_turn + 1, extraRain, debrisDistrict);
+  const before = next.budget;
+  const limit = Math.min(before, chosen.spend_limit);
+  let envelope = limit;
+  let reliefDistrict = 'none';
+  const requests = [
+    { kind: 'infrastructure', action: chosen.planner_action, district: chosen.planner_district, cost: chosen.planner_action === 'hold' ? 0 : chosen.planner_action === 'clear' ? 3 : 6 },
+    { kind: 'relief', action: chosen.residents_action, district: chosen.residents_district, cost: chosen.residents_action === 'hold' ? 0 : 2 },
+  ];
+  if (chosen.priority === 'relief') requests.reverse();
+  for (const request of requests) {
+    if (request.action === 'hold') { request.status = 'held'; request.reason = 'No request.'; continue; }
+    const district = next.districts.find(item => item.id === request.district);
+    if (request.action === 'expand' && district.upgrades === 3) { request.status = 'declined'; request.reason = 'Upgrade cap reached.'; continue; }
+    if (request.cost > envelope) { request.status = 'declined'; request.reason = 'Insufficient remaining spending envelope.'; continue; }
+    envelope -= request.cost;
+    request.status = 'funded'; request.reason = 'Funded in full.';
+    if (request.action === 'clear') district.wear = 0;
+    if (request.action === 'expand') district.upgrades += 1;
+    if (request.action === 'relief') reliefDistrict = request.district;
+  }
+  const spent = limit - envelope;
+  const waterBefore = sum(next.districts.map(district => district.water));
+  let upstream = 0;
+  const districts = next.districts.map(district => {
+    const water_before = district.water;
+    const inflow = upstream;
+    const available = water_before + forcing.rain + inflow;
+    const drain_capacity = Math.max(0, district.base_drain + 2 * district.upgrades - district.wear - forcing.debris_penalties[district.id]);
+    const drained = Math.min(available, drain_capacity);
+    const remaining = available - drained;
+    const flood_units = Math.max(0, remaining - district.safe_water);
+    const exposed = flood_units === 0 ? 0 : Math.min(district.population, 2 * flood_units + district.vulnerable);
+    const protectedHouseholds = district.id === reliefDistrict ? Math.min(4, exposed) : 0;
+    const unserved = exposed - protectedHouseholds;
+    district.water = Math.min(district.storage_cap, remaining);
+    upstream = Math.max(0, remaining - district.storage_cap);
+    district.cumulative_unserved += unserved;
+    district.wear = Math.min(6, district.wear + 1);
+    return { id: district.id, name: district.name, water_before, inflow, available, drain_capacity, drained, remaining,
+      flood_units, water_after: district.water, overflow: upstream, exposed, protected: protectedHouseholds, unserved,
+      cumulative_unserved: district.cumulative_unserved, wear_after: district.wear, upgrades: district.upgrades };
+  });
+  const income = 4;
+  const clipped_income = Math.max(0, before - spent + income - 24);
+  next.budget = before - spent + income - clipped_income;
+  next.cumulative_spent += spent;
+  next.cumulative_income += income;
+  next.cumulative_clipped_income += clipped_income;
+  next.forcing_turn = forcing.turn;
+  next.total_unserved = sum(next.districts.map(district => district.cumulative_unserved));
+  next.equity_gap = cityEquity(next.districts);
+  next.next_forcing = cityForcing(forcing.turn + 1);
+  const afterWater = sum(next.districts.map(district => district.water));
+  const drainedWater = sum(districts.map(district => district.drained));
+  const receipt = { turn: forcing.turn, forcing, decision: { ...chosen, extra_rain: extraRain, debris_district: debrisDistrict }, requests, districts,
+    budget: { before, limit, spent, income, clipped_income, after: next.budget },
+    water_balance: { before: waterBefore, rain_added: 3 * forcing.rain, drained: drainedWater, after: afterWater, river_outflow: upstream,
+      difference: waterBefore + 3 * forcing.rain - drainedWater - afterWater - upstream },
+    total_exposed: sum(districts.map(district => district.exposed)), total_protected: sum(districts.map(district => district.protected)),
+    total_unserved: sum(districts.map(district => district.unserved)), equity_gap: next.equity_gap };
+  next.latest_receipt = receipt;
+  next.receipts = [...next.receipts, clone(receipt)].slice(-12);
+  next.agent_memory = {
+    planner: { turn: forcing.turn, decision: { action: chosen.planner_action, district: chosen.planner_district },
+      observed: `${drainedWater} water units drained; ${requests.find(request => request.kind === 'infrastructure').status} infrastructure.`,
+      watch: `Wear next turn: ${next.districts.map(district => `${district.id} ${district.wear}`).join(', ')}.` },
+    residents: { turn: forcing.turn, decision: { action: chosen.residents_action, district: chosen.residents_district },
+      observed: `${receipt.total_protected} households protected; ${receipt.total_unserved} household-events unserved.`,
+      watch: `Cumulative equity gap ${next.equity_gap.toFixed(2)} events per 100 households.` },
+    auditor: { turn: forcing.turn, decision: { spend_limit: chosen.spend_limit, priority: chosen.priority },
+      observed: `${spent} credits spent; treasury ${next.budget}; ${requests.filter(request => request.status === 'declined').length} requests declined.`,
+      watch: `Next announced rain ${next.next_forcing.rain}; treasury cap 24.` },
+  };
+  return next;
+}
+
+function cityMetrics(world) {
+  const latest = world.latest_receipt;
+  return [metric('Treasury', world.budget, 'credits'), metric('Unserved this turn', latest?.total_unserved ?? 0, 'household-events'),
+    metric('Cumulative unserved', world.total_unserved, 'household-events'), metric('Equity gap', world.equity_gap, 'events / 100 households'),
+    metric('Installed upgrades', sum(world.districts.map(district => district.upgrades))), metric('Cumulative spending', world.cumulative_spent, 'credits'),
+    metric('Water retained', sum(world.districts.map(district => district.water)), 'water units'), metric('River outflow', latest?.water_balance.river_outflow ?? 0, 'water units'),
+    metric('Forcing turns elapsed', world.forcing_turn), metric('Next rain', world.next_forcing.rain, 'rain units')];
+}
+
+function citySnapshot(world) {
+  const { receipts, ...current } = world;
+  return { world: clone(current), districts: clone(world.districts), budget: world.budget, total_unserved: world.total_unserved,
+    equity_gap: world.equity_gap, forcing_turn: world.forcing_turn, next_forcing: clone(world.next_forcing),
+    latest_receipt: clone(world.latest_receipt), metrics: cityMetrics(world) };
+}
+
+function transitionCity(experiment, decision) {
+  if (decision.action !== 'govern') throw new RangeError(`Unsupported flood-city action: ${decision.action}.`);
+  const prior = experiment.world;
+  const chosen = cityParams(decision.params);
+  const world = forecastCityTurn(prior, chosen);
+  experiment.world = world;
+  const receipt = world.latest_receipt;
+  return { actor: 'Town council',
+    observation: `Treasury ${prior.budget} credits; forcing turn ${receipt.turn} announces ${receipt.forcing.rain} rain units. ${receipt.forcing.crises.join(' ')} District water/wear: ${prior.districts.map(district => `${district.id} ${district.water}/${district.wear}`).join(', ')}.`,
+    consequences: [`Spent ${receipt.budget.spent} credits; ${receipt.total_protected} households protected; ${receipt.total_unserved} household-events unserved.`,
+      `Treasury ${world.budget}; cumulative unserved ${world.total_unserved}; equity gap ${world.equity_gap.toFixed(2)} per 100 households.`,
+      ...receipt.requests.map(request => `${request.kind} ${request.action} ${request.district}: ${request.status} (${request.reason})`)],
+    evidence: [metric('Rain applied', receipt.forcing.rain, 'rain units'), metric('Explicit extra rain', receipt.forcing.overrides.extra_rain, 'rain units'),
+      metric('Explicit debris district', receipt.forcing.overrides.debris_district), metric('Credits spent', receipt.budget.spent, 'credits'),
+      metric('Households exposed', receipt.total_exposed), metric('Households protected', receipt.total_protected), metric('Unserved household-events', receipt.total_unserved),
+      metric('Equity gap', world.equity_gap, 'events / 100 households'), metric('Water balance difference', receipt.water_balance.difference, 'water units'),
+      metric('Treasury difference', receipt.budget.before - receipt.budget.spent + receipt.budget.income - receipt.budget.clipped_income - receipt.budget.after, 'credits')],
+    learned: [`Receipt ${receipt.turn}: ${receipt.total_unserved} unserved events after ${receipt.budget.spent} credits of funded requests.`,
+      `Next forcing: ${world.next_forcing.rain} rain; scheduled debris ${world.next_forcing.debris_district}.`] };
+}
+
 function updateMetrics(experiment) {
   const world = experiment.world;
+  if (experiment.type === 'flood-city') experiment.metrics = cityMetrics(world);
   if (experiment.type === 'bicycle-company') experiment.metrics = [
     metric('Cash', euros(world.cash_cents), 'EUR'), metric('Inventory book value', euros(inventoryValue(world)), 'EUR'),
     metric('Completed repairs', world.completed_orders), metric('Waiting orders', world.orders.filter(order => order.status === 'waiting').length),
@@ -718,8 +916,8 @@ function updateMetrics(experiment) {
   ];
 }
 
-const snapshots = { 'bicycle-company': companySnapshot, 'alien-language': languageSnapshot, 'invention-league': leagueSnapshot };
-const transitions = { 'bicycle-company': transitionCompany, 'alien-language': transitionLanguage, 'invention-league': transitionLeague };
+const snapshots = { 'bicycle-company': companySnapshot, 'alien-language': languageSnapshot, 'invention-league': leagueSnapshot, 'flood-city': citySnapshot };
+const transitions = { 'bicycle-company': transitionCompany, 'alien-language': transitionLanguage, 'invention-league': transitionLeague, 'flood-city': transitionCity };
 
 export function createExperiment({ id, type, createdAt = new Date().toISOString(), title, description } = {}) {
   boundedString(id, 'id', 120);
@@ -736,6 +934,7 @@ export function createExperiment({ id, type, createdAt = new Date().toISOString(
   if (type === 'bicycle-company') experiment.world = initializeCompany();
   if (type === 'alien-language') experiment.world = initializeLanguage(experiment);
   if (type === 'invention-league') experiment.world = initializeLeague(experiment);
+  if (type === 'flood-city') experiment.world = initializeCity();
   updateMetrics(experiment);
   const validation = validateExperiment(experiment);
   if (!validation.valid) throw new Error(`Invalid initializer: ${validation.errors.join('; ')}`);
@@ -788,6 +987,54 @@ export function applyDecision(input, suppliedDecision, { now = new Date().toISOS
   const after = validateExperiment(experiment);
   if (!after.valid) throw new Error(`Environment invariant failed: ${after.errors.join('; ')}`);
   return experiment;
+}
+
+function validateCity(experiment, errors) {
+  const world = experiment.world;
+  const integer = (value, min = 0, max = Number.MAX_SAFE_INTEGER) => Number.isSafeInteger(value) && value >= min && value <= max;
+  if (!isRecord(world) || !Array.isArray(world.districts) || world.districts.length !== 3 || !Array.isArray(world.receipts) || !isRecord(world.agent_memory)) { errors.push('Missing city state.'); return; }
+  for (const field of ['budget', 'opening_budget', 'cumulative_spent', 'cumulative_income', 'cumulative_clipped_income', 'forcing_turn', 'total_unserved']) {
+    if (!integer(world[field])) errors.push(`Invalid city ${field}.`);
+  }
+  if (world.opening_budget !== 12 || world.budget > 24) errors.push('Invalid city treasury bounds.');
+  if (world.budget !== 12 + world.cumulative_income - world.cumulative_spent - world.cumulative_clipped_income) errors.push('City cumulative treasury does not reconcile.');
+  if (world.cumulative_income !== 4 * world.forcing_turn) errors.push('City income does not match forcing turns.');
+  for (const [i, district] of world.districts.entries()) {
+    const seed = CITY_SEED[i];
+    if (!isRecord(district) || ['id', 'name', 'x', 'y', 'population', 'vulnerable', 'base_drain', 'safe_water', 'storage_cap'].some(field => district[field] !== seed[field])) { errors.push(`Invalid city district ${i}.`); continue; }
+    if (!integer(district.water, 0, district.storage_cap) || !integer(district.wear, 0, 6) || !integer(district.upgrades, 0, 3) || !integer(district.cumulative_unserved)) errors.push(`Invalid ${district.id} district counters.`);
+  }
+  if (world.total_unserved !== sum(world.districts.map(district => district.cumulative_unserved))) errors.push('City household history does not reconcile.');
+  if (world.equity_gap !== cityEquity(world.districts)) errors.push('City equity gap does not match household history.');
+  if (canonical(world.next_forcing) !== canonical(cityForcing(world.forcing_turn + 1))) errors.push('City next forcing is incorrect.');
+  if (world.receipts.length !== Math.min(12, world.forcing_turn)) errors.push('City receipt window does not match forcing turns.');
+  for (const [index, receipt] of world.receipts.entries()) {
+    if (!isRecord(receipt) || receipt.turn !== world.forcing_turn - world.receipts.length + index + 1 || !Array.isArray(receipt.districts) || receipt.districts.length !== 3 || !Array.isArray(receipt.requests)) { errors.push('Invalid city receipt sequence.'); continue; }
+    const overrides = receipt.forcing?.overrides;
+    if (!overrides || !integer(overrides.extra_rain, 0, 6) || !['none', ...CITY_IDS].includes(overrides.debris_district) || canonical(receipt.forcing) !== canonical(cityForcing(receipt.turn, overrides.extra_rain, overrides.debris_district))) errors.push('Invalid city forcing receipt.');
+    const balance = receipt.water_balance;
+    const treasury = receipt.budget;
+    if (!isRecord(balance) || Object.values(balance).some(value => !integer(value)) || balance.difference !== 0 || balance.before + balance.rain_added !== balance.drained + balance.after + balance.river_outflow) errors.push('City receipt water does not conserve.');
+    if (!isRecord(treasury) || Object.values(treasury).some(value => !integer(value)) || treasury.before - treasury.spent + treasury.income - treasury.clipped_income !== treasury.after || treasury.income !== 4 || treasury.after > 24 || treasury.spent > treasury.limit || treasury.limit > treasury.before || treasury.clipped_income !== Math.max(0, treasury.before - treasury.spent + 4 - 24)) errors.push('City receipt treasury does not reconcile.');
+    if (treasury?.spent !== sum(receipt.requests.filter(request => request.status === 'funded').map(request => request.cost))) errors.push('City funded request costs do not reconcile.');
+    let upstream = 0;
+    for (const [i, district] of receipt.districts.entries()) {
+      const seed = CITY_SEED[i];
+      if (district.id !== seed.id || district.inflow !== upstream || district.available !== district.water_before + receipt.forcing.rain + district.inflow || district.drained !== Math.min(district.available, district.drain_capacity) || district.remaining !== district.available - district.drained || district.water_after !== Math.min(seed.storage_cap, district.remaining) || district.overflow !== Math.max(0, district.remaining - seed.storage_cap) || district.flood_units !== Math.max(0, district.remaining - seed.safe_water)) errors.push('City district hydrology receipt is incorrect.');
+      const exposure = district.flood_units === 0 ? 0 : Math.min(seed.population, 2 * district.flood_units + seed.vulnerable);
+      if (district.exposed !== exposure || !integer(district.protected, 0, Math.min(4, exposure)) || district.unserved !== exposure - district.protected || !integer(district.cumulative_unserved, district.unserved)) errors.push('City household receipt is incorrect.');
+      upstream = district.overflow;
+    }
+    if (balance?.before !== sum(receipt.districts.map(district => district.water_before)) || balance?.rain_added !== 3 * receipt.forcing.rain || balance?.after !== sum(receipt.districts.map(district => district.water_after)) || balance?.drained !== sum(receipt.districts.map(district => district.drained)) || balance?.river_outflow !== upstream) errors.push('City water totals do not match districts.');
+    if (receipt.total_exposed !== sum(receipt.districts.map(district => district.exposed)) || receipt.total_protected !== sum(receipt.districts.map(district => district.protected)) || receipt.total_unserved !== sum(receipt.districts.map(district => district.unserved))) errors.push('City household totals do not match districts.');
+  }
+  if (world.forcing_turn === 0) {
+    if (world.latest_receipt !== null || world.total_unserved !== 0 || world.cumulative_spent !== 0) errors.push('City seed has invented activity.');
+  } else {
+    if (canonical(world.latest_receipt) !== canonical(world.receipts.at(-1))) errors.push('City latest receipt does not match memory.');
+    const latest = world.latest_receipt;
+    if (latest?.budget.after !== world.budget || latest?.equity_gap !== world.equity_gap || latest?.districts.some((district, i) => district.water_after !== world.districts[i].water || district.wear_after !== world.districts[i].wear || district.upgrades !== world.districts[i].upgrades || district.cumulative_unserved !== world.districts[i].cumulative_unserved)) errors.push('City current state does not match latest receipt.');
+  }
 }
 
 function validateCompany(experiment, errors) {
@@ -888,6 +1135,7 @@ export function validateExperiment(experiment) {
     if (experiment.type === 'bicycle-company') validateCompany(experiment, errors);
     if (experiment.type === 'alien-language') validateLanguage(experiment, errors);
     if (experiment.type === 'invention-league') validateLeague(experiment, errors);
+    if (experiment.type === 'flood-city') validateCity(experiment, errors);
   } catch (error) { errors.push(`Malformed environment data: ${error.message}`); }
   return { valid: errors.length === 0, errors };
 }

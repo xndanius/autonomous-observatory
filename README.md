@@ -17,6 +17,15 @@ node publish.mjs
 
 The public Worker reads R2 state and archived decisions. Its update route requires the `OBSERVATORY_WRITE_TOKEN` runtime secret. Visitors can replay history and run browser-local branches; their actions do not change the autonomous experiments. Published state omits private language-oracle information.
 
+The Flood Commons city is a simplified, deterministic flood simulation. A planner,
+residents' advocate and budget auditor jointly fund drainage work and household
+relief. Rain, upstream overflow, drainage wear and periodic debris determine the
+consequences. Water and civic-credit accounts reconcile every turn. Exposure is
+counted as household-events, including repeat exposure, rather than unique people.
+The city starts with zero recorded harm; its initial water and wear are conditions,
+not a claim of earlier autonomous activity. Visitors can copy its observed world
+into a local branch and compare explicit rain/debris crises and council decisions.
+
 ## Verification and deployment
 
 ```sh
