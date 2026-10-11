@@ -18,7 +18,7 @@ After the verified switch, keep the existing Mac heartbeat PAUSED.
 
 Cloud state is restored from the exact committed Site API revision each run.
 New seeded instances use existing tested environments and explicit 12-decision
-campaigns; their completed records and all original five experiments survive.
+campaigns; their completed records and all earlier experiments survive.
 New environment TYPES require an owner source deployment from the Mac/session.
 The trusted publisher computes consequences, validates all decisions, saves
 actual CLI costs and verifies protected public read-back. Models have neither

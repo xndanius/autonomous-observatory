@@ -36,6 +36,13 @@ The city starts with zero recorded harm; its initial water and wear are conditio
 not a claim of earlier autonomous activity. Visitors can copy its observed world
 into a local branch and compare explicit rain/debris crises and council decisions.
 
+The Tideglass museum builds an illustrated collection for an imaginary
+civilization. Three fictional premises constrain materials, technologies and
+chronology. Proposals and dated excavation evidence face a deterministic curator;
+accepted artifacts and rejected interpretations both remain visible. Curator
+approval means internal consistency with those premises, not historical
+authenticity.
+
 ## Verification and deployment
 
 ```sh

@@ -8,6 +8,7 @@
  */
 
 import { initializeLife, applyLifeDecision, lifeMetrics, lifeSnapshot, validateLifeWorld, LIFE_ACTIONS } from './life.mjs';
+import { initializeMuseum, applyMuseumDecision, museumMetrics, museumSnapshot, validateMuseumWorld, validateMuseumParams, MUSEUM_ACTIONS } from './museum.mjs';
 
 const PARTS = ['tube', 'chain', 'brake'];
 const SERVICES = {
@@ -156,6 +157,21 @@ export const TYPE_CATALOG = Object.freeze({
       'Every tested seed enters a measured field guide; unknown behavior remains provisional. Submitted hypotheses are confirmed, rejected or unassessed separately. Retired guide entries and all experiments remain in the immutable decision history.',
     ],
     allowed_actions: LIFE_ACTIONS,
+  },
+  'civilization-museum': {
+    title: 'Tideglass: A Museum of a Civilization That Never Was',
+    description: 'An imaginary salt-marsh civilization has three fixed historical premises. A designer proposes artifacts, an excavator reveals dated material evidence, and a curator measures consistency; accepted objects and rejected interpretations remain visible.',
+    roles: ['Artifact designer', 'Excavator', 'Consistency curator'],
+    memory_window: 12,
+    rules: [
+      'Tideglass is fictional. Its three historical premises are simulation inputs, not verified external history. An accepted proposal means internal consistency, not authenticity or artistic merit.',
+      'Clay, reed and shell are available; exchanged copper begins in year 140. Iron and glassmaking are unavailable.',
+      'The chronology spans years 0–239; kilns begin at 80, tally writing at 110, copper casting at 140 and irrigation at 160.',
+      'One proposal tests ten explicit chronology, resource, construction, writing, purpose and evidence checks. Any failed check records a visible rejection without invalidating the experiment.',
+      'Excavation deterministically computes a dated specimen from a chosen fictional deposit. A cited specimen narrows both the date window and the observed material.',
+      'Revision tests a replacement interpretation of a proposal in the twelve-record memory. Accepted objects keep reproducible provenance and useful deterministic SVG geometry; retired working records remain in the parent event archive.',
+    ],
+    allowed_actions: MUSEUM_ACTIONS,
   },
 });
 
@@ -1017,6 +1033,7 @@ function transitionCity(experiment, decision) {
 
 function updateMetrics(experiment) {
   const world = experiment.world;
+  if (experiment.type === 'civilization-museum') experiment.metrics = museumMetrics(world);
   if (experiment.type === 'life-research') experiment.metrics = lifeMetrics(world);
   if (experiment.type === 'flood-city') experiment.metrics = cityMetrics(world);
   if (experiment.type === 'bicycle-company') experiment.metrics = [
@@ -1044,8 +1061,13 @@ function transitionLife(experiment, decision) {
   experiment.world = world;
   return result;
 }
-const snapshots = { 'bicycle-company': companySnapshot, 'alien-language': languageSnapshot, 'invention-league': leagueSnapshot, 'flood-city': citySnapshot, 'life-research': lifeSnapshot };
-const transitions = { 'bicycle-company': transitionCompany, 'alien-language': transitionLanguage, 'invention-league': transitionLeague, 'flood-city': transitionCity, 'life-research': transitionLife };
+function transitionMuseum(experiment, decision) {
+  const { world, ...result } = applyMuseumDecision(experiment.world, decision);
+  experiment.world = world;
+  return result;
+}
+const snapshots = { 'bicycle-company': companySnapshot, 'alien-language': languageSnapshot, 'invention-league': leagueSnapshot, 'flood-city': citySnapshot, 'life-research': lifeSnapshot, 'civilization-museum': museumSnapshot };
+const transitions = { 'bicycle-company': transitionCompany, 'alien-language': transitionLanguage, 'invention-league': transitionLeague, 'flood-city': transitionCity, 'life-research': transitionLife, 'civilization-museum': transitionMuseum };
 
 function initializeExperimentWorld(experiment) {
   if (experiment.type === 'bicycle-company') return initializeCompany(experiment);
@@ -1053,6 +1075,7 @@ function initializeExperimentWorld(experiment) {
   if (experiment.type === 'invention-league') return initializeLeague(experiment);
   if (experiment.type === 'flood-city') return initializeCity(experiment);
   if (experiment.type === 'life-research') return initializeSeededLife(experiment);
+  if (experiment.type === 'civilization-museum') return initializeMuseum();
   throw new RangeError(`Unknown experiment type: ${experiment.type}.`);
 }
 
@@ -1060,6 +1083,7 @@ export function createExperiment({ id, type, createdAt = new Date().toISOString(
   boundedString(id, 'id', 120);
   if (!/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(id)) throw new RangeError('id must contain letters, digits, dots, underscores or hyphens.');
   if (!Object.hasOwn(TYPE_CATALOG, type)) throw new RangeError(`Unknown experiment type: ${type}.`);
+  if (type === 'civilization-museum' && seed !== undefined) throw new RangeError('civilization-museum uses explicit fictional premises and does not support seeded starting worlds.');
   const catalog = TYPE_CATALOG[type];
   const at = timestamp(createdAt, 'createdAt');
   const experiment = { schema_version: 1, id, type,
@@ -1316,6 +1340,18 @@ export function validateExperiment(experiment) {
     if (experiment.type === 'life-research') {
       const report = validateLifeWorld(experiment.world);
       if (!report.valid) errors.push(...report.errors);
+    }
+    if (experiment.type === 'civilization-museum') {
+      if (experiment.seed !== undefined) errors.push('Museum seeds are unsupported; fictional premises are explicit.');
+      const report = validateMuseumWorld(experiment.world);
+      if (!report.valid) errors.push(...report.errors);
+      if (experiment.world.decisions !== experiment.turn) errors.push('Museum decisions do not match experiment turns.');
+      if (canonical(experiment.allowed_actions) !== canonical(MUSEUM_ACTIONS)) errors.push('Museum action schema differs from the public bounded contract.');
+      if (experiment.timeline.length && canonical(experiment.timeline.at(-1).snapshot) !== canonical(museumSnapshot(experiment.world))) errors.push('Museum latest public snapshot does not match current evidence.');
+      for (const event of experiment.timeline) {
+        const trial = experiment.world.records.find(r => r.id === `museum-${event.turn}`);
+        if (trial && (trial.action !== event.decision.action || canonical(trial.params) !== canonical(validateMuseumParams(event.decision.action, event.decision.params)))) errors.push('Museum decision history differs from tested curator input.');
+      }
     }
   } catch (error) { errors.push(`Malformed environment data: ${error.message}`); }
   return { valid: errors.length === 0, errors };

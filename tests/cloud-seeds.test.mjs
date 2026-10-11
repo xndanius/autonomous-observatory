@@ -20,7 +20,7 @@ test('legacy constructor JSON and identity remain exactly unchanged for every ex
     'flood-city': '58a4e9bf8ae64d0aad7fd4e4f932248f8f5ea04d565bf8a982225656ad559b8d',
     'life-research': '55180fba9fdb76babc42625d4bf4b9caad9947ee5b83facad68f7c61bfac9a56',
   };
-  for (const type of Object.keys(TYPE_CATALOG)) {
+  for (const type of Object.keys(expected)) {
     const state = createExperiment({ id: 'legacy-fixture', type, createdAt });
     assert.equal(createHash('sha256').update(JSON.stringify(state)).digest('hex'), expected[type], type);
     assert.equal(state.seed, undefined);

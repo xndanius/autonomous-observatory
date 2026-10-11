@@ -29,12 +29,15 @@ whole immutable archive. Older turns remain available through the history API.
 An original gate artifact digest binds publication to its observed revision;
 another writer's change rejects the result.
 
-Cloud hourly launches create **new seeded instances of the five existing types**,
+Cloud hourly launches create **new seeded instances of five tested environment types**,
 not new environment types. Seeded grammar, warehouse fixtures, workshop starting
 assets, city water/wear and Life cells are deterministic and different. Every
 new instance declares a twelve-decision campaign and a measured goal; completion
 of the campaign does not claim that its hypothesis succeeded. Completed instances
-remain publicly readable. The five original experiments continue while active.
+remain publicly readable. All original experiments continue while active,
+including the civilization museum added from the owner session. Its artifacts
+are judged for consistency with explicit fictional premises, not for historical
+authenticity. It is not part of the cloud's seeded launch catalogue yet.
 Genuinely new types require tested engine/viewer code and a source deployment
 from the owner session.
 
