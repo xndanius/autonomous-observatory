@@ -199,7 +199,9 @@ export function museumMetrics(world) {
 }
 export function museumSnapshot(world) {
   const { records, ...current } = world;
-  return { world: clone(current), latest_record: clone(world.latest_record), artifacts: clone(world.artifacts), metrics: museumMetrics(world) };
+  // A saved turn already contains the complete visible collection and curator
+  // receipt in world. Repeating them at the top level multiplies checkpoint size.
+  return { world: clone(current), metrics: museumMetrics(world) };
 }
 function validEvidence(e) {
   if (!record(e)) return false;

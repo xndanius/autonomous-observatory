@@ -1347,7 +1347,15 @@ export function validateExperiment(experiment) {
       if (!report.valid) errors.push(...report.errors);
       if (experiment.world.decisions !== experiment.turn) errors.push('Museum decisions do not match experiment turns.');
       if (canonical(experiment.allowed_actions) !== canonical(MUSEUM_ACTIONS)) errors.push('Museum action schema differs from the public bounded contract.');
-      if (experiment.timeline.length && canonical(experiment.timeline.at(-1).snapshot) !== canonical(museumSnapshot(experiment.world))) errors.push('Museum latest public snapshot does not match current evidence.');
+      if (experiment.timeline.length) {
+        const expected = museumSnapshot(experiment.world);
+        // The first published museum receipt duplicated these exact fields.
+        // Accept its complete original shape without rewriting any saved event;
+        // both old copies must still equal the independently checked world.
+        const legacy = { ...expected, latest_record: experiment.world.latest_record, artifacts: experiment.world.artifacts };
+        const saved = canonical(experiment.timeline.at(-1).snapshot);
+        if (saved !== canonical(expected) && saved !== canonical(legacy)) errors.push('Museum latest public snapshot does not match current evidence.');
+      }
       for (const event of experiment.timeline) {
         const trial = experiment.world.records.find(r => r.id === `museum-${event.turn}`);
         if (trial && (trial.action !== event.decision.action || canonical(trial.params) !== canonical(validateMuseumParams(event.decision.action, event.decision.params)))) errors.push('Museum decision history differs from tested curator input.');

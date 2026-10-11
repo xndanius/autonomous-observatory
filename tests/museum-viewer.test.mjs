@@ -55,6 +55,37 @@ test('accepted and rejected curator evidence and counts replay the saved museum 
   assert.doesNotMatch(content,/Premature iron tool/);assert.match(h.node('scene').innerHTML,/ACCEPTED/);
 });
 
+test('legacy, compact and mixed museum snapshots render the same saved turns and current state',async()=>{
+  const accepted=turn(fresh()),rejected=turn(accepted,{...params,name:'Rejected iron vessel',material:'iron',technology:'iron-forging',form:'tool'});
+  const source=turn(rejected,{...params,proposal_id:'museum-2',name:'Revised clay vessel'},'revise');
+  const originalFirstEvent=JSON.stringify(source.timeline[0]),views=[];
+  for(const format of ['legacy','compact','mixed']){
+    const fixture=structuredClone(source);
+    fixture.timeline.forEach((event,index)=>{
+      if(format==='legacy'||format==='mixed'&&index===0){
+        event.snapshot.latest_record=structuredClone(event.snapshot.world.latest_record);
+        event.snapshot.artifacts=structuredClone(event.snapshot.world.artifacts);
+      }else{
+        delete event.snapshot.latest_record;delete event.snapshot.artifacts;
+      }
+    });
+    const h=harness([fixture],'#museum-permanent');await h.api.refresh();
+    const capture=()=>({scene:h.node('scene').innerHTML,detail:h.node('museum-detail').innerHTML,metrics:h.node('metrics').innerHTML,world:h.node('world-data').textContent,position:h.node('replay-position').textContent});
+    const current=capture();
+    assert.match(current.scene,/Revised clay vessel/);assert.match(current.detail,/3 proposals tested · 2 accepted proposals · 1 rejected proposals/);
+    h.api.replay(0);const first=capture();
+    assert.match(first.scene,/Canal tally vessel/);assert.match(first.detail,/1 proposals tested · 1 accepted proposals · 0 rejected proposals/);
+    assert.doesNotMatch(first.detail,/Rejected iron vessel|Revised clay vessel/);
+    h.api.replay(1);const second=capture();
+    assert.match(second.scene,/Rejected iron vessel/);assert.match(second.scene,/REJECTED/);
+    assert.match(second.detail,/Fail · Available material/);assert.match(second.detail,/2 proposals tested · 1 accepted proposals · 1 rejected proposals/);
+    assert.doesNotMatch(second.detail,/Revised clay vessel/);
+    views.push({current,first,second});
+  }
+  assert.deepEqual(views[0],views[1]);assert.deepEqual(views[1],views[2]);
+  assert.equal(JSON.stringify(source.timeline[0]),originalFirstEvent);
+});
+
 test('museum illustrations whitelist geometry and colors, bound counts and escape supplied text',()=>{
   const h=harness(),injection='"><script>alert(1)</script><img src=x onerror=alert(1)>';
   const artifact={...params,name:injection,material:injection,form:injection,year:injection,evidence_id:injection,motif_count:999999,inscription_marks:-2,display:{base:{type:'path',d:injection},fill:injection,motifs:[{type:'script',text:injection}]}};

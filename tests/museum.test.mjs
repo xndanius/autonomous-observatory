@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createExperiment, applyDecision, validateExperiment, TYPE_CATALOG, toPublicExperiment } from '../engine.mjs';
-import { initializeMuseum, applyMuseumDecision, validateMuseumWorld, MUSEUM_ACTIONS, museumDisplay } from '../museum.mjs';
+import { initializeMuseum, applyMuseumDecision, validateMuseumWorld, MUSEUM_ACTIONS, museumDisplay, museumSnapshot } from '../museum.mjs';
 
 const base = { name: 'Canal tally vessel', year: 125, material: 'clay', technology: 'kiln-firing', form: 'vessel', purpose: 'recording',
   site: 'canal', layer: 'middle', motif_count: 6, inscription_marks: 3, evidence_id: 'survey-canal-middle' };
@@ -166,4 +166,65 @@ test('validation detects forged curator verdicts, geometry, provenance, counters
   const forgedRejected = structuredClone(rejected);
   forgedRejected.world.contradictions[0].verdict.checks.find(c => c.id === 'script').passed = true;
   assert.equal(validateExperiment(forgedRejected).valid, false);
+});
+
+test('exact legacy duplicated museum snapshots survive canonical storage and continuation without rewriting history', () => {
+  let old = tick(initial(), propose());
+  const snapshot = old.timeline[0].snapshot;
+  snapshot.latest_record = structuredClone(old.world.latest_record);
+  snapshot.artifacts = structuredClone(old.world.artifacts);
+  old = canonicalRoundTrip(old);
+  const immutable = JSON.stringify(old.timeline[0]);
+  assert.ok(validateExperiment(old).valid, validateExperiment(old).errors.join('; '));
+  const next = tick(old, { action: 'excavate', params: { site: 'exchange', layer: 'upper' } });
+  assert.equal(JSON.stringify(next.timeline[0]), immutable);
+  assert.equal(JSON.stringify(old.timeline[0]), immutable);
+  assert.equal(next.timeline[1].snapshot.artifacts, undefined);
+  assert.equal(next.timeline[1].snapshot.latest_record, undefined);
+  assert.deepEqual(next.timeline[1].snapshot.world.artifacts, next.world.artifacts);
+  assert.deepEqual(next.timeline[1].snapshot.world.latest_record, next.world.latest_record);
+  assert.deepEqual(next.timeline[1].snapshot, museumSnapshot(next.world));
+  assert.ok(validateExperiment(canonicalRoundTrip(next)).valid);
+  for (const field of ['artifacts', 'latest_record']) {
+    const forged = structuredClone(old);
+    if (field === 'artifacts') forged.timeline[0].snapshot.artifacts[0].year = 49;
+    else forged.timeline[0].snapshot.latest_record.artifact.year = 49;
+    assert.equal(validateExperiment(forged).valid, false, `Forged legacy ${field} must still fail.`);
+  }
+  const extra = structuredClone(old);
+  extra.timeline[0].snapshot.unrecognized = true;
+  assert.equal(validateExperiment(extra).valid, false);
+});
+
+test('186-turn museum checkpoint with maximum specimen geometry and full retained collections fits the Worker stage cap', () => {
+  let e = initial();
+  const step = decision => {
+    e = tick(e, decision);
+    if (e.timeline.length > 12) {
+      e.timeline = e.timeline.slice(-12);
+      e.timeline_start_turn = e.turn - 11;
+    }
+  };
+  for (let i = 0; i < 116; i++) step({ action: 'excavate', params: { site: 'exchange', layer: 'upper' } });
+  const specimen = e.world.evidence.at(-1).specimen;
+  assert.equal(specimen.motif_count, 12);
+  assert.equal(specimen.inscription_marks, 9);
+  const design = { ...designFromSpecimen(specimen), name: 'M'.repeat(80) };
+  for (let i = 0; i < 58; i++) step({ action: 'propose', params: design, reason: 'R'.repeat(4000) });
+  for (let i = 0; i < 12; i++) step({ action: 'propose', params: { ...design, year: 240 }, reason: 'R'.repeat(4000) });
+  assert.equal(e.turn, 186);
+  assert.equal(e.world.artifacts.length, 48);
+  assert.equal(e.world.contradictions.length, 12);
+  assert.equal(e.world.records.length, 12);
+  assert.equal(e.timeline.length, 12);
+  assert.equal(e.world.accepted_proposals, 58);
+  assert.equal(e.world.rejected_proposals, 12);
+  const publicCheckpoint = canonicalRoundTrip(toPublicExperiment(e));
+  assert.ok(validateExperiment(publicCheckpoint).valid, validateExperiment(publicCheckpoint).errors.join('; '));
+  const bytes = Buffer.byteLength(JSON.stringify(publicCheckpoint));
+  assert.ok(bytes < 4_194_304, `Checkpoint ${bytes} bytes must fit the 4 MiB Worker stage cap.`);
+  assert.ok(bytes < 3_500_000, `Checkpoint ${bytes} bytes should retain useful stage-cap margin.`);
+  const continued = tick(publicCheckpoint, { action: 'propose', params: design });
+  assert.equal(continued.world.latest_record.verdict.status, 'accepted');
+  assert.ok(validateExperiment(continued).valid);
 });
