@@ -1,0 +1,19 @@
+{
+  "id": "tick-38174072312-1",
+  "at": "2026-10-11T20:54:38.648Z",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38174072312",
+  "usage": {
+    "status": "observed",
+    "reason": null,
+    "model": "gpt-6-luna",
+    "inputTokens": 79233,
+    "cachedInputTokens": 0,
+    "cacheWriteInputTokens": 79230,
+    "outputTokens": 3137,
+    "reasoningOutputTokens": 1701,
+    "costUsd": 0.01147255,
+    "cacheWriteAccounting": "reported_by_cli",
+    "pricingStatus": "standard_token_estimate"
+  },
+  "budget_charge_usd": 0.01147255
+}
