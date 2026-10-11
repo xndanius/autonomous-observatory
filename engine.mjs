@@ -7,6 +7,8 @@
  * Keep full local state for research. Use toPublicExperiment before publication.
  */
 
+import { initializeLife, applyLifeDecision, lifeMetrics, lifeSnapshot, validateLifeWorld, LIFE_ACTIONS } from './life.mjs';
+
 const PARTS = ['tube', 'chain', 'brake'];
 const SERVICES = {
   puncture: { part: 'tube', base_price_cents: 4000 },
@@ -140,6 +142,20 @@ export const TYPE_CATALOG = Object.freeze({
       priority: enumeration(['infrastructure', 'relief']),
       extra_rain: { ...number(0, 6, false), type: 'integer' }, debris_district: enumeration(['none', ...CITY_IDS], false),
     })],
+  },
+  'life-research': {
+    title: 'The Living Field Station',
+    description: 'Researchers propose cellular-life experiments, test periods and motion, and reproduce results in a shifted independent run. A field guide grows from measured evidence.',
+    roles: ['Explorer', 'Experimentalist', 'Replication skeptic'],
+    memory_window: 12,
+    rules: [
+      'A 16 × 16 toroidal grid updates all cells simultaneously. Each cell has eight wrapping neighbors; a dead cell is born with three neighbors, and a living cell survives with two or three.',
+      'Each experiment declares a template or custom seed, optional cell toggles, a 4–48 generation observation window and a falsifiable hypothesis. Initial and computed generation frames are saved.',
+      'Periods and translations are measured from observed frames. An unobserved return remains inconclusive; a finite observation window never proves behavior for all future time.',
+      'A separate run starts from a translated seed and checks every observed generation for translation equivariance. Reproduction verifies this deterministic experiment, not an external biological finding.',
+      'Every tested seed enters a measured field guide; unknown behavior remains provisional. Submitted hypotheses are confirmed, rejected or unassessed separately. Retired guide entries and all experiments remain in the immutable decision history.',
+    ],
+    allowed_actions: LIFE_ACTIONS,
   },
 });
 
@@ -895,6 +911,7 @@ function transitionCity(experiment, decision) {
 
 function updateMetrics(experiment) {
   const world = experiment.world;
+  if (experiment.type === 'life-research') experiment.metrics = lifeMetrics(world);
   if (experiment.type === 'flood-city') experiment.metrics = cityMetrics(world);
   if (experiment.type === 'bicycle-company') experiment.metrics = [
     metric('Cash', euros(world.cash_cents), 'EUR'), metric('Inventory book value', euros(inventoryValue(world)), 'EUR'),
@@ -916,8 +933,13 @@ function updateMetrics(experiment) {
   ];
 }
 
-const snapshots = { 'bicycle-company': companySnapshot, 'alien-language': languageSnapshot, 'invention-league': leagueSnapshot, 'flood-city': citySnapshot };
-const transitions = { 'bicycle-company': transitionCompany, 'alien-language': transitionLanguage, 'invention-league': transitionLeague, 'flood-city': transitionCity };
+function transitionLife(experiment, decision) {
+  const { world, ...result } = applyLifeDecision(experiment.world, decision);
+  experiment.world = world;
+  return result;
+}
+const snapshots = { 'bicycle-company': companySnapshot, 'alien-language': languageSnapshot, 'invention-league': leagueSnapshot, 'flood-city': citySnapshot, 'life-research': lifeSnapshot };
+const transitions = { 'bicycle-company': transitionCompany, 'alien-language': transitionLanguage, 'invention-league': transitionLeague, 'flood-city': transitionCity, 'life-research': transitionLife };
 
 export function createExperiment({ id, type, createdAt = new Date().toISOString(), title, description } = {}) {
   boundedString(id, 'id', 120);
@@ -935,6 +957,7 @@ export function createExperiment({ id, type, createdAt = new Date().toISOString(
   if (type === 'alien-language') experiment.world = initializeLanguage(experiment);
   if (type === 'invention-league') experiment.world = initializeLeague(experiment);
   if (type === 'flood-city') experiment.world = initializeCity();
+  if (type === 'life-research') experiment.world = initializeLife();
   updateMetrics(experiment);
   const validation = validateExperiment(experiment);
   if (!validation.valid) throw new Error(`Invalid initializer: ${validation.errors.join('; ')}`);
@@ -1136,6 +1159,10 @@ export function validateExperiment(experiment) {
     if (experiment.type === 'alien-language') validateLanguage(experiment, errors);
     if (experiment.type === 'invention-league') validateLeague(experiment, errors);
     if (experiment.type === 'flood-city') validateCity(experiment, errors);
+    if (experiment.type === 'life-research') {
+      const report = validateLifeWorld(experiment.world);
+      if (!report.valid) errors.push(...report.errors);
+    }
   } catch (error) { errors.push(`Malformed environment data: ${error.message}`); }
   return { valid: errors.length === 0, errors };
 }
