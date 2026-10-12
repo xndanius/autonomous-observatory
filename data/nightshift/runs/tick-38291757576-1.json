@@ -1,0 +1,204 @@
+{
+  "id": "tick-38291757576-1",
+  "at": "2026-10-12T18:36:55.819Z",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38291757576",
+  "type": "news",
+  "status": "failed_checks",
+  "cost_usd": 0.0070387,
+  "usage": {
+    "status": "observed",
+    "model": "gpt-6-luna",
+    "costUsd": 0.0070387,
+    "inputTokens": 48700,
+    "cachedInputTokens": 0,
+    "cacheWriteInputTokens": 48688,
+    "outputTokens": 1903,
+    "reasoningOutputTokens": 1067,
+    "steps": [
+      {
+        "stage": "draft",
+        "called": true,
+        "job_id": 114953392085,
+        "started_at": "2026-10-12T18:34:13Z",
+        "completed_at": "2026-10-12T18:34:40Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 11604,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 11601,
+          "outputTokens": 643,
+          "reasoningOutputTokens": 350,
+          "costUsd": 0.001771925,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      },
+      {
+        "stage": "check",
+        "called": true,
+        "job_id": 114953573220,
+        "started_at": "2026-10-12T18:34:43Z",
+        "completed_at": "2026-10-12T18:35:14Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 12137,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 12134,
+          "outputTokens": 223,
+          "reasoningOutputTokens": 99,
+          "costUsd": 0.0016285499999999999,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      },
+      {
+        "stage": "improvement",
+        "called": true,
+        "job_id": 114953776528,
+        "started_at": "2026-10-12T18:35:17Z",
+        "completed_at": "2026-10-12T18:36:01Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 12464,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 12461,
+          "outputTokens": 385,
+          "reasoningOutputTokens": 102,
+          "costUsd": 0.001750425,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      },
+      {
+        "stage": "final_check",
+        "called": true,
+        "job_id": 114954064632,
+        "started_at": "2026-10-12T18:36:04Z",
+        "completed_at": "2026-10-12T18:36:41Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 12495,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 12492,
+          "outputTokens": 652,
+          "reasoningOutputTokens": 516,
+          "costUsd": 0.0018878,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      }
+    ]
+  },
+  "first_review": {
+    "passed": false,
+    "summary": "The artifact is not publishable: its trusted-source-extracts machine check failed, and the claims are not exact short extracts from the supplied evidence.",
+    "issues": [
+      "The flyover claim adds details and paraphrases the excerpt; the heat-shield claim combines details that are not stated together in its supplied excerpt. The deterministic check rejects both as source extracts."
+    ],
+    "improvement": "Replace each claim with a short verbatim excerpt from its cited source, then update the title and summary if needed to reflect only what those excerpts support."
+  },
+  "final_review": {
+    "passed": false,
+    "summary": "The source excerpts and machine checks support the factual claims, but the flyover is still described as upcoming even though the supplied retrieval date is October 12 and the source says it was scheduled for October 11.",
+    "issues": [
+      "The title and summary say NASA plans to fly or that Isaacman will pilot, which reads as future news after the scheduled event date. The supplied evidence does not say whether the flyover happened."
+    ],
+    "improvement": "Frame the flyover as a prior announcement scheduled for October 11, and keep its outcome unstated unless you have a verified source for it."
+  },
+  "machine_checks": {
+    "passed": true,
+    "checks": [
+      {
+        "id": "bounded-payload",
+        "passed": true,
+        "detail": "Only documented bounded data fields are present."
+      },
+      {
+        "id": "trusted-source-extracts",
+        "passed": true,
+        "detail": "Each factual claim is an exact short extract from its supplied trusted source excerpt. This check proves source correspondence, not the source’s universal accuracy."
+      },
+      {
+        "id": "source-links",
+        "passed": true,
+        "detail": "Every HTTPS source link and title matches the trusted source record."
+      },
+      {
+        "id": "short-extracts",
+        "passed": true,
+        "detail": "No more than 25 quoted words per source."
+      },
+      {
+        "id": "source-diversity",
+        "passed": true,
+        "detail": "At least two independently identified source records."
+      }
+    ],
+    "errors": []
+  },
+  "piece_id": null,
+  "failure": {
+    "id": "tick-38291757576-1",
+    "at": "2026-10-12T18:36:55.819Z",
+    "type": "news",
+    "reason": "No piece published: Independent final check did not pass",
+    "cost_usd": 0.0070387,
+    "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38291757576"
+  },
+  "original_draft": {
+    "title": "NASA in the Sky and on the Way Home",
+    "summary": "NASA plans a football-game flyover and is testing heat shields with small capsules sent out with space-station trash.",
+    "topic": "Two NASA projects: a stadium flyover and heat-shield testing",
+    "claims": [
+      {
+        "text": "NASA Administrator Jared Isaacman is set to pilot one of three F-5 jets for the New York Jets–Cleveland Browns game in New Jersey.",
+        "source_id": "nasa-b25ccdaaf9e2",
+        "source_url": "https://www.nasa.gov/news-release/nasa-to-conduct-flyover-engage-nfl-fans-at-metlife-stadium/",
+        "source_title": "NASA to Conduct Flyover, Engage NFL Fans at MetLife Stadium",
+        "evidence_quote": "NASA Administrator Jared Isaacman will pilot one of three F-5 fighter jets"
+      },
+      {
+        "text": "NASA is testing heat shields using experimental capsules carried away from the International Space Station with a cargo mission’s trash.",
+        "source_id": "nasa-379bb7dc3042",
+        "source_url": "https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/",
+        "source_title": "NASA Demonstrates Next-Generation Heat Shield Technologies",
+        "evidence_quote": "NASA is testing heat shields that can keep astronauts safe as they return from missions to the Moon and Mars"
+      }
+    ]
+  },
+  "improved_final": {
+    "title": "NASA Plans a Flyover and Tests Heat Shields",
+    "summary": "NASA says Jared Isaacman will pilot one of three F-5 fighter jets and that it is testing heat shields for astronaut safety on returns from the Moon and Mars.",
+    "topic": "NASA flyover and heat-shield testing",
+    "claims": [
+      {
+        "text": "NASA Administrator Jared Isaacman will pilot one of three F-5 fighter jets",
+        "source_id": "nasa-b25ccdaaf9e2",
+        "source_url": "https://www.nasa.gov/news-release/nasa-to-conduct-flyover-engage-nfl-fans-at-metlife-stadium/",
+        "source_title": "NASA to Conduct Flyover, Engage NFL Fans at MetLife Stadium",
+        "evidence_quote": "NASA Administrator Jared Isaacman will pilot one of three F-5 fighter jets"
+      },
+      {
+        "text": "NASA is testing heat shields that can keep astronauts safe as they return from missions to the Moon and Mars",
+        "source_id": "nasa-379bb7dc3042",
+        "source_url": "https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/",
+        "source_title": "NASA Demonstrates Next-Generation Heat Shield Technologies",
+        "evidence_quote": "NASA is testing heat shields that can keep astronauts safe as they return from missions to the Moon and Mars"
+      }
+    ]
+  },
+  "published_revision": 12,
+  "public_url": "https://autonomous-observatory-20261011.xndanius.chatgpt.site"
+}
