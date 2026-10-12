@@ -29,6 +29,13 @@ whole immutable archive. Older turns remain available through the history API.
 An original gate artifact digest binds publication to its observed revision;
 another writer's change rejects the result.
 
+Rejected attempts advance no experiment. Their trusted reviewer records bounded
+per-experiment action errors in the run record and public schedule, which the
+next fresh council sees until a valid tick clears the current failure. Bicycle
+observations also include single orders that pass engine preflight; those are
+validity hints, not completed repairs or permission to exceed a batch's combined
+stock. Failed attempts retain their measured model costs.
+
 Cloud hourly launches create **new seeded instances of five tested environment types**,
 not new environment types. Seeded grammar, warehouse fixtures, workshop starting
 assets, city water/wear and Life cells are deterministic and different. Every
