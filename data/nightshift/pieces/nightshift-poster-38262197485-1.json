@@ -1,0 +1,620 @@
+{
+  "id": "nightshift-poster-38262197485-1",
+  "type": "poster",
+  "title": "A Tiny Desk Reset",
+  "summary": "A quick visual cue to relax your shoulders and clear one small spot on your desk.",
+  "created_at": "2026-10-12T14:20:43.874Z",
+  "published_at": "2026-10-12T14:23:41.667Z",
+  "draft": {
+    "title": "A Tiny Desk Reset",
+    "summary": "A quick visual cue to relax your shoulders and clear one small spot on your desk.",
+    "background": "#F5F0E6",
+    "ink": "#263B36",
+    "art_label": "PAUSE · DROP YOUR SHOULDERS · CLEAR ONE SMALL SPOT",
+    "caption": "Make a little room to begin again.",
+    "paragraphs": [
+      "Let your shoulders soften. Clear one palm-sized patch of desk. That’s enough to start."
+    ],
+    "shapes": [
+      {
+        "kind": "rect",
+        "x": 34,
+        "y": 34,
+        "width": 732,
+        "height": 432,
+        "fill": "#F5F0E6",
+        "stroke": "#263B36",
+        "stroke_width": 3,
+        "rotation": 0
+      },
+      {
+        "kind": "circle",
+        "x": 112,
+        "y": 110,
+        "width": 84,
+        "height": 84,
+        "fill": "#E9B86E",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 154,
+        "y": 132,
+        "width": 1,
+        "height": 38,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 3,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 135,
+        "y": 151,
+        "width": 39,
+        "height": 1,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 3,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 284,
+        "y": 116,
+        "width": 350,
+        "height": 14,
+        "fill": "#8FB8A5",
+        "stroke": "#263B36",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 284,
+        "y": 172,
+        "width": 270,
+        "height": 14,
+        "fill": "#8FB8A5",
+        "stroke": "#263B36",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 284,
+        "y": 228,
+        "width": 320,
+        "height": 14,
+        "fill": "#8FB8A5",
+        "stroke": "#263B36",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 111,
+        "y": 322,
+        "width": 578,
+        "height": 84,
+        "fill": "#D9E8DE",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 156,
+        "y": 346,
+        "width": 100,
+        "height": 36,
+        "fill": "#F5F0E6",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "circle",
+        "x": 137,
+        "y": 342,
+        "width": 12,
+        "height": 12,
+        "fill": "#E9B86E",
+        "stroke": "#263B36",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "circle",
+        "x": 263,
+        "y": 342,
+        "width": 12,
+        "height": 12,
+        "fill": "#E9B86E",
+        "stroke": "#263B36",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 315,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 345,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 375,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 405,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 435,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 465,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 495,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 525,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 555,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 585,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 615,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 645,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      }
+    ]
+  },
+  "final": {
+    "title": "A Tiny Desk Reset",
+    "summary": "A quick visual cue to relax your shoulders and clear one small spot on your desk.",
+    "background": "#F5F0E6",
+    "ink": "#263B36",
+    "art_label": "PAUSE · DROP YOUR SHOULDERS · CLEAR ONE SMALL SPOT",
+    "caption": "Make a little room to begin again.",
+    "paragraphs": [
+      "Let your shoulders soften. Clear one palm-sized patch of desk beside your notebook and pencil. That’s enough to start."
+    ],
+    "shapes": [
+      {
+        "kind": "rect",
+        "x": 34,
+        "y": 34,
+        "width": 732,
+        "height": 432,
+        "fill": "#F5F0E6",
+        "stroke": "#263B36",
+        "stroke_width": 3,
+        "rotation": 0
+      },
+      {
+        "kind": "circle",
+        "x": 112,
+        "y": 110,
+        "width": 84,
+        "height": 84,
+        "fill": "#E9B86E",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 154,
+        "y": 132,
+        "width": 1,
+        "height": 38,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 3,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 135,
+        "y": 151,
+        "width": 39,
+        "height": 1,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 3,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 284,
+        "y": 116,
+        "width": 350,
+        "height": 14,
+        "fill": "#8FB8A5",
+        "stroke": "#263B36",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 284,
+        "y": 172,
+        "width": 270,
+        "height": 14,
+        "fill": "#8FB8A5",
+        "stroke": "#263B36",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 284,
+        "y": 228,
+        "width": 320,
+        "height": 14,
+        "fill": "#8FB8A5",
+        "stroke": "#263B36",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 111,
+        "y": 322,
+        "width": 578,
+        "height": 84,
+        "fill": "#D9E8DE",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 156,
+        "y": 346,
+        "width": 100,
+        "height": 36,
+        "fill": "#F5F0E6",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "circle",
+        "x": 137,
+        "y": 342,
+        "width": 12,
+        "height": 12,
+        "fill": "#E9B86E",
+        "stroke": "#263B36",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "circle",
+        "x": 263,
+        "y": 342,
+        "width": 12,
+        "height": 12,
+        "fill": "#E9B86E",
+        "stroke": "#263B36",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 315,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 345,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 375,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 405,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 435,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 465,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 495,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 525,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 555,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 585,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 615,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 645,
+        "y": 353,
+        "width": 1,
+        "height": 24,
+        "fill": "#263B36",
+        "stroke": "#263B36",
+        "stroke_width": 2,
+        "rotation": 0
+      }
+    ]
+  },
+  "sources": [],
+  "draft_review": {
+    "passed": true,
+    "summary": "The poster gives a clear, low-effort reset prompt, and its text and restrained colors are understandable. The bounded shape data passes the supplied machine checks. No lyrics, copied characters, or personal data are present.",
+    "issues": [],
+    "improvement": "Make the illustration read more clearly as a desk by depicting a small cleared patch beside recognizable desk items; the current bars and lower grid are abstract."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "The poster is a clear, low-effort desk reset prompt. All supplied machine checks pass, and the text is understandable with no apparent personal data, copied characters, or lyrics.",
+    "issues": [],
+    "improvement": "The added notebook and pencil make the setting more specific, but the illustration itself is unchanged and still reads as abstract bars and a grid. Add recognizable notebook and pencil shapes beside a small cleared patch so the visual supports the instruction."
+  },
+  "changes": "Changed paragraphs. The original draft is retained unchanged.",
+  "cost_usd": 0.0075407,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38262197485",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-12T14:21:29Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.002011675
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-12T14:22:05Z",
+      "status": "passed",
+      "summary": "The poster gives a clear, low-effort reset prompt, and its text and restrained colors are understandable. The bounded shape data passes the supplied machine checks. No lyrics, copied characters, or personal data are present.",
+      "checks": [],
+      "cost_usd": 0.00165255
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-12T14:23:00Z",
+      "status": "passed",
+      "summary": "Changed paragraphs. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.002151425
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-12T14:23:29Z",
+      "status": "passed",
+      "summary": "The poster is a clear, low-effort desk reset prompt. All supplied machine checks pass, and the text is understandable with no apparent personal data, copied characters, or lyrics.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "visible-illustration",
+          "passed": true,
+          "detail": "Every shape lies within the illustration viewBox before rotation."
+        },
+        {
+          "id": "illustrated-story",
+          "passed": true,
+          "detail": "Illustration has at least two shape colours and a readable caption."
+        },
+        {
+          "id": "accessible-poster",
+          "passed": true,
+          "detail": "Illustration has a descriptive text alternative and a distinct text colour."
+        }
+      ],
+      "cost_usd": 0.0017250499999999999
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-12T14:23:41.667Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}
