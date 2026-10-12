@@ -1,0 +1,123 @@
+{
+  "id": "nightshift-game-38251878003-1",
+  "type": "game",
+  "title": "Gem Path",
+  "summary": "Use arrow keys or WASD to collect both gems (*) and reach the goal (G). Walls (#) block movement; dots (.) are walkable ground. Max 30 moves.",
+  "created_at": "2026-10-12T12:53:26.057Z",
+  "published_at": "2026-10-12T12:56:23.304Z",
+  "draft": {
+    "title": "Gem Path",
+    "summary": "Use arrow keys or WASD to collect both gems (*) and reach the goal (G). Walls (#) block movement; max 30 moves.",
+    "theme": "grove",
+    "grid": [
+      "#######",
+      "#P*...#",
+      "#.#.#.#",
+      "#*....#",
+      "##...G#",
+      "#.....#",
+      "#######"
+    ],
+    "max_moves": 30
+  },
+  "final": {
+    "title": "Gem Path",
+    "summary": "Use arrow keys or WASD to collect both gems (*) and reach the goal (G). Walls (#) block movement; dots (.) are walkable ground. Max 30 moves.",
+    "theme": "grove",
+    "grid": [
+      "#######",
+      "#P*...#",
+      "#.#.#.#",
+      "#*....#",
+      "##...G#",
+      "#.....#",
+      "#######"
+    ],
+    "max_moves": 30
+  },
+  "sources": [],
+  "draft_review": {
+    "passed": true,
+    "summary": "Gem Path is a bounded, understandable game with clear controls, a seven-by-seven rectangular grid, two gems, one player and one goal. The supplied deterministic checks pass, including a reachable win in 9 moves within the 30-move limit.",
+    "issues": [],
+    "improvement": "Add a short legend explaining that `.` marks walkable ground, so players can interpret every grid symbol before starting."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "The game is understandable and bounded: its rectangular grid has one player, one goal, two gems, and clear movement and terrain instructions. Deterministic checks confirm a winning route executes in 9 moves, within the 30-move limit.",
+    "issues": [],
+    "improvement": "Add an instruction for restarting the game after a win or when the player wants to try a different route."
+  },
+  "changes": "Changed summary. The original draft is retained unchanged.",
+  "cost_usd": 0.005958074999999999,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38251878003",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-12T12:54:05Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.00157655
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-12T12:54:48Z",
+      "status": "passed",
+      "summary": "Gem Path is a bounded, understandable game with clear controls, a seven-by-seven rectangular grid, two gems, one player and one goal. The supplied deterministic checks pass, including a reachable win in 9 moves within the 30-move limit.",
+      "checks": [],
+      "cost_usd": 0.00143355
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-12T12:55:28Z",
+      "status": "passed",
+      "summary": "Changed summary. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.0014579249999999999
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-12T12:56:07Z",
+      "status": "passed",
+      "summary": "The game is understandable and bounded: its rectangular grid has one player, one goal, two gems, and clear movement and terrain instructions. Deterministic checks confirm a winning route executes in 9 moves, within the 30-move limit.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "grid-geometry",
+          "passed": true,
+          "detail": "Rectangular board with exactly one player and one goal."
+        },
+        {
+          "id": "collectibles",
+          "passed": true,
+          "detail": "Two to eight collectible gems."
+        },
+        {
+          "id": "reachable-win",
+          "passed": true,
+          "detail": "Independent maze search needs 9 moves; limit 30."
+        },
+        {
+          "id": "executed-win",
+          "passed": true,
+          "detail": "The found route executes through the shipped movement rules and collects every gem before winning."
+        }
+      ],
+      "cost_usd": 0.00149005
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-12T12:56:23.304Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}
