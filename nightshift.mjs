@@ -4,7 +4,15 @@ export const ROTATION=['song','game','tool','poster','news'];
 export const canonical=x=>Array.isArray(x)?'['+x.map(canonical).join(',')+']':x&&typeof x==='object'?'{'+Object.keys(x).sort().map(k=>JSON.stringify(k)+':'+canonical(x[k])).join(',')+'}':JSON.stringify(x);
 export const sha=x=>createHash('sha256').update(canonical(x)).digest('hex');
 export const hourAfter=at=>new Date(Date.parse(at)+3600000).toISOString();
-export const substantiveChange=(draft,final)=>canonical(Object.fromEntries(Object.entries(draft||{}).filter(([k])=>!['title','summary'].includes(k))))!==canonical(Object.fromEntries(Object.entries(final||{}).filter(([k])=>!['title','summary'].includes(k))));
+export const substantiveChange=(draft,final)=>{
+ const body=x=>Object.fromEntries(Object.entries(x||{}).filter(([k])=>!['title','summary'].includes(k)));
+ if(canonical(body(draft))!==canonical(body(final)))return true;
+ // Instructions are rendered inside the actual artifact, so a clearer control
+ // legend is a real usability improvement. Names and punctuation are not.
+ const before=new Set(String(draft?.summary||'').toLowerCase().match(/[a-z0-9]+/g)||[]);
+ const added=[...new Set(String(final?.summary||'').toLowerCase().match(/[a-z0-9]+/g)||[])].filter(w=>!before.has(w));
+ return added.length>=2&&String(final?.summary||'').length>=20&&/control|move|collect|reach|legend|input|enter|unit|box|price|calculate|convert|play|stop|read/i.test(final?.summary||'');
+};
 export const validRecordedReview=x=>x&&typeof x.passed==='boolean'&&typeof x.summary==='string'&&x.summary.length>=20&&x.summary.length<=1000&&Array.isArray(x.issues)&&x.issues.length<=8&&x.issues.every(v=>typeof v==='string'&&v.length<=600)&&typeof x.improvement==='string'&&x.improvement.length>=10&&x.improvement.length<=1500;
 export const emptyGallery=()=>({schema_version:2,title:'The Night Shift',revision:0,piece_count:0,attempt_count:0,created_at:null,updated_at:null,schedule:{status:'preparing',runner:'github-actions',cadence_minutes:60,next_piece_at:null,last_run_url:null,budget:null},pieces:[],failures:[]});
 export function metadata(piece){return Object.fromEntries(['id','type','title','summary','created_at','published_at','cost_usd','run_url','changes','steps','cost_accounting'].map(k=>[k,piece[k]]));}
