@@ -1105,9 +1105,23 @@
       "id": "tick-38219321022-1",
       "day": "2026-10-12",
       "at": "2026-10-12T07:43:34.427Z",
-      "status": "reserved",
-      "charged_usd": 0.1,
-      "cost_usd": null
+      "status": "observed",
+      "charged_usd": 0.01390955,
+      "cost_usd": 0.01390955,
+      "settled_at": "2026-10-12T07:44:43.425Z",
+      "usage": {
+        "status": "observed",
+        "reason": null,
+        "model": "gpt-6-luna",
+        "inputTokens": 99217,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 99214,
+        "outputTokens": 3015,
+        "reasoningOutputTokens": 1250,
+        "costUsd": 0.01390955,
+        "cacheWriteAccounting": "reported_by_cli",
+        "pricingStatus": "standard_token_estimate"
+      }
     }
   ]
 }
