@@ -1,0 +1,208 @@
+{
+  "id": "tick-38277461346-1",
+  "at": "2026-10-12T16:29:58.568Z",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38277461346",
+  "type": "news",
+  "status": "failed_checks",
+  "cost_usd": 0.006785325,
+  "usage": {
+    "status": "observed",
+    "model": "gpt-6-luna",
+    "costUsd": 0.006785325,
+    "inputTokens": 48729,
+    "cachedInputTokens": 0,
+    "cacheWriteInputTokens": 48717,
+    "outputTokens": 1389,
+    "reasoningOutputTokens": 602,
+    "steps": [
+      {
+        "stage": "draft",
+        "called": true,
+        "job_id": 114906432566,
+        "started_at": "2026-10-12T16:27:18Z",
+        "completed_at": "2026-10-12T16:27:55Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 11604,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 11601,
+          "outputTokens": 282,
+          "reasoningOutputTokens": 0,
+          "costUsd": 0.001591425,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      },
+      {
+        "stage": "check",
+        "called": true,
+        "job_id": 114906703588,
+        "started_at": "2026-10-12T16:27:58Z",
+        "completed_at": "2026-10-12T16:28:24Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 12156,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 12153,
+          "outputTokens": 217,
+          "reasoningOutputTokens": 103,
+          "costUsd": 0.001627925,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      },
+      {
+        "stage": "improvement",
+        "called": true,
+        "job_id": 114906855628,
+        "started_at": "2026-10-12T16:28:34Z",
+        "completed_at": "2026-10-12T16:29:08Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 12473,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 12470,
+          "outputTokens": 527,
+          "reasoningOutputTokens": 239,
+          "costUsd": 0.00182255,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      },
+      {
+        "stage": "final_check",
+        "called": true,
+        "job_id": 114907144473,
+        "started_at": "2026-10-12T16:29:11Z",
+        "completed_at": "2026-10-12T16:29:42Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 12496,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 12493,
+          "outputTokens": 363,
+          "reasoningOutputTokens": 260,
+          "costUsd": 0.001743425,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      }
+    ]
+  },
+  "first_review": {
+    "passed": false,
+    "summary": "The artifact is understandable, but the supplied machine checks fail, so it is not ready to publish.",
+    "issues": [
+      "Both claims are not exact extracts from the supplied source excerpt.",
+      "The quoted evidence exceeds the 25-word limit per source.",
+      "Both claims use one source record, failing the two-source diversity check."
+    ],
+    "improvement": "Rewrite claims as exact excerpts of 25 words or fewer from the supplied source text, and support them with at least one additional independently identified source record."
+  },
+  "final_review": {
+    "passed": false,
+    "summary": "The article is understandable and its claims match the supplied source excerpts, but it fails the short-extract machine check and is not ready to publish.",
+    "issues": [
+      "The commercial space station evidence quote contains 26 words, exceeding the 25-word limit per source."
+    ],
+    "improvement": "Shorten that claim and quote to an exact excerpt of 25 words or fewer from its supplied source, then rerun the machine checks."
+  },
+  "machine_checks": {
+    "passed": false,
+    "checks": [
+      {
+        "id": "bounded-payload",
+        "passed": true,
+        "detail": "Only documented bounded data fields are present."
+      },
+      {
+        "id": "trusted-source-extracts",
+        "passed": true,
+        "detail": "Each factual claim is an exact short extract from its supplied trusted source excerpt. This check proves source correspondence, not the source’s universal accuracy."
+      },
+      {
+        "id": "source-links",
+        "passed": true,
+        "detail": "Every HTTPS source link and title matches the trusted source record."
+      },
+      {
+        "id": "short-extracts",
+        "passed": false,
+        "detail": "No more than 25 quoted words per source."
+      },
+      {
+        "id": "source-diversity",
+        "passed": true,
+        "detail": "At least two independently identified source records."
+      }
+    ],
+    "errors": [
+      "short-extracts: No more than 25 quoted words per source."
+    ]
+  },
+  "piece_id": null,
+  "failure": {
+    "id": "tick-38277461346-1",
+    "at": "2026-10-12T16:29:58.568Z",
+    "type": "news",
+    "reason": "No piece published: short-extracts: No more than 25 quoted words per source.",
+    "cost_usd": 0.006785325,
+    "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38277461346"
+  },
+  "original_draft": {
+    "title": "NASA’s Heat Shield Capsules",
+    "summary": "NASA tested 12 small experimental capsules designed to demonstrate heat shield technologies after leaving the International Space Station aboard a cargo resupply mission.",
+    "topic": "NASA heat shield technology demonstration",
+    "claims": [
+      {
+        "text": "NASA is testing heat shields to help protect astronauts returning from missions to the Moon and Mars.",
+        "source_id": "nasa-379bb7dc3042",
+        "source_url": "https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/",
+        "source_title": "NASA Demonstrates Next-Generation Heat Shield Technologies",
+        "evidence_quote": "NASA is testing heat shields that can keep astronauts safe as they return from missions to the Moon and Mars"
+      },
+      {
+        "text": "A cargo resupply spacecraft carried 12 experimental capsules after undocking from the International Space Station.",
+        "source_id": "nasa-379bb7dc3042",
+        "source_url": "https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/",
+        "source_title": "NASA Demonstrates Next-Generation Heat Shield Technologies",
+        "evidence_quote": "When Northrop Grumman 24th cargo resupply mission for NASA undocked from the International Space Station, it carried a fleet of 12 small, experimental capsules"
+      }
+    ]
+  },
+  "improved_final": {
+    "title": "NASA Heat Shields and Commercial Space Stations",
+    "summary": "NASA is testing heat shields for astronaut returns from the Moon and Mars, and advancing plans for commercial space stations in low Earth orbit.",
+    "topic": "NASA space technology and commercial space stations",
+    "claims": [
+      {
+        "text": "NASA is testing heat shields that can keep astronauts safe as they return from missions to the Moon and Mars",
+        "source_id": "nasa-379bb7dc3042",
+        "source_url": "https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/",
+        "source_title": "NASA Demonstrates Next-Generation Heat Shield Technologies",
+        "evidence_quote": "NASA is testing heat shields that can keep astronauts safe as they return from missions to the Moon and Mars"
+      },
+      {
+        "text": "NASA is advancing American leadership in space by taking the next step toward a future where commercial space stations lead the way in low Earth orbit.",
+        "source_id": "nasa-927f8df3be92",
+        "source_url": "https://www.nasa.gov/news-release/nasa-seeks-us-industry-plans-for-commercial-space-stations/",
+        "source_title": "NASA Seeks US Industry Plans for Commercial Space Stations",
+        "evidence_quote": "NASA is advancing American leadership in space by taking the next step toward a future where commercial space stations lead the way in low Earth orbit."
+      }
+    ]
+  },
+  "published_revision": 10,
+  "public_url": "https://autonomous-observatory-20261011.xndanius.chatgpt.site"
+}
