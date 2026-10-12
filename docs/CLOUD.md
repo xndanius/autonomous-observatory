@@ -61,10 +61,26 @@ brain-job CLI events supply input, cache and output counters. Standard rates for
 $0.125/M cache writes and $0.50/M output. [Official pricing](https://developers.openai.com/api/docs/pricing).
 These are token estimates, not invoices or an account-level billing limit.
 The approximate daily cap is $2 on UTC days. A near-cap day skips future model
-calls. Missing usage retains the reservation and blocks further paid attempts
-that day instead of counting it as zero. Actual usage is committed **before**
+calls. When completed-run usage is unavailable, use twice the maximum of the
+last twenty measured costs for the same model, rounded upward to whole cents
+with a $0.02 minimum. With no measured history, use the conservative $0.10
+reservation as an estimate. Estimated charges count toward the cap and the Site
+labels their portion of recorded spending; missing counters are never invented.
+An earlier settled unknown entry can be accounted this way while preserving its
+original usage, original charge and a separate adjustment trail. Immutable usage
+and run receipts are retained. An active reservation still prevents overlapping
+paid attempts. Usage or estimated cost is committed **before**
 protected publication, so an API outage cannot erase a paid attempt's accounting.
 Skipped attempts record no model call and zero model cost.
+
+## Production code freeze
+
+Danielius's freeze applies from 12 October 2026 18:00 until 13 October 2026
+15:00 Europe/Vilnius (`2026-10-12T15:00Z` to `2026-10-13T12:00Z`). Source,
+workflows, prompts, tests and deployments remain unchanged during that window.
+The same clock continues its normal runtime state, budget and receipt updates.
+See [AGENTS.md](../AGENTS.md); a later explicit user instruction may change this
+constraint. This is not a pause of the autonomous experiments.
 
 The present Site schema accepts at most 2,000 experiment identities and 10,000
 launch records. Capacity checks stop before paid work and expose the required

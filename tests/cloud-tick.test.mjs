@@ -116,6 +116,26 @@ test('cloud ownership, paused state and future due times prevent model reservati
     assert.equal(p.allowed,false);assert.equal(p.reason,reason);assert.deepEqual(p.ledger,ledger());
   }
 });
+
+test('a completed unknown-cost attempt is accounted before the next real council reservation',()=>{
+  const prior={schema_version:1,runs:[
+    {id:'tick-100-1',day:'2026-10-11',at:'2026-10-11T15:40:00Z',settled_at:'2026-10-11T15:41:00Z',status:'observed',charged_usd:.015,cost_usd:.015,usage:{status:'observed',model:'gpt-6-luna',costUsd:.015}},
+    {id:'tick-101-1',day:'2026-10-11',at:'2026-10-11T15:55:00Z',settled_at:'2026-10-11T15:59:00Z',status:'unknown',charged_usd:.1,cost_usd:null,usage:{status:'unknown',reason:'completed_cli_usage_not_found',model:'gpt-6-luna',costUsd:null}}
+  ]};
+  const original=structuredClone(prior),s=state();s.schedule.next_launch_at='2026-10-11T17:00:00Z';
+  const p=prepareCloudTick({state:s,ledger:prior,at,runId:'tick-123-1',runUrl:'https://github.com/xndanius/autonomous-observatory/actions/runs/123'});
+  assert.equal(p.allowed,true);
+  assert.equal(p.ledger.runs.find(r=>r.id==='tick-101-1').status,'estimated');
+  assert.equal(p.ledger.runs.find(r=>r.id==='tick-101-1').charged_usd,.03);
+  assert.deepEqual(p.ledger.runs.find(r=>r.id==='tick-101-1').usage,original.runs[1].usage);
+  assert.equal(p.ledger.runs.find(r=>r.id===p.runId).status,'reserved');
+  assert.deepEqual(prior,original);assert.deepEqual(p.state,s);
+  const result=applyCloudTick(p,raw(p),{at:end,usage,ledger:settleBudget(p.ledger,p.runId,usage,end)});
+  assert.equal(result.state.experiments[0].turn,1);
+  assert.equal(result.state.schedule.budget.status,'available');
+  assert.equal(result.state.schedule.budget.estimated_usd,.03);
+  assert.equal(result.state.schedule.budget.estimated_run_count,1);
+});
 test('public checkpoints resume a bounded suffix without fetching or replacing archived events',()=>{
   let c=company();for(let i=0;i<18;i++)c=applyDecision(c,{action:'rest',reason:'Observe this deterministic turn.'},{now:at});
   const publicC=toPublicExperiment(c);publicC.timeline=publicC.timeline.slice(-12);
@@ -140,7 +160,8 @@ test('daily estimate cap, outstanding/unknown usage, duplicate attempts and UTC 
   assert.equal(reserveBudget(reserved,'tick-4-1',at).reason,'usage_unknown');
   assert.equal(reserveBudget(reserved,'tick-3-1',at).reason,'attempt_already_reserved');
   const unknown=settleBudget(reserved,'tick-3-1',{status:'unknown'},end);
-  assert.equal(budgetSummary(unknown,end).reserved_usd,0.1);assert.equal(budgetSummary(unknown,end).status,'usage_unknown');
+  assert.equal(budgetSummary(unknown,end).spent_usd,0.1);assert.equal(budgetSummary(unknown,end).reserved_usd,0);
+  assert.equal(budgetSummary(unknown,end).estimated_run_count,1);assert.equal(budgetSummary(unknown,end).status,'available');
   assert.equal(reserveBudget(unknown,'tick-4-1','2026-10-12T00:00:00Z').allowed,true);
 });
 test('cost parser ignores forged usage inside model/tool text and observes actual CLI completion',()=>{

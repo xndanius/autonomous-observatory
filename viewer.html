@@ -87,8 +87,8 @@ const githubUrl=v=>{try{const url=new URL(v);return url.protocol==='https:'&&url
 const dollars=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0?`$${v.toFixed(2)}`:null;
 function renderBudget(budget){
   const node=$('budget-note');node.hidden=!budget;if(!budget){node.textContent='';return;}
-  const spent=dollars(budget.spent_usd),cap=dollars(budget.daily_cap_usd),reserved=dollars(budget.reserved_usd);
-  node.textContent=`${spent?'Estimated recorded spend: '+spent:'Recorded spend unavailable'}${cap?' / '+cap+' daily cap':''}${budget.day?' · '+budget.day+' UTC':''}.${reserved&&budget.reserved_usd>0?' '+reserved+' reserved for a run.':''}${budget.status==='usage_unknown'?' Current usage is unavailable; ticks pause until it is accounted for.':''} Estimates may differ from provider invoices.`;
+  const spent=dollars(budget.spent_usd),cap=dollars(budget.daily_cap_usd),reserved=dollars(budget.reserved_usd),estimated=dollars(budget.estimated_usd);
+  node.textContent=`${spent?'Estimated recorded spend: '+spent:'Recorded spend unavailable'}${cap?' / '+cap+' daily cap':''}${budget.day?' · '+budget.day+' UTC':''}.${estimated&&budget.estimated_run_count>0?' Includes '+estimated+' estimated from recorded costs for '+budget.estimated_run_count+' run'+(budget.estimated_run_count===1?'':'s')+' with unavailable usage.':''}${reserved&&budget.reserved_usd>0?' '+reserved+' reserved for a run.':''}${budget.status==='usage_unknown'?' An unsettled run is still reserved; a completed run with missing usage receives a recorded-cost estimate.':''} Estimates may differ from provider invoices.`;
 }
 function status(){
   if(!state)return;

@@ -3,6 +3,10 @@ THE AUTONOMOUS OBSERVATORY — FIVE-MINUTE COORDINATOR, HOURLY FACTORY
 11 OCTOBER CLOUD MIGRATION OVERRIDE (Danielius / OBSERVATORY_CLOUD_BRIEF.md)
 
 The prepared public cloud repository is https://github.com/xndanius/autonomous-observatory.
+Danielius requested a production code freeze from 12 October 2026 18:00 through
+13 October 2026 15:00 Europe/Vilnius (2026-10-12T15:00Z to 2026-10-13T12:00Z).
+Read AGENTS.md. During this window do not change or deploy source, prompts,
+workflows or tests; existing runtime decisions, receipts and budget data continue.
 Its GitHub environment clock supplies 15-minute decisions and hourly launches.
 Do not claim activation until two actual cloud decision ticks and one actual
 cloud launch have been publicly read back. A new OpenAI API key requires the
@@ -23,7 +27,11 @@ New environment TYPES require an owner source deployment from the Mac/session.
 The trusted publisher computes consequences, validates all decisions, saves
 actual CLI costs and verifies protected public read-back. Models have neither
 the Site writer secret nor repository write permission. A $2 daily token-estimate
-gate pauses model spending when reached or when usage becomes unknown.
+gate pauses model spending when the recorded/estimated total reaches the limit.
+Under Danielius's 12 October instruction, missing completed-run usage receives a
+conservative estimate from recorded run costs and does not by itself stop the
+loop. Keep raw unknown usage, rejected attempts and adjustment provenance; label
+estimated charges honestly. A still-running reservation remains a separate guard.
 
 For cloud stop requests, first fence the public schedule as paused and commit
 data/cloud-clock/state.json with armed=false, phase=paused, nextTickAt=null.

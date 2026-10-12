@@ -95,12 +95,21 @@ test('missing usage is not presented as zero spend and blocks the active cloud c
   const h=harness();h.show(cloud({budget:{daily_cap_usd:2,day:'2026-10-11',spent_usd:null,reserved_usd:0,status:'usage_unknown'}}));
   assert.equal(h.text('status-text'),'Cloud runs paused · usage unavailable');
   assert.match(h.text('budget-note'),/^Recorded spend unavailable \/ \$2\.00 daily cap/);
-  assert.match(h.text('budget-note'),/ticks pause until it is accounted for/);
+  assert.match(h.text('budget-note'),/completed run with missing usage receives a recorded-cost estimate/);
   assert.doesNotMatch(h.text('budget-note'),/\$0\.00/);
   h.show(cloud({status:'paused'}));
   assert.equal(h.text('status-text'),'Cloud runs paused · paused');
   assert.equal(h.node('budget-note').hidden,true);
   assert.equal(h.text('budget-note'),'');
+});
+
+test('unavailable live usage with an accounted historical estimate remains active under the cap',()=>{
+  const h=harness();h.show(cloud({budget:{daily_cap_usd:2,day:'2026-10-11',spent_usd:.50,observed_usd:.46,estimated_usd:.04,estimated_run_count:1,reserved_usd:0,status:'available'}}));
+  assert.equal(h.text('runner-label'),'Runs in the cloud');
+  assert.match(h.text('budget-note'),/Estimated recorded spend: \$0\.50 \/ \$2\.00 daily cap/);
+  assert.match(h.text('budget-note'),/Includes \$0\.04 estimated from recorded costs for 1 run with unavailable usage/);
+  assert.doesNotMatch(h.text('budget-note'),/ticks pause/);
+  assert.equal(h.node('status-dot').classes.get('warn'),false);
 });
 
 test('existing Mac schedules preserve their requirements and hide cloud-only details',()=>{
