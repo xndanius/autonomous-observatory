@@ -1,0 +1,210 @@
+{
+  "id": "tick-38305675828-1",
+  "at": "2026-10-12T20:42:33.106Z",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38305675828",
+  "type": "news",
+  "status": "failed_checks",
+  "cost_usd": 0.00669195,
+  "usage": {
+    "status": "observed",
+    "model": "gpt-6-luna",
+    "costUsd": 0.00669195,
+    "inputTokens": 48822,
+    "cachedInputTokens": 0,
+    "cacheWriteInputTokens": 48810,
+    "outputTokens": 1179,
+    "reasoningOutputTokens": 301,
+    "steps": [
+      {
+        "stage": "draft",
+        "called": true,
+        "job_id": 114999147013,
+        "started_at": "2026-10-12T20:40:15Z",
+        "completed_at": "2026-10-12T20:40:45Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 11604,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 11601,
+          "outputTokens": 286,
+          "reasoningOutputTokens": 0,
+          "costUsd": 0.0015934249999999999,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      },
+      {
+        "stage": "check",
+        "called": true,
+        "job_id": 114999346618,
+        "started_at": "2026-10-12T20:40:48Z",
+        "completed_at": "2026-10-12T20:41:19Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 12160,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 12157,
+          "outputTokens": 303,
+          "reasoningOutputTokens": 160,
+          "costUsd": 0.001671425,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      },
+      {
+        "stage": "improvement",
+        "called": true,
+        "job_id": 114999538756,
+        "started_at": "2026-10-12T20:41:21Z",
+        "completed_at": "2026-10-12T20:41:50Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 12506,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 12503,
+          "outputTokens": 292,
+          "reasoningOutputTokens": 0,
+          "costUsd": 0.001709175,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      },
+      {
+        "stage": "final_check",
+        "called": true,
+        "job_id": 114999715542,
+        "started_at": "2026-10-12T20:41:53Z",
+        "completed_at": "2026-10-12T20:42:20Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 12552,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 12549,
+          "outputTokens": 298,
+          "reasoningOutputTokens": 141,
+          "costUsd": 0.001717925,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      }
+    ]
+  },
+  "first_review": {
+    "passed": false,
+    "summary": "The heat-shield story is understandable, but it fails the supplied machine checks and is not publishable as written.",
+    "issues": [
+      "Both claims use the same source, so the source-diversity check fails.",
+      "The claims are not exact short excerpts from the supplied source text; the second quote also exceeds the 25-word limit.",
+      "The other supplied NASA sources concern unrelated topics and do not support this heat-shield story."
+    ],
+    "improvement": "Use exact excerpts of no more than 25 words each from at least two independently identified sources that both support the story, or choose a topic supported by two of the supplied sources."
+  },
+  "final_review": {
+    "passed": false,
+    "summary": "The revised heat-shield story fails the trusted-source-extracts check and its summary is cut off mid-word, so it is not publishable as written.",
+    "issues": [
+      "The final summary ends with “after it und,” leaving the story incomplete.",
+      "The second claim is about a NASA football flyover, not heat-shield experiments, and the machine check rejects the claim-to-extract match.",
+      "The claims cite two independent sources, but source diversity does not make the unrelated flyover claim relevant to this story."
+    ],
+    "improvement": "Replace the flyover claim with a short exact excerpt from an independently identified source that supports the heat-shield story, then finish the summary using only supported details."
+  },
+  "machine_checks": {
+    "passed": false,
+    "checks": [
+      {
+        "id": "bounded-payload",
+        "passed": true,
+        "detail": "Only documented bounded data fields are present."
+      },
+      {
+        "id": "trusted-source-extracts",
+        "passed": false,
+        "detail": "Each factual claim is an exact short extract from its supplied trusted source excerpt. This check proves source correspondence, not the source’s universal accuracy."
+      },
+      {
+        "id": "source-links",
+        "passed": true,
+        "detail": "Every HTTPS source link and title matches the trusted source record."
+      },
+      {
+        "id": "short-extracts",
+        "passed": true,
+        "detail": "No more than 25 quoted words per source."
+      },
+      {
+        "id": "source-diversity",
+        "passed": true,
+        "detail": "At least two independently identified source records."
+      }
+    ],
+    "errors": [
+      "trusted-source-extracts: Each factual claim is an exact short extract from its supplied trusted source excerpt. This check proves source correspondence, not the source’s universal accuracy."
+    ]
+  },
+  "piece_id": null,
+  "failure": {
+    "id": "tick-38305675828-1",
+    "at": "2026-10-12T20:42:33.106Z",
+    "type": "news",
+    "reason": "No piece published: trusted-source-extracts: Each factual claim is an exact short extract from its supplied trusted source excerpt. This check proves source correspondence, not the source’s universal accuracy.",
+    "cost_usd": 0.00669195,
+    "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38305675828"
+  },
+  "original_draft": {
+    "title": "NASA Heat Shields Test Their Limits",
+    "summary": "NASA is testing experimental heat shields by sending them out with space-station trash. The capsules are designed to help protect astronauts returning from the Moon and Mars.",
+    "topic": "NASA heat-shield experiments",
+    "claims": [
+      {
+        "text": "NASA is testing heat shields designed to protect astronauts returning from missions to the Moon and Mars.",
+        "source_id": "nasa-379bb7dc3042",
+        "source_url": "https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/",
+        "source_title": "NASA Demonstrates Next-Generation Heat Shield Technologies",
+        "evidence_quote": "NASA is testing heat shields that can keep astronauts safe as they return from missions to the Moon and Mars"
+      },
+      {
+        "text": "The test capsules traveled away from the International Space Station aboard a cargo resupply mission.",
+        "source_id": "nasa-379bb7dc3042",
+        "source_url": "https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/",
+        "source_title": "NASA Demonstrates Next-Generation Heat Shield Technologies",
+        "evidence_quote": "When Northrop Grumman 24th cargo resupply mission for NASA undocked from the International Space Station, it carried a fleet of 12 small, experimental capsules"
+      }
+    ]
+  },
+  "improved_final": {
+    "title": "NASA Heat Shields Test Their Limits",
+    "summary": "NASA is testing heat shields designed to keep astronauts safe as they return from missions to the Moon and Mars. The agency says the test capsules traveled aboard a cargo resupply mission after it und",
+    "topic": "NASA heat-shield experiments",
+    "claims": [
+      {
+        "text": "NASA is testing heat shields that can keep astronauts safe as they return from missions to the Moon and Mars",
+        "source_id": "nasa-379bb7dc3042",
+        "source_url": "https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/",
+        "source_title": "NASA Demonstrates Next-Generation Heat Shield Technologies",
+        "evidence_quote": "NASA is testing heat shields that can keep astronauts safe as they return from missions to the Moon and Mars"
+      },
+      {
+        "text": "NASA Administrator Jared Isaacman will pilot one of three F-5 fighter jets for the New York Jets vs. Cleveland Browns game.",
+        "source_id": "nasa-b25ccdaaf9e2",
+        "source_url": "https://www.nasa.gov/news-release/nasa-to-conduct-flyover-engage-nfl-fans-at-metlife-stadium/",
+        "source_title": "NASA to Conduct Flyover, Engage NFL Fans at MetLife Stadium",
+        "evidence_quote": "NASA Administrator Jared Isaacman will pilot one of three F-5 fighter jets"
+      }
+    ]
+  },
+  "published_revision": 14,
+  "public_url": "https://autonomous-observatory-20261011.xndanius.chatgpt.site"
+}
