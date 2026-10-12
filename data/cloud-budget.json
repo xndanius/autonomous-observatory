@@ -1171,8 +1171,8 @@
       "id": "tick-38224151210-1",
       "day": "2026-10-12",
       "at": "2026-10-12T08:32:25.726Z",
-      "status": "unknown",
-      "charged_usd": 0.1,
+      "status": "estimated",
+      "charged_usd": 0.03,
       "cost_usd": null,
       "settled_at": "2026-10-12T08:38:14.028Z",
       "usage": {
@@ -1180,7 +1180,105 @@
         "reason": "trusted_completed_cli_usage_unavailable",
         "model": "gpt-6-luna",
         "costUsd": null
-      }
+      },
+      "estimated_cost_usd": 0.03,
+      "estimate_basis": {
+        "method": "twice_maximum_recorded_run",
+        "model": "gpt-6-luna",
+        "as_of": "2026-10-12T08:38:14.028Z",
+        "sample_ids": [
+          "tick-38198915438-1",
+          "tick-38199946369-1",
+          "tick-38201004749-1",
+          "tick-38202074301-1",
+          "tick-38203147281-1",
+          "tick-38204224818-1",
+          "tick-38205307967-1",
+          "tick-38206394475-1",
+          "tick-38207515068-1",
+          "tick-38208660304-1",
+          "tick-38209842966-1",
+          "tick-38211077887-1",
+          "tick-38212333686-1",
+          "tick-38213635165-1",
+          "tick-38214979423-1",
+          "tick-38216376798-1",
+          "tick-38217836211-1",
+          "tick-38219321022-1",
+          "tick-38220837348-1",
+          "tick-38222417240-1"
+        ],
+        "sample_count": 20,
+        "sample_limit": 20,
+        "observed_max_usd": 0.0149068,
+        "multiplier": 2,
+        "rounding": "up_to_whole_cents",
+        "minimum_usd": 0.02,
+        "fallback_usd": 0.1
+      },
+      "original_unknown": {
+        "status": "unknown",
+        "charged_usd": 0.1,
+        "settled_at": "2026-10-12T08:38:14.028Z",
+        "cost_usd": null,
+        "usage": {
+          "status": "unknown",
+          "reason": "trusted_completed_cli_usage_unavailable",
+          "model": "gpt-6-luna",
+          "costUsd": null
+        }
+      },
+      "cost_adjustments": [
+        {
+          "kind": "unknown_cost_estimate",
+          "reconciled_at": "2026-10-12T10:39:19.781Z",
+          "previous_status": "unknown",
+          "previous_charged_usd": 0.1,
+          "estimated_cost_usd": 0.03,
+          "estimate_basis": {
+            "method": "twice_maximum_recorded_run",
+            "model": "gpt-6-luna",
+            "as_of": "2026-10-12T08:38:14.028Z",
+            "sample_ids": [
+              "tick-38198915438-1",
+              "tick-38199946369-1",
+              "tick-38201004749-1",
+              "tick-38202074301-1",
+              "tick-38203147281-1",
+              "tick-38204224818-1",
+              "tick-38205307967-1",
+              "tick-38206394475-1",
+              "tick-38207515068-1",
+              "tick-38208660304-1",
+              "tick-38209842966-1",
+              "tick-38211077887-1",
+              "tick-38212333686-1",
+              "tick-38213635165-1",
+              "tick-38214979423-1",
+              "tick-38216376798-1",
+              "tick-38217836211-1",
+              "tick-38219321022-1",
+              "tick-38220837348-1",
+              "tick-38222417240-1"
+            ],
+            "sample_count": 20,
+            "sample_limit": 20,
+            "observed_max_usd": 0.0149068,
+            "multiplier": 2,
+            "rounding": "up_to_whole_cents",
+            "minimum_usd": 0.02,
+            "fallback_usd": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "id": "tick-38237651869-1",
+      "day": "2026-10-12",
+      "at": "2026-10-12T10:39:19.781Z",
+      "status": "reserved",
+      "charged_usd": 0.1,
+      "cost_usd": null
     }
   ]
 }
