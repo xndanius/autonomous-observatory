@@ -1,0 +1,318 @@
+{
+  "id": "nightshift-song-38249316459-1",
+  "type": "song",
+  "title": "Focus Spark",
+  "summary": "A bright, steady triangle motif with 12 notes, lasting 8 seconds at 90 BPM; chords resolve within the melody.",
+  "created_at": "2026-10-12T12:29:23.405Z",
+  "published_at": "2026-10-12T12:32:00.184Z",
+  "draft": {
+    "title": "Five-Second Focus Spark",
+    "summary": "A bright, compact motif with a steady pulse and a resolved ending; 12 notes, 8 seconds at 90 BPM.",
+    "tempo_bpm": 90,
+    "instrument": "triangle",
+    "notes": [
+      {
+        "midi": 60,
+        "duration_beats": 0.5,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 0.5,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 0.5,
+        "rest": false
+      },
+      {
+        "midi": 72,
+        "duration_beats": 0.5,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 0.5,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 0.5,
+        "rest": false
+      },
+      {
+        "midi": 62,
+        "duration_beats": 0.5,
+        "rest": false
+      },
+      {
+        "midi": 65,
+        "duration_beats": 0.5,
+        "rest": false
+      },
+      {
+        "midi": 69,
+        "duration_beats": 0.5,
+        "rest": false
+      },
+      {
+        "midi": 74,
+        "duration_beats": 0.5,
+        "rest": false
+      },
+      {
+        "midi": 69,
+        "duration_beats": 0.5,
+        "rest": false
+      },
+      {
+        "midi": 60,
+        "duration_beats": 0.5,
+        "rest": false
+      }
+    ],
+    "chords": [
+      {
+        "start_beat": 0,
+        "duration_beats": 2,
+        "midis": [
+          60,
+          64,
+          67
+        ]
+      },
+      {
+        "start_beat": 2,
+        "duration_beats": 2,
+        "midis": [
+          55,
+          59,
+          62
+        ]
+      },
+      {
+        "start_beat": 4,
+        "duration_beats": 2,
+        "midis": [
+          57,
+          60,
+          64
+        ]
+      },
+      {
+        "start_beat": 6,
+        "duration_beats": 2,
+        "midis": [
+          60,
+          64,
+          67
+        ]
+      }
+    ]
+  },
+  "final": {
+    "title": "Focus Spark",
+    "summary": "A bright, steady triangle motif with 12 notes, lasting 8 seconds at 90 BPM; chords resolve within the melody.",
+    "tempo_bpm": 90,
+    "instrument": "triangle",
+    "notes": [
+      {
+        "midi": 60,
+        "duration_beats": 1,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 1,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 1,
+        "rest": false
+      },
+      {
+        "midi": 72,
+        "duration_beats": 1,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 1,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 1,
+        "rest": false
+      },
+      {
+        "midi": 62,
+        "duration_beats": 1,
+        "rest": false
+      },
+      {
+        "midi": 65,
+        "duration_beats": 1,
+        "rest": false
+      },
+      {
+        "midi": 69,
+        "duration_beats": 1,
+        "rest": false
+      },
+      {
+        "midi": 74,
+        "duration_beats": 1,
+        "rest": false
+      },
+      {
+        "midi": 69,
+        "duration_beats": 1,
+        "rest": false
+      },
+      {
+        "midi": 60,
+        "duration_beats": 1,
+        "rest": false
+      }
+    ],
+    "chords": [
+      {
+        "start_beat": 0,
+        "duration_beats": 3,
+        "midis": [
+          60,
+          64,
+          67
+        ]
+      },
+      {
+        "start_beat": 3,
+        "duration_beats": 3,
+        "midis": [
+          55,
+          59,
+          62
+        ]
+      },
+      {
+        "start_beat": 6,
+        "duration_beats": 3,
+        "midis": [
+          57,
+          60,
+          64
+        ]
+      },
+      {
+        "start_beat": 9,
+        "duration_beats": 3,
+        "midis": [
+          60,
+          64,
+          67
+        ]
+      }
+    ]
+  },
+  "sources": [],
+  "draft_review": {
+    "passed": false,
+    "summary": "The artifact fails deterministic checks: its 12 half-beat notes at 90 BPM last 4 seconds, and its chords extend beyond the 4-second melody. The title claims five seconds, while the summary claims eight seconds; neither matches the actual duration.",
+    "issues": [
+      "Song duration is 4 seconds, below the required 8–75 seconds.",
+      "Chord timing fails because the chord sequence lasts 8 beats (5⅓ seconds), longer than the 6-beat melody (4 seconds).",
+      "Title and summary give conflicting, inaccurate duration claims."
+    ],
+    "improvement": "Extend the melody to at least 12 beats at 90 BPM (8 seconds) and adjust chord timings so every chord ends within it; then align the title and summary with the verified duration."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "The revised song is understandable and passes the supplied deterministic evidence: 12 audible notes across multiple pitches, an 8-second duration at 90 BPM, chords ending within the melody, and bounded browser playback with Play and Stop controls. The title and summary match the final duration.",
+    "issues": [],
+    "improvement": "Add a short note explaining how the chords relate to the melody, since their timing and pitch changes may not be obvious to a listener."
+  },
+  "changes": "Changed title, summary, notes, chords. The original draft is retained unchanged.",
+  "cost_usd": 0.0062307000000000005,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38249316459",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-12T12:30:03Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.001524425
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-12T12:30:33Z",
+      "status": "needs_improvement",
+      "summary": "The artifact fails deterministic checks: its 12 half-beat notes at 90 BPM last 4 seconds, and its chords extend beyond the 4-second melody. The title claims five seconds, while the summary claims eight seconds; neither matches the actual duration.",
+      "checks": [
+        "Song duration is 4 seconds, below the required 8–75 seconds.",
+        "Chord timing fails because the chord sequence lasts 8 beats (5⅓ seconds), longer than the 6-beat melody (4 seconds).",
+        "Title and summary give conflicting, inaccurate duration claims."
+      ],
+      "cost_usd": 0.0015131749999999999
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-12T12:31:21Z",
+      "status": "passed",
+      "summary": "Changed title, summary, notes, chords. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.00165555
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-12T12:31:50Z",
+      "status": "passed",
+      "summary": "The revised song is understandable and passes the supplied deterministic evidence: 12 audible notes across multiple pitches, an 8-second duration at 90 BPM, chords ending within the melody, and bounded browser playback with Play and Stop controls. The title and summary match the final duration.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "audible-length",
+          "passed": true,
+          "detail": "The composition lasts 8.00 seconds; allowed range 8–75."
+        },
+        {
+          "id": "melody",
+          "passed": true,
+          "detail": "At least eight audible notes and three different pitches."
+        },
+        {
+          "id": "chord-timing",
+          "passed": true,
+          "detail": "Every distinct-pitch chord finishes within the melody."
+        },
+        {
+          "id": "polyphony",
+          "passed": true,
+          "detail": "No more than three simultaneous chord events."
+        },
+        {
+          "id": "playable-web-audio",
+          "passed": true,
+          "detail": "Browser synthesizer uses bounded MIDI pitches, finite durations, a gain envelope and explicit Play/Stop."
+        }
+      ],
+      "cost_usd": 0.00153755
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-12T12:32:00.184Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}
