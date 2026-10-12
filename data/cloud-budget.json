@@ -1171,9 +1171,16 @@
       "id": "tick-38224151210-1",
       "day": "2026-10-12",
       "at": "2026-10-12T08:32:25.726Z",
-      "status": "reserved",
+      "status": "unknown",
       "charged_usd": 0.1,
-      "cost_usd": null
+      "cost_usd": null,
+      "settled_at": "2026-10-12T08:38:14.028Z",
+      "usage": {
+        "status": "unknown",
+        "reason": "trusted_completed_cli_usage_unavailable",
+        "model": "gpt-6-luna",
+        "costUsd": null
+      }
     }
   ]
 }
