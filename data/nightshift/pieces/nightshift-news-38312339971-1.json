@@ -1,0 +1,174 @@
+{
+  "id": "nightshift-news-38312339971-1",
+  "type": "news",
+  "title": "Space’s Two Kinds of Mirrors",
+  "summary": "A quick-look mini poster: galaxies can look warped, while tiny capsules test heat-shield ideas. Pause and spot both kinds of space science.",
+  "created_at": "2026-10-12T21:43:04.224Z",
+  "published_at": "2026-10-12T21:45:29.598Z",
+  "draft": {
+    "title": "Space’s Two Kinds of Mirrors",
+    "summary": "A quick-look mini poster: galaxies can look warped, while tiny capsules test heat-shield ideas. Pause and spot both kinds of space science.",
+    "topic": "NASA heat-shield testing and a Webb image of galaxies",
+    "claims": [
+      {
+        "text": "NASA says a cargo mission carried 12 small experimental capsules designed to test heat-shield technologies.",
+        "source_id": "nasa-379bb7dc3042",
+        "source_url": "https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/",
+        "source_title": "NASA Demonstrates Next-Generation Heat Shield Technologies",
+        "evidence_quote": "it carried a fleet of 12 small, experimental capsules designed to"
+      },
+      {
+        "text": "NASA describes galaxies in a Webb image as appearing to warp and multiply like reflections in a house of mirrors.",
+        "source_id": "nasa-29666617b33e",
+        "source_url": "https://www.nasa.gov/image-article/cosmic-house-of-mirrors/",
+        "source_title": "Cosmic House of Mirrors",
+        "evidence_quote": "Galaxies warp and multiply as if in a house of mirrors"
+      }
+    ]
+  },
+  "final": {
+    "title": "Space’s Two Kinds of Mirrors",
+    "summary": "A quick-look mini poster: galaxies can look warped, while tiny capsules test heat-shield ideas. Pause and spot both kinds of space science.",
+    "topic": "NASA heat-shield testing and a Webb image of galaxies",
+    "claims": [
+      {
+        "text": "it carried a fleet of 12 small, experimental capsules designed to",
+        "source_id": "nasa-379bb7dc3042",
+        "source_url": "https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/",
+        "source_title": "NASA Demonstrates Next-Generation Heat Shield Technologies",
+        "evidence_quote": "it carried a fleet of 12 small, experimental capsules designed to"
+      },
+      {
+        "text": "Galaxies warp and multiply as if in a house of mirrors",
+        "source_id": "nasa-29666617b33e",
+        "source_url": "https://www.nasa.gov/image-article/cosmic-house-of-mirrors/",
+        "source_title": "Cosmic House of Mirrors",
+        "evidence_quote": "Galaxies warp and multiply as if in a house of mirrors"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "nasa-b25ccdaaf9e2",
+      "url": "https://www.nasa.gov/news-release/nasa-to-conduct-flyover-engage-nfl-fans-at-metlife-stadium/",
+      "title": "NASA to Conduct Flyover, Engage NFL Fans at MetLife Stadium",
+      "excerpt": "NASA to Conduct Flyover, Engage NFL Fans at MetLife Stadium As part of the agency’s Inspiration Tour flyover, NASA Administrator Jared Isaacman will pilot one of three F-5 fighter jets to kick off the New York Jets vs. Cleveland Browns game in East Rutherford, New Jersey, on Sunday, Oct. 11. NASA team members will engage with fans at the agency’s Experience Zone, located at the [&#8230;]",
+      "published_at": "Sat, 10 Oct 2026 14:18:59 +0000",
+      "retrieved_at": "2026-10-12T21:43:04.876Z"
+    },
+    {
+      "id": "nasa-927f8df3be92",
+      "url": "https://www.nasa.gov/news-release/nasa-seeks-us-industry-plans-for-commercial-space-stations/",
+      "title": "NASA Seeks US Industry Plans for Commercial Space Stations",
+      "excerpt": "NASA Seeks US Industry Plans for Commercial Space Stations NASA is advancing American leadership in space by taking the next step toward a future where commercial space stations lead the way in low Earth orbit. On Friday, the agency released its final Request for Proposals inviting industry to submit plans for the next generation of commercial space stations. “In alignment with the President’s National [&#8230;]",
+      "published_at": "Fri, 09 Oct 2026 18:11:44 +0000",
+      "retrieved_at": "2026-10-12T21:43:04.876Z"
+    },
+    {
+      "id": "nasa-379bb7dc3042",
+      "url": "https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/",
+      "title": "NASA Demonstrates Next-Generation Heat Shield Technologies",
+      "excerpt": "NASA Demonstrates Next-Generation Heat Shield Technologies NASA is testing heat shields that can keep astronauts safe as they return from missions to the Moon and Mars in an unusual way: by taking out the trash. When Northrop Grumman 24th cargo resupply mission for NASA undocked from the International Space Station, it carried a fleet of 12 small, experimental capsules designed to [&#8230;]",
+      "published_at": "Fri, 09 Oct 2026 16:59:24 +0000",
+      "retrieved_at": "2026-10-12T21:43:04.876Z"
+    },
+    {
+      "id": "nasa-29666617b33e",
+      "url": "https://www.nasa.gov/image-article/cosmic-house-of-mirrors/",
+      "title": "Cosmic House of Mirrors",
+      "excerpt": "Cosmic House of Mirrors Galaxies warp and multiply as if in a house of mirrors in this image from NASA's James Webb Space Telescope released on Sept. 29, 2026. The brilliant golden galaxies seen here are part of a galaxy cluster called MACS J0454.1-0300. The orange galaxies bunched together on one side of the image, however, are not actually [&#8230;]",
+      "published_at": "Fri, 09 Oct 2026 13:57:24 +0000",
+      "retrieved_at": "2026-10-12T21:43:04.876Z"
+    }
+  ],
+  "draft_review": {
+    "passed": false,
+    "summary": "The poster has a clear, understandable concept, but it fails the trusted-source-extracts machine check: both factual claims paraphrase their supplied excerpts instead of matching them exactly.",
+    "issues": [
+      "The heat-shield claim does not exactly match its excerpt, which says “it carried a fleet of 12 small, experimental capsules designed to”.",
+      "The galaxy claim does not exactly match its excerpt: “Galaxies warp and multiply as if in a house of mirrors”."
+    ],
+    "improvement": "Revise each claim to use only a short exact excerpt from its cited source, preserving the source IDs, URLs and titles, then rerun the deterministic checks."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "The revised mini poster is understandable, and the supplied deterministic checks pass. Both claims now exactly match short excerpts from distinct NASA sources; the checks establish correspondence to the supplied records, not broader factual accuracy. The supplied evidence does not demonstrate how the poster is rendered or used.",
+    "issues": [],
+    "improvement": "Add a simple visual cue or layout instruction that helps viewers distinguish the Webb galaxy image from the heat-shield capsule story at a glance."
+  },
+  "changes": "Changed claims. The original draft is retained unchanged.",
+  "cost_usd": 0.0066787,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38312339971",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-12T21:43:37Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.001734425
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-12T21:44:06Z",
+      "status": "needs_improvement",
+      "summary": "The poster has a clear, understandable concept, but it fails the trusted-source-extracts machine check: both factual claims paraphrase their supplied excerpts instead of matching them exactly.",
+      "checks": [
+        "The heat-shield claim does not exactly match its excerpt, which says “it carried a fleet of 12 small, experimental capsules designed to”.",
+        "The galaxy claim does not exactly match its excerpt: “Galaxies warp and multiply as if in a house of mirrors”."
+      ],
+      "cost_usd": 0.0016598
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-12T21:44:39Z",
+      "status": "passed",
+      "summary": "Changed claims. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.0016768
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-12T21:45:13Z",
+      "status": "passed",
+      "summary": "The revised mini poster is understandable, and the supplied deterministic checks pass. Both claims now exactly match short excerpts from distinct NASA sources; the checks establish correspondence to the supplied records, not broader factual accuracy. The supplied evidence does not demonstrate how the poster is rendered or used.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "trusted-source-extracts",
+          "passed": true,
+          "detail": "Each factual claim is an exact short extract from its supplied trusted source excerpt. This check proves source correspondence, not the source’s universal accuracy."
+        },
+        {
+          "id": "source-links",
+          "passed": true,
+          "detail": "Every HTTPS source link and title matches the trusted source record."
+        },
+        {
+          "id": "short-extracts",
+          "passed": true,
+          "detail": "No more than 25 quoted words per source."
+        },
+        {
+          "id": "source-diversity",
+          "passed": true,
+          "detail": "At least two independently identified source records."
+        }
+      ],
+      "cost_usd": 0.001607675
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-12T21:45:29.598Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}
