@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {createExperiment,toPublicExperiment,applyDecision} from '../engine.mjs';
-import {prepareCloudTick,applyCloudTick,observe,checkpoint,validateDecisions} from '../scripts/cloud-tick.mjs';
+import {prepareCloudTick,applyCloudTick,observe,checkpoint,validateDecisions,reviewCloudDecisions,rejectCloudTick} from '../scripts/cloud-tick.mjs';
 import {reserveBudget,settleBudget,budgetSummary} from '../cloud-budget.mjs';
 import {parseCodexUsage} from '../cloud-usage.mjs';
 import {canonicalPublic} from '../publish.mjs';
@@ -51,6 +51,64 @@ test('wrong/duplicate IDs, omitted alternatives and invalid parameters reject th
   const invalid=raw(p);invalid.decisions[1].params_json='{"subject":"everyone"}';
   assert.throws(()=>applyCloudTick(p,invalid,{at:end,usage,ledger:p.ledger}));
   assert.equal(p.state.experiments[0].turn,0);
+});
+
+function emptyChainCompany(){
+  let e=createExperiment({id:'seeded-company',type:'bicycle-company',createdAt:at,seed:{version:1,value:'review-recovery-regression'}});
+  for(let i=0;i<40;i++){
+    const waiting=e.world.orders.find(o=>o.status==='waiting'&&o.service==='chain');
+    if(e.world.inventory.chain.quantity===0&&waiting)return e;
+    e=applyDecision(e,waiting&&e.world.inventory.chain.quantity>0?{action:'service',params:{order_id:waiting.id}}:{action:'rest'},{now:at});
+  }
+  assert.fail('Seeded regression fixture never reached an empty-chain waiting order');
+}
+
+test('an infeasible seeded repair gives the next fresh council feedback without advancing any world',()=>{
+  const s=state(),seeded=emptyChainCompany();
+  s.experiments.push(toPublicExperiment(seeded));s.schedule.next_launch_at='2026-10-11T17:00:00.000Z';
+  const p=prep(s),before=structuredClone(p.state),input=raw(p),order=seeded.world.orders.find(o=>o.status==='waiting'&&o.service==='chain');
+  const rejected=input.decisions.find(d=>d.experiment_id===seeded.id);
+  Object.assign(rejected,{action:'service',params_json:JSON.stringify({order_id:order.id})});
+  const review=reviewCloudDecisions(p,input,{at:end});
+  assert.equal(review.status,'rejected');assert.equal(review.error_count,1);
+  assert.deepEqual(review.errors,[{experiment_id:seeded.id,action:'service',error:'Insufficient chain stock for this batch.'}]);
+  assert.throws(()=>applyCloudTick(p,input,{at:end,usage,ledger:p.ledger}),/Insufficient chain stock/);
+  assert.deepEqual(p.state,before);
+  const settled=settleBudget(p.ledger,p.runId,usage,end),failure=rejectCloudTick(p,review,{at:end,usage,ledger:settled});
+  assert.deepEqual(failure.state.experiments,before.experiments);assert.deepEqual(failure.state.launches,before.launches);
+  assert.equal(failure.record.status,'rejected');assert.equal(failure.record.validation_review.run_id,p.runId);
+  assert.equal(failure.record.validation_review.at,end);assert.equal(failure.state.schedule.last_tick_at,before.schedule.last_tick_at);
+  const retryAt='2026-10-11T16:15:00.000Z',publishedAt='2026-10-11T16:16:00.000Z';
+  const q=prepareCloudTick({state:failure.state,ledger:settled,at:retryAt,runId:'tick-124-1',runUrl:'https://github.com/xndanius/autonomous-observatory/actions/runs/124'});
+  assert.deepEqual(q.context.last_rejected_attempt,failure.record.validation_review);
+  const observed=q.context.experiments.find(e=>e.id===seeded.id);
+  assert(!observed.service_preflight.single_order_ids.includes(order.id));
+  assert(observed.service_preflight.single_order_ids.length>0,'Other stocked single orders remain available to the council');
+  assert.match(observed.service_preflight.scope,/no repair has been performed/);
+  const correction=raw(q);Object.assign(correction.decisions.find(d=>d.experiment_id===seeded.id),{action:'purchase',params_json:'{"part":"chain","quantity":1}'});
+  assert.equal(reviewCloudDecisions(q,correction,{at:publishedAt}).status,'accepted');
+  assert.deepEqual(q.state,failure.state);
+  const published=applyCloudTick(q,correction,{at:publishedAt,usage,ledger:settleBudget(q.ledger,q.runId,usage,publishedAt)});
+  assert(published.state.experiments.every((e,i)=>e.turn===before.experiments[i].turn+1));
+  assert.equal(published.state.experiments.find(e=>e.id===seeded.id).world.inventory.chain.quantity,1);
+  assert.equal(published.state.schedule.last_attempt_result,'published');assert.equal(published.state.schedule.last_rejection_review,null);
+  const next=prepareCloudTick({state:published.state,ledger:settleBudget(q.ledger,q.runId,usage,publishedAt),at:'2026-10-11T16:30:00.000Z',runId:'tick-125-1',runUrl:'https://github.com/xndanius/autonomous-observatory/actions/runs/125'});
+  assert.equal(Object.hasOwn(next.context,'last_rejected_attempt'),false);
+});
+
+test('review feedback caps errors and messages, and malformed envelopes disclose no raw parameters',()=>{
+  const s=state();s.schedule.next_launch_at='2026-10-11T17:00:00.000Z';
+  s.experiments=Array.from({length:14},(_,i)=>toPublicExperiment(createExperiment({id:'company-'+i,type:'bicycle-company',createdAt:at})));
+  const p=prep(s),input=raw(p);
+  for(const d of input.decisions)Object.assign(d,{action:'service',params_json:JSON.stringify({order_id:'missing-'+ 'x'.repeat(1000)})});
+  const review=reviewCloudDecisions(p,input,{at:end});
+  assert.equal(review.error_count,14);assert.equal(review.errors.length,12);
+  assert(review.errors.every(e=>e.error.length<=300&&e.action==='service'));
+  input.decisions[0].params_json='UNPARSEABLE_PARAMETERS_MUST_NOT_BE_ECHOED';
+  const malformed=reviewCloudDecisions(p,input,{at:end});
+  assert.deepEqual(malformed.errors.map(e=>[e.experiment_id,e.action]),[[null,null]]);
+  assert.match(malformed.errors[0].error,/envelope failed validation/);
+  assert(!JSON.stringify(malformed).includes(input.decisions[0].params_json));
 });
 test('cloud ownership, paused state and future due times prevent model reservation',()=>{
   for(const [change,reason] of [[{runner:'mac'},'cloud_does_not_own_writer'],[{status:'paused'},'paused'],[{next_tick_at:'2026-10-11T17:00:00.000Z'},'not_due']]){
