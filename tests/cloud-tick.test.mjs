@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {createExperiment,toPublicExperiment,applyDecision} from '../engine.mjs';
-import {prepareCloudTick,applyCloudTick,observe,checkpoint,validateDecisions,reviewCloudDecisions,rejectCloudTick} from '../scripts/cloud-tick.mjs';
+import {prepareCloudTick,applyCloudTick,observe,checkpoint,validateDecisions,reviewCloudDecisions,rejectCloudTick,decisionSchema} from '../scripts/cloud-tick.mjs';
 import {reserveBudget,settleBudget,budgetSummary} from '../cloud-budget.mjs';
 import {parseCodexUsage} from '../cloud-usage.mjs';
 import {canonicalPublic} from '../publish.mjs';
@@ -51,6 +51,29 @@ test('wrong/duplicate IDs, omitted alternatives and invalid parameters reject th
   const invalid=raw(p);invalid.decisions[1].params_json='{"subject":"everyone"}';
   assert.throws(()=>applyCloudTick(p,invalid,{at:end,usage,ledger:p.ledger}));
   assert.equal(p.state.experiments[0].turn,0);
+});
+
+test('a fully repaired cafe remains active, and an omitted review is identified without fabricated progress',()=>{
+  let cafe=createExperiment({id:'repair-cafe-007',type:'repair-cafe',createdAt:at});
+  for(const [app_id,source] of Object.entries({checkout:'floor(x*y*(100-z)/100)',temperature:'x*9/5+32',boxes:'ceil(x/y)',travel:'x/y*60'})){
+    cafe=applyDecision(cafe,{action:'repair',params:{app_id,source}},{now:at});
+  }
+  assert.equal(cafe.world.queue.length,0);assert.equal(cafe.status,'active');
+  const s=state();s.experiments.push(toPublicExperiment(cafe));s.schedule.next_launch_at='2026-10-11T17:00:00Z';
+  const p=prep(s),before=structuredClone(p.state),input=raw(p);
+  input.decisions=input.decisions.filter(d=>d.experiment_id!==cafe.id);
+  const review=reviewCloudDecisions(p,input,{at:end});
+  assert.equal(review.status,'rejected');assert.equal(review.errors[0].experiment_id,cafe.id);
+  assert.match(review.errors[0].error,/goal appears complete/);
+  assert.throws(()=>applyCloudTick(p,input,{at:end,usage,ledger:p.ledger}),/Exactly one decision/);
+  assert.deepEqual(p.state,before);
+  const contract=decisionSchema(p.context.experiments.map(e=>e.id));
+  assert.equal(contract.properties.decisions.minItems,p.context.experiments.length);
+  assert.equal(contract.properties.decisions.maxItems,p.context.experiments.length);
+  input.decisions.push({experiment_id:cafe.id,action:'inspect',params_json:'{"app_id":"checkout"}',reason:'The cafe is fully repaired but active; the reviewer checks its deployed checkout against regression fixtures.',alternatives:['Apply an unchanged patch: it would create no useful repair.','Omit this cafe: an active experiment still requires a review.']});
+  const result=applyCloudTick(p,input,{at:end,usage,ledger:settleBudget(p.ledger,p.runId,usage,end)});
+  assert.equal(result.state.experiments.find(e=>e.id===cafe.id).turn,cafe.turn+1);
+  assert.equal(result.state.experiments.find(e=>e.id===cafe.id).world.latest_record.verdict,'inspected');
 });
 
 function emptyChainCompany(){
