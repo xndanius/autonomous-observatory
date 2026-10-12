@@ -1,0 +1,21 @@
+{
+  "id": "tick-38239274946-1",
+  "at": "2026-10-12T10:56:24.975Z",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38239274946",
+  "status": "publication_failed",
+  "usage": {
+    "status": "observed",
+    "reason": null,
+    "model": "gpt-6-luna",
+    "inputTokens": 106421,
+    "cachedInputTokens": 0,
+    "cacheWriteInputTokens": 106418,
+    "outputTokens": 3045,
+    "reasoningOutputTokens": 1129,
+    "costUsd": 0.01482505,
+    "cacheWriteAccounting": "reported_by_cli",
+    "pricingStatus": "standard_token_estimate"
+  },
+  "source_revision": 124,
+  "reason": "Protected publication or public read-back did not succeed; no successful cloud tick is claimed."
+}
