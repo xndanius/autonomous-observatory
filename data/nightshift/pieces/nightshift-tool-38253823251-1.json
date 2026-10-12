@@ -1,0 +1,139 @@
+{
+  "id": "nightshift-tool-38253823251-1",
+  "type": "tool",
+  "title": "Pocket Mile Converter",
+  "summary": "Convert kilometres to international miles using 1 mile = 1.609344 km. Enter a distance in kilometres; the result is rounded to three decimal places.",
+  "created_at": "2026-10-12T13:10:31.964Z",
+  "published_at": "2026-10-12T13:13:20.589Z",
+  "draft": {
+    "title": "Pocket Mile Converter",
+    "summary": "Convert kilometres to international miles using 1 mile = 1.609344 km.",
+    "chore": "km-to-miles",
+    "source": "x / 1.609344",
+    "inputs": [
+      {
+        "name": "x",
+        "label": "Distance (km)",
+        "default": 5,
+        "min": 0,
+        "max": 1000000,
+        "step": 0.1
+      }
+    ],
+    "result_label": "Distance (miles)",
+    "decimals": 3
+  },
+  "final": {
+    "title": "Pocket Mile Converter",
+    "summary": "Convert kilometres to international miles using 1 mile = 1.609344 km. Enter a distance in kilometres; the result is rounded to three decimal places.",
+    "chore": "km-to-miles",
+    "source": "x / 1.609344",
+    "inputs": [
+      {
+        "name": "x",
+        "label": "Distance (km)",
+        "default": 5,
+        "min": 0,
+        "max": 1000000,
+        "step": 0.1
+      }
+    ],
+    "result_label": "Distance (miles)",
+    "decimals": 3
+  },
+  "sources": [],
+  "draft_review": {
+    "passed": true,
+    "summary": "Pocket Mile Converter is a useful, understandable km-to-mile tool. Its bounded arithmetic source and all 17 independent fixtures pass; the formula and displayed units are coherent.",
+    "issues": [],
+    "improvement": "Add a short input instruction explaining that the value is a distance in kilometres and the result is rounded to three decimal places."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "Pocket Mile Converter is a useful, understandable km-to-mile tool. Its bounded arithmetic source uses the correct conversion factor, and all 17 independent fixtures pass.",
+    "issues": [],
+    "improvement": "Consider adding an example input and result so users can quickly see how the conversion works."
+  },
+  "changes": "Changed summary. The original draft is retained unchanged.",
+  "cost_usd": 0.0060382,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38253823251",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-12T13:11:05Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.0014977999999999999
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-12T13:11:37Z",
+      "status": "passed",
+      "summary": "Pocket Mile Converter is a useful, understandable km-to-mile tool. Its bounded arithmetic source and all 17 independent fixtures pass; the formula and displayed units are coherent.",
+      "checks": [],
+      "cost_usd": 0.001484925
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-12T13:12:11Z",
+      "status": "passed",
+      "summary": "Changed summary. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.001593175
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-12T13:13:10Z",
+      "status": "passed",
+      "summary": "Pocket Mile Converter is a useful, understandable km-to-mile tool. Its bounded arithmetic source uses the correct conversion factor, and all 17 independent fixtures pass.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "customer-inputs",
+          "passed": true,
+          "detail": "Inputs match the selected concrete customer chore."
+        },
+        {
+          "id": "input-domain",
+          "passed": true,
+          "detail": "Defaults and input ranges respect independently defined physical and numeric domains."
+        },
+        {
+          "id": "display-units",
+          "passed": true,
+          "detail": "Labels state canonical units; integer-result chores display whole counts/cents."
+        },
+        {
+          "id": "safe-expression",
+          "passed": true,
+          "detail": "Source parses as bounded arithmetic and uses only declared inputs."
+        },
+        {
+          "id": "independent-fixtures",
+          "passed": true,
+          "detail": "17/17 independently computed golden and edge/interior examples pass."
+        },
+        {
+          "id": "default-calculation",
+          "passed": true,
+          "detail": "The displayed defaults compute a finite real result."
+        }
+      ],
+      "cost_usd": 0.0014623
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-12T13:13:20.589Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}
