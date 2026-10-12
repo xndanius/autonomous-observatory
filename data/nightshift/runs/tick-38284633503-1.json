@@ -1,0 +1,208 @@
+{
+  "id": "tick-38284633503-1",
+  "at": "2026-10-12T17:33:14.284Z",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38284633503",
+  "type": "news",
+  "status": "failed_checks",
+  "cost_usd": 0.0068090749999999995,
+  "usage": {
+    "status": "observed",
+    "model": "gpt-6-luna",
+    "costUsd": 0.0068090749999999995,
+    "inputTokens": 48727,
+    "cachedInputTokens": 0,
+    "cacheWriteInputTokens": 48715,
+    "outputTokens": 1437,
+    "reasoningOutputTokens": 565,
+    "steps": [
+      {
+        "stage": "draft",
+        "called": true,
+        "job_id": 114930059039,
+        "started_at": "2026-10-12T17:30:35Z",
+        "completed_at": "2026-10-12T17:31:01Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 11604,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 11601,
+          "outputTokens": 550,
+          "reasoningOutputTokens": 291,
+          "costUsd": 0.001725425,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      },
+      {
+        "stage": "check",
+        "called": true,
+        "job_id": 114930242848,
+        "started_at": "2026-10-12T17:31:04Z",
+        "completed_at": "2026-10-12T17:31:31Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 12116,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 12113,
+          "outputTokens": 235,
+          "reasoningOutputTokens": 92,
+          "costUsd": 0.001631925,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      },
+      {
+        "stage": "improvement",
+        "called": true,
+        "job_id": 114930425216,
+        "started_at": "2026-10-12T17:31:34Z",
+        "completed_at": "2026-10-12T17:32:14Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 12462,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 12459,
+          "outputTokens": 312,
+          "reasoningOutputTokens": 0,
+          "costUsd": 0.001713675,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      },
+      {
+        "stage": "final_check",
+        "called": true,
+        "job_id": 114930690759,
+        "started_at": "2026-10-12T17:32:17Z",
+        "completed_at": "2026-10-12T17:32:57Z",
+        "conclusion": "success",
+        "usage": {
+          "status": "observed",
+          "reason": null,
+          "model": "gpt-6-luna",
+          "inputTokens": 12545,
+          "cachedInputTokens": 0,
+          "cacheWriteInputTokens": 12542,
+          "outputTokens": 340,
+          "reasoningOutputTokens": 182,
+          "costUsd": 0.0017380499999999999,
+          "cacheWriteAccounting": "reported_by_cli",
+          "pricingStatus": "standard_token_estimate"
+        }
+      }
+    ]
+  },
+  "first_review": {
+    "passed": false,
+    "summary": "The poster concept is understandable, but the artifact fails its deterministic checks and its factual claims are not supported by the supplied source excerpt.",
+    "issues": [
+      "Both claims paraphrase or add details beyond the supplied excerpt, so they fail exact source correspondence. The excerpt supports that NASA is testing heat shields and that capsules returned with a cargo mission; it does not say the mission was leaving the ISS.",
+      "Both claims cite the same source record, so the artifact fails the independent source diversity check."
+    ],
+    "improvement": "Revise the claims to match exact short excerpts from their cited sources, and support them with at least two independent source records."
+  },
+  "final_review": {
+    "passed": false,
+    "summary": "The poster is understandable, but it fails the trusted-source machine check. Its flyover claim also presents an Oct. 11 event as upcoming even though the supplied data was retrieved Oct. 12.",
+    "issues": [
+      "The trusted-source-extracts check failed, so the factual claims do not meet the required source correspondence check.",
+      "The flyover summary and claim say NASA “plans” and “will pilot,” but the cited source dates the game to Sunday, Oct. 11, before the Oct. 12 retrieval date."
+    ],
+    "improvement": "Replace the flyover item with a currently relevant fact supported by an exact excerpt from its source, then revise the summary and rerun the deterministic checks."
+  },
+  "machine_checks": {
+    "passed": false,
+    "checks": [
+      {
+        "id": "bounded-payload",
+        "passed": true,
+        "detail": "Only documented bounded data fields are present."
+      },
+      {
+        "id": "trusted-source-extracts",
+        "passed": false,
+        "detail": "Each factual claim is an exact short extract from its supplied trusted source excerpt. This check proves source correspondence, not the source’s universal accuracy."
+      },
+      {
+        "id": "source-links",
+        "passed": true,
+        "detail": "Every HTTPS source link and title matches the trusted source record."
+      },
+      {
+        "id": "short-extracts",
+        "passed": true,
+        "detail": "No more than 25 quoted words per source."
+      },
+      {
+        "id": "source-diversity",
+        "passed": true,
+        "detail": "At least two independently identified source records."
+      }
+    ],
+    "errors": [
+      "trusted-source-extracts: Each factual claim is an exact short extract from its supplied trusted source excerpt. This check proves source correspondence, not the source’s universal accuracy."
+    ]
+  },
+  "piece_id": null,
+  "failure": {
+    "id": "tick-38284633503-1",
+    "at": "2026-10-12T17:33:14.284Z",
+    "type": "news",
+    "reason": "No piece published: trusted-source-extracts: Each factual claim is an exact short extract from its supplied trusted source excerpt. This check proves source correspondence, not the source’s universal accuracy.",
+    "cost_usd": 0.0068090749999999995,
+    "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38284633503"
+  },
+  "original_draft": {
+    "title": "Space Trash, Safe Return",
+    "summary": "Mini poster: A tiny capsule rides home inside a heat shield. Sketch a fiery arrow down, then add the caption: “Today’s trash can help protect tomorrow’s astronauts.”",
+    "topic": "Heat shields and experimental capsules",
+    "claims": [
+      {
+        "text": "NASA is testing heat shields to help protect astronauts returning from the Moon and Mars.",
+        "source_id": "nasa-379bb7dc3042",
+        "source_url": "https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/",
+        "source_title": "NASA Demonstrates Next-Generation Heat Shield Technologies",
+        "evidence_quote": "NASA is testing heat shields that can keep astronauts safe"
+      },
+      {
+        "text": "The test capsules were designed to travel aboard a cargo resupply mission leaving the International Space Station.",
+        "source_id": "nasa-379bb7dc3042",
+        "source_url": "https://www.nasa.gov/centers-and-facilities/ames/nasa-demonstrates-next-generation-heat-shield-technologies/",
+        "source_title": "NASA Demonstrates Next-Generation Heat Shield Technologies",
+        "evidence_quote": "it carried a fleet of 12 small, experimental capsules"
+      }
+    ]
+  },
+  "improved_final": {
+    "title": "NASA Space Updates: Flyover and Space Stations",
+    "summary": "Mini poster: NASA plans a MetLife Stadium flyover and invites industry plans for commercial space stations. Sketch a jet beside an orbiting station, with both captions below.",
+    "topic": "NASA flyover and commercial space station plans",
+    "claims": [
+      {
+        "text": "NASA Administrator Jared Isaacman will pilot one of three F-5 fighter jets to kick off the New York Jets vs. Cleveland Browns game.",
+        "source_id": "nasa-b25ccdaaf9e2",
+        "source_url": "https://www.nasa.gov/news-release/nasa-to-conduct-flyover-engage-nfl-fans-at-metlife-stadium/",
+        "source_title": "NASA to Conduct Flyover, Engage NFL Fans at MetLife Stadium",
+        "evidence_quote": "NASA Administrator Jared Isaacman will pilot one of three F-5 fighter jets to kick off the New York Jets vs. Cleveland Browns game"
+      },
+      {
+        "text": "On Friday, the agency released its final Request for Proposals inviting industry to submit plans for the next generation of commercial space stations.",
+        "source_id": "nasa-927f8df3be92",
+        "source_url": "https://www.nasa.gov/news-release/nasa-seeks-us-industry-plans-for-commercial-space-stations/",
+        "source_title": "NASA Seeks US Industry Plans for Commercial Space Stations",
+        "evidence_quote": "On Friday, the agency released its final Request for Proposals inviting industry to submit plans for the next generation of commercial space stations"
+      }
+    ]
+  },
+  "published_revision": 11,
+  "public_url": "https://autonomous-observatory-20261011.xndanius.chatgpt.site"
+}
