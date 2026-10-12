@@ -1,136 +1,42 @@
-THE AUTONOMOUS OBSERVATORY — FIVE-MINUTE COORDINATOR, HOURLY FACTORY
+THE NIGHT SHIFT — V2 CLOUD WORKSHOP
 
-11 OCTOBER CLOUD MIGRATION OVERRIDE (Danielius / OBSERVATORY_CLOUD_BRIEF.md)
+Danielius approved OBSERVATORY_CLOUD_BRIEF.md v2 on 12 October 2026 and
+explicitly exempted this rebuild from the former 18:00 code freeze.
+The same public Site and GitHub repo now host real small pieces, not worlds.
+The complete old simulation archive is archive/observatory-20261012.
 
-The prepared public cloud repository is https://github.com/xndanius/autonomous-observatory.
-Danielius requested a production code freeze from 12 October 2026 18:00 through
-13 October 2026 15:00 Europe/Vilnius (2026-10-12T15:00Z to 2026-10-13T12:00Z).
-Read AGENTS.md. During this window do not change or deploy source, prompts,
-workflows or tests; existing runtime decisions, receipts and budget data continue.
-Its GitHub environment clock supplies 15-minute decisions and hourly launches.
-Do not claim activation until two actual cloud decision ticks and one actual
-cloud launch have been publicly read back. A new OpenAI API key requires the
-user's explicit approval. Existing writer-token transfer to GitHub Secrets is
-authorized by the cloud brief. Never expose or commit credentials.
+The existing Mac heartbeat stays PAUSED. Never begin or publish an old lab tick.
+The GitHub environment wait-clock remains the only clock and retains its exact
+chain identity. It wakes every 15 minutes; the Night Shift due-time gate reserves
+one new piece per hour. Not-due, rebuilding and budget-blocked wakes spend zero.
+Do not create a duplicate schedule or modify While You Sleep, SSE, the demo,
+comic, atlas or Trail.
 
-BEFORE ANY LOCAL PUBLICATION OR BEGIN: inspect `node lab.mjs status`.
-If schedule.runner is cloud-validation or github-actions, return quietly:
-the cloud owns the writer, including during the two-tick validation period.
-Do not retry a stale local publication, force a reservation, resume the Mac
-heartbeat, or advance local state while cloud ownership is recorded.
-After the verified switch, keep the existing Mac heartbeat PAUSED.
+Each hourly attempt rotates song, game, useful tool, illustrated poster/story,
+then a source-backed news brief. Four fresh ephemeral Codex calls author the
+first draft, independently check it, make one substantive improvement, and
+independently check the final. Trusted code independently verifies runnable
+behavior, exact news-source extracts and real changes. If final checks fail,
+publish no piece and record the reason/cost. Both draft and final remain playable.
+Never invent work, timestamps, facts, costs or independent reviews.
 
-Cloud state is restored from the exact committed Site API revision each run.
-New seeded instances use existing tested environments and explicit 12-decision
-campaigns; their completed records and all earlier experiments survive.
-New environment TYPES require an owner source deployment from the Mac/session.
-The trusted publisher computes consequences, validates all decisions, saves
-actual CLI costs and verifies protected public read-back. Models have neither
-the Site writer secret nor repository write permission. A $2 daily token-estimate
-gate pauses model spending when the recorded/estimated total reaches the limit.
-Under Danielius's 12 October instruction, missing completed-run usage receives a
-conservative estimate from recorded run costs and does not by itself stop the
-loop. Keep raw unknown usage, rejected attempts and adjustment provenance; label
-estimated charges honestly. A still-running reservation remains a separate guard.
+Use scripts/nightshift-tick.mjs through .github/workflows/tick.yml. Its gate
+validates exact immutable clock provenance, public state, the hourly due time
+and shared data/cloud-budget.json before paid calls. The writer secret appears
+only in the trusted publisher, never model jobs. The OpenAI key stays solely
+in GitHub Secrets. Do not create another key. All four actual CLI costs count
+toward the same $2 UTC-day cap; unavailable individual stage usage receives a
+labelled conservative recorded-cost estimate without invented token counters.
 
-For cloud stop requests, first fence the public schedule as paused and commit
-data/cloud-clock/state.json with armed=false, phase=paused, nextTickAt=null.
-Cancel the exact pending clock run if needed, and keep the Mac heartbeat paused.
-Do not erase history or create replacement schedules. Resume only on a new user
-request with the same cloud workflows; inspect docs/CLOUD_CLOCK.md.
+The first three real commissioned pieces form an explicit initial launch batch,
+not three invented unattended hours. Owner-only bootstrap slots are accepted
+sequentially while phase=bootstrap. After three successful pieces the same
+clock automatically continues hourly. Data/control and immutable receipts are
+tracked. Failed attempts remain preserved. Public data uses protected CAS and
+content-addressed immutable artifacts, with exact read-back before success.
+A durable publication is reconciled before another model call after a failure.
 
-The local workflow below applies only while no cloud runner owns the state.
-
-User authorization: create a genuinely new autonomous demonstration every hour,
-continue its decisions and progress, and publish the results as public websites.
-This public gallery gives every experiment its own permanent #id address.
-Continue until the user stops or changes this instruction. Do not alter Trail,
-Atlas, the SSE Riga work, or the While You Sleep project.
-
-Workspace: /Users/xndanius/Documents/ChatGPT/BitDegree RSI/autonomous-observatory
-Site identity and public origin: site.json and .openai/hosting.json. Never create
-another Site for this gallery. The public read APIs are anonymous; writes use a
-local ignored secret in .runtime/writer.key and the matching Sites runtime secret.
-Never display that secret, put it in a prompt, commit it, or send it elsewhere.
-No OpenAI API key is needed: fresh Codex subagents author the decisions, and the
-engine applies deterministic simulation rules. Do not claim the simulator itself
-is a language model. Never invent elapsed unattended work or fake timestamps.
-
-EACH TICK
-
-1. Run `node lab.mjs status`. If paused, return quietly. First retry pending
-   publication with `node publish.mjs`; a storage/network failure is actionable.
-   If it fails, repair or report it before committing additional decisions.
-   Run `node lab.mjs begin`. Skip busy/not_due. The ownership token reserves this
-   attempt for 20 minutes. Do not run catch-up batches for missed ticks.
-
-2. Give a NEW reasoning subagent, with fork_turns='none', this experiment's world,
-   allowed_actions, metrics, recent_timeline and compact memory from begin. Ask it
-   to choose one action, explain why, name one rejected alternative, and include
-   role deliberation in reason when useful. A few experiments can be handled by
-   one fresh council subagent to keep work bounded. The decision must match the
-   engine's allowed action and params schema. Preserve factual causal chains.
-   Different choices, failures, rejected hypotheses, and unchanged metrics are
-   legitimate outcomes. Do not optimize for a success story.
-
-3. If begin.launch_due is true, create ONE new kind of demonstration in this run.
-   Begin with alien-language and invention-league if unused, then use the user's
-   ideas: city governance, repair café, evolving game studio, musical band with
-   memory, correcting newspaper, imaginary civilization museum, artificial-life
-   station, or a genuinely new idea inspired by relevant project chats. You may
-   read other project chats; do not message them without user authorization.
-   Use a fresh creative subagent to define its decision space, persistent memory,
-   consequence rules, progress measure and lecture interaction. Do not relabel
-   a previously launched engine type or simply repeat a previous seed. If the
-   type is not implemented, add it to engine.mjs and TYPE_CATALOG, meaningful
-   tests and a suitable viewer in viewer.html before launch. Keep unrelated code
-   and existing events unchanged. Add an initial valid decision with the launch.
-   For repair/game demonstrations, create and check real before/after artifacts.
-   For music, create actual playable instrumental code/audio; for news, research
-   actual source links and correction evidence. Use the applicable skill if
-   an idea needs images, video, audio, documents or research. Never substitute
-   empty promises, static decorative counters, or fabricated external results.
-
-4. Save .runtime/decisions-<token>.json:
-   {"decisions":[{"experiment_id":"...","action":"...","params":{},
-     "actor":"Operations / Purchasing / Auditor","reason":"...",
-     "alternatives":["..."],"observation":"..."}],
-    "launch":{"type":"...","title":"...","description":"...",
-      "reason":"Why this is a distinct useful demonstration",
-      "decision":{"action":"...","params":{},"reason":"..."}}}
-   Omit launch when not due. Commit with
-   `node lab.mjs commit TOKEN .runtime/decisions-TOKEN.json`.
-   The engine, never the author, computes consequences and metrics. Validation
-   rejects impossible actions. Correct the decision and retry the same token.
-   If work fails, preserve drafts and use `node lab.mjs release TOKEN REASON`.
-
-5. For routine data, run `node publish.mjs`. It writes a new R2 revision through
-   the protected endpoint and verifies public read-back; it does not redeploy.
-   Immutable events are archived; each world retains the latest 12 decisions,
-   with earlier events available through the paginated history endpoint. The
-   shared R2 pointer and `/api/index` are compact metadata; the gallery loads
-   `/api/experiments/ID/state?revision=N` only for the selected world. The writer
-   stages changed content-addressed worlds before a protected index CAS and
-   verifies each committed world. `/api/state` and revision history still assemble
-   exact full records for compatibility. Verify `/api/status`, the index, individual
-   worlds and new event archives. Preserve the split storage and old immutable
-   archives; never revert to a monolithic pointer. Monitor index and per-world
-   size, rather than requiring the combined compatibility read to remain small.
-
-6. Source changes need public deployment BEFORE publishing state using them.
-   Follow the Sites skill with this same project_id. Run relevant node tests,
-   node scripts/bundle.mjs, bash scripts/build.sh, node scripts/validate-artifact.mjs.
-   Get a fresh Sites source repository write credential and pass it only through
-   hidden stdin to the Sites site-workflow helper; use its commit_sha and archive
-   in save_site_version then deploy_site_version. Preserve public access. Keep
-   native returned deployment IDs and poll only nonterminal states. Check writer
-   auth remains enforced after every source deployment. Then publish new data.
-
-Keep this loop's normal successful ticks quiet. Notify only on a new useful hourly
-launch (include its public link), a meaningful finding, failure or required user
-action. No social publishing, email or other messages are authorized here.
-The Mac must stay awake with Codex running and network/usage available. The hosted
-site remains readable when generation is offline; state timestamps expose delays.
-If the user stops the factory/loops, pause the matching heartbeat using the native
-automation tool, set `node lab.mjs schedule paused`, and publish that schedule.
-Reuse the same automation on resume. Do not silently cap launches or erase history.
+Source changes require meaningful tests, build and SAME Site deployment before
+GitHub enables affected source. Follow Sites skill and .openai/hosting.json;
+never create another Site or expose credentials. Preserve all history and
+permanent piece links after older pieces leave the latest-100 shelf.

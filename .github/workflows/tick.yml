@@ -1,19 +1,12 @@
-name: Autonomous Observatory decision tick
+name: The Night Shift hourly maker
 on:
   workflow_dispatch:
     inputs:
-      source_clock_run_id:
-        type: string
-        default: ''
-      source_clock_run_attempt:
-        type: string
-        default: ''
-      source_clock_chain_id:
-        type: string
-        default: ''
-      source_clock_generation:
-        type: string
-        default: ''
+      source_clock_run_id: {type: string, default: ''}
+      source_clock_run_attempt: {type: string, default: ''}
+      source_clock_chain_id: {type: string, default: ''}
+      source_clock_generation: {type: string, default: ''}
+      bootstrap_slot: {type: string, default: ''}
 permissions:
   contents: read
 concurrency:
@@ -25,63 +18,53 @@ env:
   SOURCE_CLOCK_RUN_ATTEMPT: ${{ inputs.source_clock_run_attempt }}
   SOURCE_CLOCK_CHAIN_ID: ${{ inputs.source_clock_chain_id }}
   SOURCE_CLOCK_GENERATION: ${{ inputs.source_clock_generation }}
+  BOOTSTRAP_SLOT: ${{ inputs.bootstrap_slot }}
 jobs:
   gate:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    permissions:
-      contents: write
-      actions: read
-    concurrency:
-      group: observatory-record
-      cancel-in-progress: false
-      queue: max
+    permissions: {contents: write, actions: read}
+    concurrency: {group: observatory-record, cancel-in-progress: false, queue: max}
     outputs:
       run_models: ${{ steps.gate.outputs.run_models }}
-      run_id: ${{ steps.gate.outputs.run_id }}
       gate_sha256: ${{ steps.gate.outputs.gate_sha256 }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-        with:
-          ref: main
-          fetch-depth: 0
+        with: {ref: main, fetch-depth: 0}
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
-        with:
-          node-version: 22
+        with: {node-version: 22}
       - id: gate
-        name: Validate writer ownership, exact clock provenance, state and daily budget
+        name: Validate exact clock, hourly due time and shared daily budget
         env:
           GH_TOKEN: ${{ github.token }}
           OPENAI_CONFIGURED: ${{ secrets.OPENAI_API_KEY != '' }}
-        run: node scripts/cloud-tick.mjs gate
+        run: node scripts/nightshift-tick.mjs gate
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: gate-${{ github.run_id }}-${{ github.run_attempt }}
-          path: .runtime/cloud/gate.json
+          name: nightshift-gate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift/gate.json
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 7
       - if: steps.gate.outputs.run_models == 'true'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: observations-${{ github.run_id }}-${{ github.run_attempt }}
-          path: .runtime/cloud/brain/
-          include-hidden-files: true
+          name: nightshift-context-${{ github.run_id }}-${{ github.run_attempt }}
+          path: observations/
           if-no-files-found: error
           retention-days: 7
-  brain:
-    needs: gate
+  draft:
+    needs: [gate]
     if: needs.gate.outputs.run_models == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 4
-    permissions:
-      contents: read
+    timeout-minutes: 5
+    permissions: {contents: read}
     steps:
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          name: observations-${{ github.run_id }}-${{ github.run_attempt }}
+          name: nightshift-context-${{ github.run_id }}-${{ github.run_attempt }}
           path: observations
-      - name: Fresh Codex council sees only the observation artifact
+      - name: Fresh independent Codex draft
         uses: openai/codex-action@bdf19a4a223ec2549a3e2274a0cf61556bc07675
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
@@ -93,48 +76,185 @@ jobs:
           effort: low
           prompt-file: ${{ github.workspace }}/observations/prompt.txt
           output-schema-file: ${{ github.workspace }}/observations/schema.json
-          output-file: ${{ github.workspace }}/decisions.json
+          output-file: ${{ github.workspace }}/draft.json
           codex-args: '["--ephemeral", "--json"]'
-      - if: success()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: decisions-${{ github.run_id }}-${{ github.run_attempt }}
-          path: decisions.json
+          name: nightshift-draft-${{ github.run_id }}-${{ github.run_attempt }}
+          path: draft.json
+          if-no-files-found: error
+          retention-days: 7
+  check:
+    needs: [gate, draft]
+    if: needs.gate.outputs.run_models == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with: {ref: main, persist-credentials: false}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with: {node-version: 22}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: nightshift-gate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: nightshift-draft-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift/draft
+      - run: node scripts/nightshift-tick.mjs prepare check
+      - name: Fresh independent Codex check
+        uses: openai/codex-action@bdf19a4a223ec2549a3e2274a0cf61556bc07675
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          allow-bot-users: ${{ inputs.source_clock_run_id != '' && 'github-actions[bot]' || '' }}
+          permission-profile: ':read-only'
+          safety-strategy: drop-sudo
+          working-directory: ${{ github.workspace }}/observations
+          model: gpt-6-luna
+          effort: low
+          prompt-file: ${{ github.workspace }}/observations/prompt.txt
+          output-schema-file: ${{ github.workspace }}/observations/schema.json
+          output-file: ${{ github.workspace }}/check.json
+          codex-args: '["--ephemeral", "--json"]'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: nightshift-check-${{ github.run_id }}-${{ github.run_attempt }}
+          path: check.json
+          if-no-files-found: error
+          retention-days: 7
+  improvement:
+    needs: [gate, draft, check]
+    if: needs.gate.outputs.run_models == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with: {ref: main, persist-credentials: false}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with: {node-version: 22}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: nightshift-gate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: nightshift-draft-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift/draft
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: nightshift-check-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift/check
+      - run: node scripts/nightshift-tick.mjs prepare improvement
+      - name: Fresh independent Codex improvement
+        uses: openai/codex-action@bdf19a4a223ec2549a3e2274a0cf61556bc07675
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          allow-bot-users: ${{ inputs.source_clock_run_id != '' && 'github-actions[bot]' || '' }}
+          permission-profile: ':read-only'
+          safety-strategy: drop-sudo
+          working-directory: ${{ github.workspace }}/observations
+          model: gpt-6-luna
+          effort: low
+          prompt-file: ${{ github.workspace }}/observations/prompt.txt
+          output-schema-file: ${{ github.workspace }}/observations/schema.json
+          output-file: ${{ github.workspace }}/final.json
+          codex-args: '["--ephemeral", "--json"]'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: nightshift-improvement-${{ github.run_id }}-${{ github.run_attempt }}
+          path: final.json
+          if-no-files-found: error
+          retention-days: 7
+  final_check:
+    needs: [gate, draft, check, improvement]
+    if: needs.gate.outputs.run_models == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with: {ref: main, persist-credentials: false}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with: {node-version: 22}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: nightshift-gate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: nightshift-draft-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift/draft
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: nightshift-check-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift/check
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: nightshift-improvement-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift/improvement
+      - run: node scripts/nightshift-tick.mjs prepare final_check
+      - name: Fresh independent Codex final_check
+        uses: openai/codex-action@bdf19a4a223ec2549a3e2274a0cf61556bc07675
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          allow-bot-users: ${{ inputs.source_clock_run_id != '' && 'github-actions[bot]' || '' }}
+          permission-profile: ':read-only'
+          safety-strategy: drop-sudo
+          working-directory: ${{ github.workspace }}/observations
+          model: gpt-6-luna
+          effort: low
+          prompt-file: ${{ github.workspace }}/observations/prompt.txt
+          output-schema-file: ${{ github.workspace }}/observations/schema.json
+          output-file: ${{ github.workspace }}/final-check.json
+          codex-args: '["--ephemeral", "--json"]'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: nightshift-final_check-${{ github.run_id }}-${{ github.run_attempt }}
+          path: final-check.json
           if-no-files-found: error
           retention-days: 7
   publish:
-    needs: [gate, brain]
+    needs: [gate, draft, check, improvement, final_check]
     if: always() && needs.gate.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 8
-    permissions:
-      contents: write
-      actions: read
-    concurrency:
-      group: observatory-record
-      cancel-in-progress: false
-      queue: max
+    permissions: {contents: write, actions: read}
+    concurrency: {group: observatory-record, cancel-in-progress: false, queue: max}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-        with:
-          ref: main
-          fetch-depth: 0
+        with: {ref: main, fetch-depth: 0}
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
-        with:
-          node-version: 22
+        with: {node-version: 22}
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          name: gate-${{ github.run_id }}-${{ github.run_attempt }}
-          path: .runtime/cloud
-      - if: needs.brain.result == 'success'
+          name: nightshift-gate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift
+      - if: needs.draft.result == 'success'
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          name: decisions-${{ github.run_id }}-${{ github.run_attempt }}
-          path: .runtime/cloud/decision
-      - name: Compute consequences, collect actual token usage and verify protected publication
+          name: nightshift-draft-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift/draft
+      - if: needs.check.result == 'success'
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: nightshift-check-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift/check
+      - if: needs.improvement.result == 'success'
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: nightshift-improvement-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift/improvement
+      - if: needs.final_check.result == 'success'
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: nightshift-final_check-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/nightshift/final_check
+      - name: Validate runnable pieces, collect four real CLI costs, publish and read back
         env:
           GH_TOKEN: ${{ github.token }}
           OBSERVATORY_WRITER_TOKEN: ${{ secrets.OBSERVATORY_WRITER_TOKEN }}
           EXPECTED_GATE_SHA256: ${{ needs.gate.outputs.gate_sha256 }}
-          BRAIN_RESULT: ${{ needs.brain.result }}
-        run: node scripts/cloud-tick.mjs publish
+        run: node scripts/nightshift-tick.mjs publish

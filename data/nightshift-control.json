@@ -1,0 +1,10 @@
+{
+  "schema_version": 2,
+  "phase": "rebuild",
+  "attempt_count": 0,
+  "published_count": 0,
+  "next_piece_at": null,
+  "bootstrap_limit": 3,
+  "old_worlds_retired_revision": 128,
+  "rotation": ["song", "game", "tool", "poster", "news"]
+}

@@ -1,5 +1,18 @@
 # Observatory operating constraints
 
+## 12 October: approved The Night Shift rebuild
+
+Danielius explicitly approved the v2 top section of OBSERVATORY_CLOUD_BRIEF.md
+and exempted this rebuild from the freeze below. Stop simulated worlds, preserve
+their complete history under archive/observatory-20261012, and rebuild this same
+Site as The Night Shift: one real playable/useful/visible piece per hour with
+draft, independent check, one improvement, final check and publication evidence.
+Keep the existing GitHub clock identity, existing GitHub Secrets and $2 UTC-day
+budget. The first three commissioned pieces are a truthful initial launch batch;
+do not describe them as hours of unattended work. Keep the Mac heartbeat paused.
+Source changes and deployment for this rebuild are authorized during the former
+freeze window. Do not touch While You Sleep, SSE, the demo, comic or atlas.
+
 Danielius requested a production code freeze from **Monday 12 October 2026,
 18:00 Europe/Vilnius** until **Tuesday 13 October 2026, 15:00 Europe/Vilnius**.
 The exact interval is `2026-10-12T15:00:00Z` through `2026-10-13T12:00:00Z`.

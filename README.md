@@ -1,68 +1,31 @@
-# The Autonomous Observatory
+# The Night Shift
 
-A public gallery of autonomous experiments, each with a permanent address. Fresh Codex reasoning chooses actions from observed state and compact memory; deterministic environments compute consequences. The cloud runner supports a decision tick every 15 minutes and a new seeded experiment each hour. Actual activation, timestamps and runner status are shown on the [public site](https://autonomous-observatory-20261011.xndanius.chatgpt.site).
+Every hour a cloud workshop makes one small original thing you can play, see or
+use. Each piece preserves its first draft, independent check, one substantive
+improvement, final check and actual publication/cost evidence.
 
-The cloud code lives in [xndanius/autonomous-observatory](https://github.com/xndanius/autonomous-observatory). It uses GitHub Actions, the official pinned `openai/codex-action`, and a self-dispatching 15-minute environment wait chain. See [cloud setup and operation](docs/CLOUD.md) and [clock provenance](docs/CLOUD_CLOCK.md). The clock starts paused; a checked deployment alone does not establish successful unattended work.
+Public gallery: https://autonomous-observatory-20261011.xndanius.chatgpt.site
 
-The complete recurring workflow is in `LOOP.txt`. The existing comic, Atlas and workshop sites are separate projects.
+Types rotate through a browser-synthesized song, playable small game, useful
+calculator/converter, illustrated poster/story and short source-backed news
+brief. Pieces use bounded executable data and trusted browser renderers, not
+arbitrary model JavaScript. News quotes are checked against retrieved NASA
+source excerpts and linked to the original sources.
 
-## Operation
+The same singleton GitHub environment clock wakes every fifteen minutes.
+Only an hourly due gate makes paid model calls; four fresh ephemeral Codex
+stages share the existing $2 UTC-day budget. Missing stage usage is labelled
+as an estimate and still counts. Initial three pieces are an explicitly
+commissioned launch batch; hourly unattended work starts after that batch.
 
-```sh
-node lab.mjs status
-node lab.mjs begin
-node lab.mjs commit TOKEN .runtime/decisions-TOKEN.json
-node publish.mjs
-```
+`npm test`, `npm run build`, `npm run validate`. The gallery preview is
+`npm run preview` at http://127.0.0.1:8018. See LOOP.txt and AGENTS.md.
 
-`begin` reserves one tick and reports whether the next hourly launch is due. `commit` validates one decision for each active experiment and creates one new experiment when due. Missed ticks do not produce invented catch-up activity. Local state, decisions, reservations, failures and the writer secret are ignored under `.runtime/`. State writes use atomic replacement. Individual decisions have unique IDs and history is immutable.
+The former Observatory worlds are retired. Their 17 final states, 530 immutable
+historical events, all128 original public revisions and original cloud receipts
+are preserved under `archive/observatory-20261012`; original source also remains
+in Git history. No worlds appear on the live site or old public APIs.
 
-The public Worker reads R2 state and archived decisions. Its update route requires the `OBSERVATORY_WRITE_TOKEN` runtime secret. Visitors can replay history and run browser-local branches; their actions do not change the autonomous experiments. Published state omits private language-oracle information.
-
-R2 stores a compact publication index and immutable, content-addressed experiment
-states. The gallery requests `/api/index`, then only its selected experiment at
-`/api/experiments/ID/state?revision=N`. The protected publisher stages changed
-worlds independently, advances the shared index conditionally, and verifies each
-committed world. Earlier decision archives remain intact. `/api/state` and
-`/api/history?revision=N` assemble exact full records for compatibility, including
-revisions stored before the split-storage migration.
-
-The Flood Commons city is a simplified, deterministic flood simulation. A planner,
-residents' advocate and budget auditor jointly fund drainage work and household
-relief. Rain, upstream overflow, drainage wear and periodic debris determine the
-consequences. Water and civic-credit accounts reconcile every turn. Exposure is
-counted as household-events, including repeat exposure, rather than unique people.
-The city starts with zero recorded harm; its initial water and wear are conditions,
-not a claim of earlier autonomous activity. Visitors can copy its observed world
-into a local branch and compare explicit rain/debris crises and council decisions.
-
-The Tideglass museum builds an illustrated collection for an imaginary
-civilization. Three fictional premises constrain materials, technologies and
-chronology. Proposals and dated excavation evidence face a deterministic curator;
-accepted artifacts and rejected interpretations both remain visible. Curator
-approval means internal consistency with those premises, not historical
-authenticity.
-
-The Autonomous Repair Café contains four working calculator applications with
-defective original programs. Agents supply replacement arithmetic-expression
-source; independent fixtures measure its outputs and accept a repair only when
-every case passes. Rejected programs keep their measured receipts and return to
-the queue. Visitors can enter their own values and run the original and any
-saved candidate side by side. This is a finite regression suite, not proof that
-a program handles every possible input. Expressions have a bounded parser and
-cannot execute arbitrary JavaScript or access external systems.
-
-## Verification and deployment
-
-```sh
-npm test
-bash scripts/build.sh
-node scripts/validate-artifact.mjs
-node scripts/preview.mjs
-```
-
-Source identity is `.openai/hosting.json`; the public origin is in `site.json`. Use the Sites source workflow helper with fresh credentials through hidden stdin, then save and deploy the returned archive and pushed commit. Routine data updates use `publish.mjs` and verify public read-back without deployment.
-
-The website remains available when generation is offline. Once cloud validation succeeds, GitHub runs independently of the Mac and the local heartbeat stays paused. Source deployments for genuinely new environment types still need the owner session. The viewer compares actual timestamps with the expected cadence.
-
-To stop the cloud, fence the public schedule as paused and stop the same clock chain using the documented control procedure. Keep the local heartbeat paused. The original local workflow remains available only before cloud ownership or after an explicit user-requested handoff.
+No credentials belong in this repository. The existing OpenAI API key and
+writer token stay in GitHub Secrets. The Mac heartbeat stays paused. While You
+Sleep, SSE, the demo, comic and atlas are separate and untouched.

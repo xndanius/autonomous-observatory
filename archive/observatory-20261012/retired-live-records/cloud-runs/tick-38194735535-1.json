@@ -1,0 +1,22 @@
+{
+  "id": "tick-38194735535-1",
+  "at": "2026-10-12T02:11:36.993Z",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38194735535",
+  "usage": {
+    "status": "observed",
+    "reason": null,
+    "model": "gpt-6-luna",
+    "inputTokens": 102418,
+    "cachedInputTokens": 0,
+    "cacheWriteInputTokens": 102415,
+    "outputTokens": 2946,
+    "reasoningOutputTokens": 869,
+    "costUsd": 0.014275175,
+    "cacheWriteAccounting": "reported_by_cli",
+    "pricingStatus": "standard_token_estimate"
+  },
+  "status": "rejected",
+  "reason": "Cloud decisions were unavailable or failed independent deterministic validation.",
+  "published_revision": 91,
+  "public_url": "https://autonomous-observatory-20261011.xndanius.chatgpt.site"
+}
