@@ -770,6 +770,14 @@
         "cacheWriteAccounting": "reported_by_cli",
         "pricingStatus": "standard_token_estimate"
       }
+    },
+    {
+      "id": "tick-38201004749-1",
+      "day": "2026-10-12",
+      "at": "2026-10-12T03:45:36.882Z",
+      "status": "reserved",
+      "charged_usd": 0.1,
+      "cost_usd": null
     }
   ]
 }
