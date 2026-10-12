@@ -1,10 +1,18 @@
 {
   "schema_version": 2,
-  "phase": "rebuild",
+  "phase": "bootstrap",
   "attempt_count": 0,
   "published_count": 0,
   "next_piece_at": null,
   "bootstrap_limit": 3,
   "old_worlds_retired_revision": 128,
-  "rotation": ["song", "game", "tool", "poster", "news"]
+  "rotation": [
+    "song",
+    "game",
+    "tool",
+    "poster",
+    "news"
+  ],
+  "rebuild_approved_at": "2026-10-12T11:34:17Z",
+  "bootstrap_commissioned_at": "2026-10-12T12:06:36.448822+00:00"
 }
