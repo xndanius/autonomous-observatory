@@ -53,7 +53,35 @@ test('incorrect staging digest prevents pointer publication',async()=>{
 
 test('incorrect committed world read-back cannot mark local publication',async()=>{
   const state=makeState(),old=buildPublicationIndex(state,7);old.storage_format='legacy';const mock=server(old,[],{wrongWorld:true}),marks=[];
-  await assert.rejects(publishSnapshot({state,origin,writerToken:'test-only-token',fetchImpl:mock.fetchImpl,mark:async n=>marks.push(n)}),/read-back differs/);assert.deepEqual(marks,[]);
+  await assert.rejects(publishSnapshot({state,origin,writerToken:'test-only-token',fetchImpl:mock.fetchImpl,mark:async n=>marks.push(n),waitForRetry:async()=>{}}),/read-back differs/);assert.deepEqual(marks,[]);
+});
+
+test('transient read-back failures recover without repeating writes or claiming an unverified result',async()=>{
+  const state=makeState(),old=buildPublicationIndex(state,7);old.storage_format='legacy';
+  const mock=server(old,[]),marks=[],delays=[];let indexReads=0,worldFailure=true;
+  const fetchImpl=async(url,options={})=>{
+    const path=new URL(url).pathname;
+    if(!options.method&&path==='/api/index'&&++indexReads===2)return Response.json({error:'temporary'}, {status:503});
+    if(!options.method&&path==='/api/experiments/world-1/state'&&worldFailure){worldFailure=false;throw new TypeError('fetch failed');}
+    return mock.fetchImpl(url,options);
+  };
+  const result=await publishSnapshot({state,origin,writerToken:'test-only-token',fetchImpl,mark:async r=>marks.push(r),waitForRetry:async ms=>delays.push(ms)});
+  assert.equal(result.revision,8);assert.deepEqual(marks,[8]);assert.deepEqual(delays,[500,500]);
+  assert.deepEqual(mock.calls.filter(c=>c.method==='PUT').map(c=>c.path),['/api/experiments/world-1/state','/api/experiments/world-2/state','/api/index']);
+});
+
+test('a briefly stale index is reread, while persistent errors never mark publication',async()=>{
+  const state=makeState(),old=buildPublicationIndex(state,7);old.storage_format='legacy';
+  const mock=server(old,[]),marks=[];let reads=0;
+  const fetchImpl=(url,options={})=>!options.method&&new URL(url).pathname==='/api/index'&&++reads===2?Response.json(old):mock.fetchImpl(url,options);
+  await publishSnapshot({state,origin,writerToken:'test-only-token',fetchImpl,mark:async r=>marks.push(r),waitForRetry:async()=>{}});
+  assert.deepEqual(marks,[8]);assert.equal(mock.calls.filter(c=>c.path==='/api/index'&&c.method==='PUT').length,1);
+  let attempts=0;
+  await assert.rejects(publishSnapshot({state,origin,writerToken:'test-only-token',fetchImpl:async()=>{attempts++;return Response.json({error:'temporary'},{status:503});},waitForRetry:async()=>{}}),/Public read failed: 503/);
+  assert.equal(attempts,3);
+  attempts=0;
+  await assert.rejects(publishSnapshot({state,origin,writerToken:'test-only-token',fetchImpl:async()=>{attempts++;return Response.json({error:'denied'},{status:403});},waitForRetry:async()=>{}}),/Public read failed: 403/);
+  assert.equal(attempts,1);
 });
 
 test('publisher and real Worker agree on canonical hashes and exact saved experiment reads',async()=>{

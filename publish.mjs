@@ -19,9 +19,25 @@ export function buildPublicationIndex(state,revision=state.revision) {
 }
 const samePayload=(a,b)=>{const x=structuredClone(a),y=structuredClone(b);delete x.revision;delete y.revision;return isDeepStrictEqual(x,y);};
 
-export async function publishSnapshot({state,origin,writerToken,fetchImpl=fetch,mark=async()=>{}}) {
+export async function publishSnapshot({state,origin,writerToken,fetchImpl=fetch,mark=async()=>{},waitForRetry=ms=>new Promise(r=>setTimeout(r,ms))}) {
   if(!/^https:\/\/[a-z0-9.-]+\.chatgpt\.site$/.test(origin))throw new Error('Invalid pinned site origin');
-  const get=async path=>{const r=await fetchImpl(origin+path);if(!r.ok)throw new Error('Public read failed: '+r.status);return r.json();};
+  // Retry public reads only. Never repeat a model call, staging write or CAS.
+  const get=async(path,expected,label)=>{
+    for(let attempt=0;attempt<3;attempt++){
+      let retryable=false;
+      try{
+        const r=await fetchImpl(origin+path,{signal:AbortSignal.timeout(15000),cache:'no-store'});
+        if(!r.ok){retryable=r.status===429||r.status>=500||(expected!==undefined&&r.status===404);throw new Error('Public read failed: '+r.status);}
+        const actual=await r.json();
+        if(expected!==undefined&&!isDeepStrictEqual(actual,expected)){retryable=true;throw new Error(label);}
+        return actual;
+      }catch(error){
+        retryable ||= error instanceof TypeError||error instanceof SyntaxError||['AbortError','TimeoutError'].includes(error?.name);
+        if(!retryable||attempt===2)throw error;
+        await waitForRetry(500*(attempt+1));
+      }
+    }
+  };
   const put=async(path,body)=>{
     const response=await fetchImpl(origin+path,{method:'PUT',headers:{'Authorization':'Bearer '+writerToken,'Content-Type':'application/json'},body:JSON.stringify(body)});
     const outcome=await response.json();
@@ -46,12 +62,10 @@ export async function publishSnapshot({state,origin,writerToken,fetchImpl=fetch,
   }
   const outcome=await put('/api/index',{expected_revision:existing.revision,state:index});
   if(outcome.revision!==index.revision)throw new Error('Publication revision differs');
-  const verify=await get('/api/index');
-  if(!isDeepStrictEqual(verify,index))throw new Error('Publication index read-back differs');
+  await get('/api/index',index,'Publication index read-back differs');
   // Verify immutable worlds at the committed revision, without a combined read.
   for(const experiment of state.experiments) {
-    const actual=await get('/api/experiments/'+encodeURIComponent(experiment.id)+'/state?revision='+index.revision);
-    if(!isDeepStrictEqual(actual,experiment))throw new Error('Experiment read-back differs: '+experiment.id);
+    await get('/api/experiments/'+encodeURIComponent(experiment.id)+'/state?revision='+index.revision,experiment,'Experiment read-back differs: '+experiment.id);
   }
   await mark(index.revision);
   return {action:'published',revision:index.revision,count:index.experiments.length,turns:index.experiments.reduce((n,e)=>n+e.turn,0),url:origin};
