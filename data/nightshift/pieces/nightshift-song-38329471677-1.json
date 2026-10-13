@@ -1,0 +1,196 @@
+{
+  "id": "nightshift-song-38329471677-1",
+  "type": "song",
+  "title": "Desk Reset Chime",
+  "summary": "A calm triangle chime with 8 notes, lasting about 10.7 seconds at 90 BPM; follow the rising and falling melody at a slower pace for a brief reset.",
+  "created_at": "2026-10-13T00:53:45.546Z",
+  "published_at": "2026-10-13T00:55:58.231Z",
+  "draft": {
+    "title": "Desk Reset Chime",
+    "summary": "A calm triangle chime with 8 notes, lasting 8 seconds at 120 BPM; follow the rising and falling melody for a brief reset.",
+    "tempo_bpm": 120,
+    "instrument": "triangle",
+    "notes": [
+      {
+        "midi": 60,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 72,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 62,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 60,
+        "duration_beats": 2,
+        "rest": false
+      }
+    ],
+    "chords": []
+  },
+  "final": {
+    "title": "Desk Reset Chime",
+    "summary": "A calm triangle chime with 8 notes, lasting about 10.7 seconds at 90 BPM; follow the rising and falling melody at a slower pace for a brief reset.",
+    "tempo_bpm": 90,
+    "instrument": "triangle",
+    "notes": [
+      {
+        "midi": 60,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 72,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 62,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 60,
+        "duration_beats": 2,
+        "rest": false
+      }
+    ],
+    "chords": []
+  },
+  "sources": [],
+  "draft_review": {
+    "passed": true,
+    "summary": "The bounded song passes all reported machine checks. Its eight audible notes span five pitches, and 16 beats at 120 BPM gives the stated 8-second duration. The calm triangle chime is understandable as a brief desk reset, and the checks support that it is playable with explicit Play and Stop controls.",
+    "issues": [],
+    "improvement": "Add a slower replay option so listeners can follow the rising and falling melody more easily."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "The final song has 8 audible notes across 5 pitches. At 16 beats and 90 BPM, it lasts about 10.67 seconds, matching the summary and passing the reported machine checks. Its melody and triangle timbre suit a brief desk reset.",
+    "issues": [],
+    "improvement": "Add a slower replay option so listeners can follow the rising and falling melody more easily."
+  },
+  "changes": "Changed summary, tempo_bpm. The original draft is retained unchanged.",
+  "cost_usd": 0.0061447,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38329471677",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-13T00:54:18Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.001536925
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-13T00:54:46Z",
+      "status": "passed",
+      "summary": "The bounded song passes all reported machine checks. Its eight audible notes span five pitches, and 16 beats at 120 BPM gives the stated 8-second duration. The calm triangle chime is understandable as a brief desk reset, and the checks support that it is playable with explicit Play and Stop controls.",
+      "checks": [],
+      "cost_usd": 0.001506425
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-13T00:55:15Z",
+      "status": "passed",
+      "summary": "Changed summary, tempo_bpm. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.001606675
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-13T00:55:43Z",
+      "status": "passed",
+      "summary": "The final song has 8 audible notes across 5 pitches. At 16 beats and 90 BPM, it lasts about 10.67 seconds, matching the summary and passing the reported machine checks. Its melody and triangle timbre suit a brief desk reset.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "audible-length",
+          "passed": true,
+          "detail": "The composition lasts 10.67 seconds; allowed range 8–75."
+        },
+        {
+          "id": "melody",
+          "passed": true,
+          "detail": "At least eight audible notes and three different pitches."
+        },
+        {
+          "id": "chord-timing",
+          "passed": true,
+          "detail": "Every distinct-pitch chord finishes within the melody."
+        },
+        {
+          "id": "polyphony",
+          "passed": true,
+          "detail": "No more than three simultaneous chord events."
+        },
+        {
+          "id": "playable-web-audio",
+          "passed": true,
+          "detail": "Browser synthesizer uses bounded MIDI pitches, finite durations, a gain envelope and explicit Play/Stop."
+        }
+      ],
+      "cost_usd": 0.001494675
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-13T00:55:58.231Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}
