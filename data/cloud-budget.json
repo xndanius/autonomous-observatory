@@ -4409,9 +4409,106 @@
       "id": "tick-38414423214-1",
       "day": "2026-10-13",
       "at": "2026-10-13T14:33:59.585Z",
-      "status": "reserved",
-      "charged_usd": 0.4,
-      "cost_usd": null
+      "status": "observed",
+      "charged_usd": 0.005813074999999999,
+      "cost_usd": 0.005813074999999999,
+      "settled_at": "2026-10-13T14:36:28.173Z",
+      "usage": {
+        "status": "observed",
+        "model": "gpt-6-luna",
+        "costUsd": 0.005813074999999999,
+        "inputTokens": 44847,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 44835,
+        "outputTokens": 415,
+        "reasoningOutputTokens": 0,
+        "steps": [
+          {
+            "stage": "draft",
+            "called": true,
+            "job_id": 115355090947,
+            "started_at": "2026-10-13T14:34:09Z",
+            "completed_at": "2026-10-13T14:34:32Z",
+            "conclusion": "success",
+            "usage": {
+              "status": "observed",
+              "reason": null,
+              "model": "gpt-6-luna",
+              "inputTokens": 10911,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 10908,
+              "outputTokens": 98,
+              "reasoningOutputTokens": 0,
+              "costUsd": 0.0014127999999999999,
+              "cacheWriteAccounting": "reported_by_cli",
+              "pricingStatus": "standard_token_estimate"
+            }
+          },
+          {
+            "stage": "check",
+            "called": true,
+            "job_id": 115355309853,
+            "started_at": "2026-10-13T14:34:36Z",
+            "completed_at": "2026-10-13T14:35:12Z",
+            "conclusion": "success",
+            "usage": {
+              "status": "observed",
+              "reason": null,
+              "model": "gpt-6-luna",
+              "inputTokens": 11170,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 11167,
+              "outputTokens": 117,
+              "reasoningOutputTokens": 0,
+              "costUsd": 0.001454675,
+              "cacheWriteAccounting": "reported_by_cli",
+              "pricingStatus": "standard_token_estimate"
+            }
+          },
+          {
+            "stage": "improvement",
+            "called": true,
+            "job_id": 115355642973,
+            "started_at": "2026-10-13T14:35:15Z",
+            "completed_at": "2026-10-13T14:35:46Z",
+            "conclusion": "success",
+            "usage": {
+              "status": "observed",
+              "reason": null,
+              "model": "gpt-6-luna",
+              "inputTokens": 11393,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 11390,
+              "outputTokens": 98,
+              "reasoningOutputTokens": 0,
+              "costUsd": 0.00147305,
+              "cacheWriteAccounting": "reported_by_cli",
+              "pricingStatus": "standard_token_estimate"
+            }
+          },
+          {
+            "stage": "final_check",
+            "called": true,
+            "job_id": 115355930723,
+            "started_at": "2026-10-13T14:35:49Z",
+            "completed_at": "2026-10-13T14:36:14Z",
+            "conclusion": "success",
+            "usage": {
+              "status": "observed",
+              "reason": null,
+              "model": "gpt-6-luna",
+              "inputTokens": 11373,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 11370,
+              "outputTokens": 102,
+              "reasoningOutputTokens": 0,
+              "costUsd": 0.00147255,
+              "cacheWriteAccounting": "reported_by_cli",
+              "pricingStatus": "standard_token_estimate"
+            }
+          }
+        ]
+      }
     }
   ]
 }
