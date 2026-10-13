@@ -1,0 +1,481 @@
+{
+  "id": "nightshift-poster-38344529703-1",
+  "type": "poster",
+  "title": "Two-Minute Desk Reset",
+  "summary": "A small visual reminder to loosen your shoulders, take one easy breath, and clear a little space on your desk.",
+  "created_at": "2026-10-13T04:02:30.534Z",
+  "published_at": "2026-10-13T04:05:12.342Z",
+  "draft": {
+    "title": "Two-Minute Desk Reset",
+    "summary": "A small visual reminder to loosen your shoulders, take one easy breath, and clear a little space on your desk.",
+    "background": "#F4EEDB",
+    "ink": "#243B35",
+    "art_label": "A quiet desk corner with a sun, a breathing path, and room to begin again.",
+    "caption": "Unclench. Breathe. Make a little room.",
+    "paragraphs": [
+      "Let your shoulders drop away from your ears.",
+      "Take one slow, comfortable breath.",
+      "Clear one small patch of desk, then return to what matters."
+    ],
+    "shapes": [
+      {
+        "kind": "rect",
+        "x": 86,
+        "y": 76,
+        "width": 628,
+        "height": 348,
+        "fill": "#FFFDF5",
+        "stroke": "#243B35",
+        "stroke_width": 3,
+        "rotation": 0
+      },
+      {
+        "kind": "circle",
+        "x": 570,
+        "y": 107,
+        "width": 92,
+        "height": 92,
+        "fill": "#E8B65B",
+        "stroke": "#243B35",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 158,
+        "y": 235,
+        "width": 478,
+        "height": 1,
+        "fill": "#243B35",
+        "stroke": "#A7C7B2",
+        "stroke_width": 5,
+        "rotation": 0
+      },
+      {
+        "kind": "ellipse",
+        "x": 158,
+        "y": 186,
+        "width": 172,
+        "height": 76,
+        "fill": "#FFFDF5",
+        "stroke": "#5C8B79",
+        "stroke_width": 4,
+        "rotation": 0
+      },
+      {
+        "kind": "ellipse",
+        "x": 328,
+        "y": 186,
+        "width": 172,
+        "height": 76,
+        "fill": "#FFFDF5",
+        "stroke": "#5C8B79",
+        "stroke_width": 4,
+        "rotation": 0
+      },
+      {
+        "kind": "ellipse",
+        "x": 500,
+        "y": 186,
+        "width": 136,
+        "height": 76,
+        "fill": "#FFFDF5",
+        "stroke": "#5C8B79",
+        "stroke_width": 4,
+        "rotation": 0
+      },
+      {
+        "kind": "triangle",
+        "x": 165,
+        "y": 306,
+        "width": 26,
+        "height": 28,
+        "fill": "#5C8B79",
+        "stroke": "#243B35",
+        "stroke_width": 1,
+        "rotation": 90
+      },
+      {
+        "kind": "rect",
+        "x": 190,
+        "y": 310,
+        "width": 131,
+        "height": 4,
+        "fill": "#243B35",
+        "stroke": "#243B35",
+        "stroke_width": 0,
+        "rotation": 0
+      },
+      {
+        "kind": "triangle",
+        "x": 165,
+        "y": 345,
+        "width": 26,
+        "height": 28,
+        "fill": "#5C8B79",
+        "stroke": "#243B35",
+        "stroke_width": 1,
+        "rotation": 90
+      },
+      {
+        "kind": "rect",
+        "x": 190,
+        "y": 349,
+        "width": 188,
+        "height": 4,
+        "fill": "#243B35",
+        "stroke": "#243B35",
+        "stroke_width": 0,
+        "rotation": 0
+      },
+      {
+        "kind": "triangle",
+        "x": 165,
+        "y": 384,
+        "width": 26,
+        "height": 28,
+        "fill": "#5C8B79",
+        "stroke": "#243B35",
+        "stroke_width": 1,
+        "rotation": 90
+      },
+      {
+        "kind": "rect",
+        "x": 190,
+        "y": 388,
+        "width": 160,
+        "height": 4,
+        "fill": "#243B35",
+        "stroke": "#243B35",
+        "stroke_width": 0,
+        "rotation": 0
+      },
+      {
+        "kind": "ellipse",
+        "x": 443,
+        "y": 331,
+        "width": 96,
+        "height": 43,
+        "fill": "#D9E7DB",
+        "stroke": "#5C8B79",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 486,
+        "y": 367,
+        "width": 10,
+        "height": 31,
+        "fill": "#5C8B79",
+        "stroke": "#5C8B79",
+        "stroke_width": 0,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 461,
+        "y": 396,
+        "width": 60,
+        "height": 7,
+        "fill": "#243B35",
+        "stroke": "#243B35",
+        "stroke_width": 0,
+        "rotation": 0
+      }
+    ]
+  },
+  "final": {
+    "title": "Two-Minute Desk Reset",
+    "summary": "A small visual reminder to loosen your shoulders, take one easy breath, and clear a little space on your desk.",
+    "background": "#F4EEDB",
+    "ink": "#243B35",
+    "art_label": "A quiet desk corner with a sun, a breathing path marked by three arrows, and room to begin again.",
+    "caption": "Unclench. Breathe. Make a little room.",
+    "paragraphs": [
+      "Let your shoulders drop away from your ears.",
+      "Follow the three arrows from left to right as you take one slow, comfortable breath.",
+      "Clear one small patch of desk, then return to what matters."
+    ],
+    "shapes": [
+      {
+        "kind": "rect",
+        "x": 86,
+        "y": 76,
+        "width": 628,
+        "height": 348,
+        "fill": "#FFFDF5",
+        "stroke": "#243B35",
+        "stroke_width": 3,
+        "rotation": 0
+      },
+      {
+        "kind": "circle",
+        "x": 570,
+        "y": 107,
+        "width": 92,
+        "height": 92,
+        "fill": "#E8B65B",
+        "stroke": "#243B35",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 158,
+        "y": 235,
+        "width": 478,
+        "height": 1,
+        "fill": "#243B35",
+        "stroke": "#A7C7B2",
+        "stroke_width": 5,
+        "rotation": 0
+      },
+      {
+        "kind": "ellipse",
+        "x": 158,
+        "y": 186,
+        "width": 172,
+        "height": 76,
+        "fill": "#FFFDF5",
+        "stroke": "#5C8B79",
+        "stroke_width": 4,
+        "rotation": 0
+      },
+      {
+        "kind": "ellipse",
+        "x": 328,
+        "y": 186,
+        "width": 172,
+        "height": 76,
+        "fill": "#FFFDF5",
+        "stroke": "#5C8B79",
+        "stroke_width": 4,
+        "rotation": 0
+      },
+      {
+        "kind": "ellipse",
+        "x": 500,
+        "y": 186,
+        "width": 136,
+        "height": 76,
+        "fill": "#FFFDF5",
+        "stroke": "#5C8B79",
+        "stroke_width": 4,
+        "rotation": 0
+      },
+      {
+        "kind": "triangle",
+        "x": 277,
+        "y": 211,
+        "width": 18,
+        "height": 20,
+        "fill": "#5C8B79",
+        "stroke": "#243B35",
+        "stroke_width": 1,
+        "rotation": 90
+      },
+      {
+        "kind": "triangle",
+        "x": 445,
+        "y": 211,
+        "width": 18,
+        "height": 20,
+        "fill": "#5C8B79",
+        "stroke": "#243B35",
+        "stroke_width": 1,
+        "rotation": 90
+      },
+      {
+        "kind": "triangle",
+        "x": 610,
+        "y": 211,
+        "width": 18,
+        "height": 20,
+        "fill": "#5C8B79",
+        "stroke": "#243B35",
+        "stroke_width": 1,
+        "rotation": 90
+      },
+      {
+        "kind": "triangle",
+        "x": 165,
+        "y": 306,
+        "width": 26,
+        "height": 28,
+        "fill": "#5C8B79",
+        "stroke": "#243B35",
+        "stroke_width": 1,
+        "rotation": 90
+      },
+      {
+        "kind": "rect",
+        "x": 190,
+        "y": 310,
+        "width": 131,
+        "height": 4,
+        "fill": "#243B35",
+        "stroke": "#243B35",
+        "stroke_width": 0,
+        "rotation": 0
+      },
+      {
+        "kind": "triangle",
+        "x": 165,
+        "y": 345,
+        "width": 26,
+        "height": 28,
+        "fill": "#5C8B79",
+        "stroke": "#243B35",
+        "stroke_width": 1,
+        "rotation": 90
+      },
+      {
+        "kind": "rect",
+        "x": 190,
+        "y": 349,
+        "width": 188,
+        "height": 4,
+        "fill": "#243B35",
+        "stroke": "#243B35",
+        "stroke_width": 0,
+        "rotation": 0
+      },
+      {
+        "kind": "triangle",
+        "x": 165,
+        "y": 384,
+        "width": 26,
+        "height": 28,
+        "fill": "#5C8B79",
+        "stroke": "#243B35",
+        "stroke_width": 1,
+        "rotation": 90
+      },
+      {
+        "kind": "rect",
+        "x": 190,
+        "y": 388,
+        "width": 160,
+        "height": 4,
+        "fill": "#243B35",
+        "stroke": "#243B35",
+        "stroke_width": 0,
+        "rotation": 0
+      },
+      {
+        "kind": "ellipse",
+        "x": 443,
+        "y": 331,
+        "width": 96,
+        "height": 43,
+        "fill": "#D9E7DB",
+        "stroke": "#5C8B79",
+        "stroke_width": 2,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 486,
+        "y": 367,
+        "width": 10,
+        "height": 31,
+        "fill": "#5C8B79",
+        "stroke": "#5C8B79",
+        "stroke_width": 0,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 461,
+        "y": 396,
+        "width": 60,
+        "height": 7,
+        "fill": "#243B35",
+        "stroke": "#243B35",
+        "stroke_width": 0,
+        "rotation": 0
+      }
+    ]
+  },
+  "sources": [],
+  "draft_review": {
+    "passed": true,
+    "summary": "The poster gives clear, gentle desk-reset steps, and the illustration data passes all supplied machine checks. The title does not promise a timed two-minute activity, so it does not conflict with the instructions.",
+    "issues": [],
+    "improvement": "Make the three outlined breathing-path shapes visually read as a sequence—for example, add clear directional cues—so viewers can tell how the breath is meant to move."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "The poster is understandable and useful as a brief desk-reset reminder. Its final text explains how to follow the three arrows, and the supplied machine checks all pass. No unsupported factual claims or personal data are present.",
+    "issues": [],
+    "improvement": "Consider making the arrow direction unmistakable at a glance, such as ensuring each arrowhead points consistently from left to right along the breathing path."
+  },
+  "changes": "Changed art_label, paragraphs, shapes. The original draft is retained unchanged.",
+  "cost_usd": 0.007022324999999999,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38344529703",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-13T04:03:13Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.0018068
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-13T04:03:45Z",
+      "status": "passed",
+      "summary": "The poster gives clear, gentle desk-reset steps, and the illustration data passes all supplied machine checks. The title does not promise a timed two-minute activity, so it does not conflict with the instructions.",
+      "checks": [],
+      "cost_usd": 0.001530175
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-13T04:04:23Z",
+      "status": "passed",
+      "summary": "Changed art_label, paragraphs, shapes. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.00202655
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-13T04:04:57Z",
+      "status": "passed",
+      "summary": "The poster is understandable and useful as a brief desk-reset reminder. Its final text explains how to follow the three arrows, and the supplied machine checks all pass. No unsupported factual claims or personal data are present.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "visible-illustration",
+          "passed": true,
+          "detail": "Every shape lies within the illustration viewBox before rotation."
+        },
+        {
+          "id": "illustrated-story",
+          "passed": true,
+          "detail": "Illustration has at least two shape colours and a readable caption."
+        },
+        {
+          "id": "accessible-poster",
+          "passed": true,
+          "detail": "Illustration has a descriptive text alternative and a distinct text colour."
+        }
+      ],
+      "cost_usd": 0.0016588
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-13T04:05:12.342Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}

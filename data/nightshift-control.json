@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "phase": "active",
-  "attempt_count": 19,
-  "published_count": 8,
-  "next_piece_at": "2026-10-13T04:02:22.573Z",
+  "attempt_count": 20,
+  "published_count": 9,
+  "next_piece_at": "2026-10-13T05:05:12.342Z",
   "bootstrap_limit": 3,
   "old_worlds_retired_revision": 128,
   "rotation": [
@@ -15,5 +15,5 @@
   ],
   "rebuild_approved_at": "2026-10-12T11:34:17Z",
   "bootstrap_commissioned_at": "2026-10-12T12:06:36.448822+00:00",
-  "last_attempt_at": "2026-10-13T03:02:22.573Z"
+  "last_attempt_at": "2026-10-13T04:05:12.342Z"
 }
