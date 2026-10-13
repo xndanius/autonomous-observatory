@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "armed": true,
-  "phase": "waiting",
+  "phase": "ticking",
   "chainId": "clock-38164147311-1",
   "generation": 134,
   "expectedRunId": "38353661698",
@@ -10,9 +10,10 @@
   "parentRunAttempt": 1,
   "claimedAt": "2026-10-13T05:53:01.103Z",
   "lastTickAt": "2026-10-13T05:52:36.711Z",
-  "nextTickAt": "2026-10-13T06:08:01.103Z",
+  "nextTickAt": null,
   "clockRunUrl": "https://github.com/xndanius/autonomous-observatory/actions/runs/38353661698",
   "lastTickRunUrl": "https://github.com/xndanius/autonomous-observatory/actions/runs/38352294688",
   "lastDecisionRunUrl": "https://github.com/xndanius/autonomous-observatory/actions/runs/38353659970",
-  "waitMinutes": 15
+  "waitMinutes": 15,
+  "dispatchStartedAt": "2026-10-13T06:08:18.572Z"
 }
