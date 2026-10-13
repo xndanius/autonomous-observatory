@@ -1,0 +1,123 @@
+{
+  "id": "nightshift-game-38334500981-1",
+  "type": "game",
+  "title": "Grove Gem Trail",
+  "summary": "Use arrow keys or WASD to move one tile per move, collect both gems (*) and reach the goal (G). Walls (#) block movement; dots (.) are open paths. You have 20 moves.",
+  "created_at": "2026-10-13T01:56:30.076Z",
+  "published_at": "2026-10-13T01:59:01.445Z",
+  "draft": {
+    "title": "Grove Gem Trail",
+    "summary": "Use arrow keys or WASD to collect both gems (*) and reach the goal (G). Walls (#) block movement; dots (.) are open paths. You have 20 moves.",
+    "theme": "grove",
+    "grid": [
+      "########",
+      "#P..*..#",
+      "#...#.G#",
+      "#.*....#",
+      "###.#..#",
+      "#......#",
+      "########"
+    ],
+    "max_moves": 20
+  },
+  "final": {
+    "title": "Grove Gem Trail",
+    "summary": "Use arrow keys or WASD to move one tile per move, collect both gems (*) and reach the goal (G). Walls (#) block movement; dots (.) are open paths. You have 20 moves.",
+    "theme": "grove",
+    "grid": [
+      "########",
+      "#P..*..#",
+      "#...#.G#",
+      "#.*....#",
+      "###.#..#",
+      "#......#",
+      "########"
+    ],
+    "max_moves": 20
+  },
+  "sources": [],
+  "draft_review": {
+    "passed": true,
+    "summary": "Grove Gem Trail is understandable and winnable: the board has two gems, one player and one goal, and the supplied checks report a 10-move winning route within the 20-move limit. Controls and tile meanings are explained.",
+    "issues": [],
+    "improvement": "State that arrow keys and WASD move one tile per move, so players can tell how the 20-move limit is counted."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "Grove Gem Trail has a rectangular board, one player, one goal and two gems. The supplied deterministic checks report a 10-move winning route within the 20-move limit, confirmed under the shipped movement rules. The final instructions explain controls, tile meanings and that each move covers one tile.",
+    "issues": [],
+    "improvement": "Add a brief win condition reminder that the player must collect both gems before reaching G."
+  },
+  "changes": "Changed summary. The original draft is retained unchanged.",
+  "cost_usd": 0.006168574999999999,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38334500981",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-13T01:57:12Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.00177755
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-13T01:57:41Z",
+      "status": "passed",
+      "summary": "Grove Gem Trail is understandable and winnable: the board has two gems, one player and one goal, and the supplied checks report a 10-move winning route within the 20-move limit. Controls and tile meanings are explained.",
+      "checks": [],
+      "cost_usd": 0.00144655
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-13T01:58:17Z",
+      "status": "passed",
+      "summary": "Changed summary. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.001473425
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-13T01:58:50Z",
+      "status": "passed",
+      "summary": "Grove Gem Trail has a rectangular board, one player, one goal and two gems. The supplied deterministic checks report a 10-move winning route within the 20-move limit, confirmed under the shipped movement rules. The final instructions explain controls, tile meanings and that each move covers one tile.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "grid-geometry",
+          "passed": true,
+          "detail": "Rectangular board with exactly one player and one goal."
+        },
+        {
+          "id": "collectibles",
+          "passed": true,
+          "detail": "Two to eight collectible gems."
+        },
+        {
+          "id": "reachable-win",
+          "passed": true,
+          "detail": "Independent maze search needs 10 moves; limit 20."
+        },
+        {
+          "id": "executed-win",
+          "passed": true,
+          "detail": "The found route executes through the shipped movement rules and collects every gem before winning."
+        }
+      ],
+      "cost_usd": 0.00147105
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-13T01:59:01.445Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}
