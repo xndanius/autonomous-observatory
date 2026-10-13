@@ -1,0 +1,125 @@
+{
+  "id": "nightshift-game-38423584606-1",
+  "type": "game",
+  "title": "Grove Gem Loop",
+  "summary": "Use arrow keys or WASD to move one tile per move. Collect both gems (*) and reach the goal (G); walls (#) block movement, and dots (.) are open paths. A visible counter tracks your remaining moves. 24",
+  "created_at": "2026-10-13T15:37:10.759Z",
+  "published_at": "2026-10-13T15:39:46.772Z",
+  "draft": {
+    "title": "Grove Gem Loop",
+    "summary": "Use arrow keys or WASD to move one tile per move. Collect both gems (*) and reach the goal (G); walls (#) block movement, and dots (.) are open paths. You have 24 moves.",
+    "theme": "grove",
+    "grid": [
+      "#######",
+      "#P.*..#",
+      "#.#.#.#",
+      "#*....#",
+      "###.#G#",
+      "#.....#",
+      "#######"
+    ],
+    "max_moves": 24
+  },
+  "final": {
+    "title": "Grove Gem Loop",
+    "summary": "Use arrow keys or WASD to move one tile per move. Collect both gems (*) and reach the goal (G); walls (#) block movement, and dots (.) are open paths. A visible counter tracks your remaining moves. 24",
+    "theme": "grove",
+    "grid": [
+      "#######",
+      "#P.*..#",
+      "#.#.#.#",
+      "#*....#",
+      "###.#G#",
+      "#.....#",
+      "#######"
+    ],
+    "max_moves": 24
+  },
+  "sources": [],
+  "draft_review": {
+    "passed": true,
+    "summary": "The 7×7 grid, controls, goal, collectibles, and 24-move limit are clear. Deterministic checks confirm a winning route that collects both gems in 11 moves.",
+    "issues": [],
+    "improvement": "Add a visible move counter so players can track their remaining moves."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "The game is playable and understandable: the controls, objective, symbols, and 24-move limit are stated, and deterministic checks confirm a winning route that collects both gems in 11 moves.",
+    "issues": [
+      "The final summary ends with a bare “24,” which reads like an editing artifact."
+    ],
+    "improvement": "Remove the trailing “24” from the summary; the 24-move limit is already stated clearly."
+  },
+  "changes": "Changed summary. The original draft is retained unchanged.",
+  "cost_usd": 0.00608695,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38423584606",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-13T15:37:52Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.0016028
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-13T15:38:27Z",
+      "status": "passed",
+      "summary": "The 7×7 grid, controls, goal, collectibles, and 24-move limit are clear. Deterministic checks confirm a winning route that collects both gems in 11 moves.",
+      "checks": [],
+      "cost_usd": 0.0014609249999999999
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-13T15:39:02Z",
+      "status": "passed",
+      "summary": "Changed summary. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.001474675
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-13T15:39:36Z",
+      "status": "passed",
+      "summary": "The game is playable and understandable: the controls, objective, symbols, and 24-move limit are stated, and deterministic checks confirm a winning route that collects both gems in 11 moves.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "grid-geometry",
+          "passed": true,
+          "detail": "Rectangular board with exactly one player and one goal."
+        },
+        {
+          "id": "collectibles",
+          "passed": true,
+          "detail": "Two to eight collectible gems."
+        },
+        {
+          "id": "reachable-win",
+          "passed": true,
+          "detail": "Independent maze search needs 11 moves; limit 24."
+        },
+        {
+          "id": "executed-win",
+          "passed": true,
+          "detail": "The found route executes through the shipped movement rules and collects every gem before winning."
+        }
+      ],
+      "cost_usd": 0.0015485499999999999
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-13T15:39:46.772Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}
