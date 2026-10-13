@@ -1,0 +1,268 @@
+{
+  "id": "nightshift-poster-38441329300-1",
+  "type": "poster",
+  "title": "Look Up, Look Far",
+  "summary": "A tiny visual reminder to pause your near focus and look at something across the room.",
+  "created_at": "2026-10-13T17:46:27.523Z",
+  "published_at": "2026-10-13T17:49:07.603Z",
+  "draft": {
+    "title": "Look Up, Look Far",
+    "summary": "A tiny visual reminder to pause your near focus and look at something across the room.",
+    "background": "#F5F0E6",
+    "ink": "#263B3A",
+    "art_label": "A quiet window frames a faraway hill beneath a bright sky.",
+    "caption": "Let your eyes travel to the far hill.",
+    "paragraphs": [
+      "Pause for a moment. Find something farther away than your screen, and let your gaze rest there."
+    ],
+    "shapes": [
+      {
+        "kind": "rect",
+        "x": 180,
+        "y": 90,
+        "width": 440,
+        "height": 290,
+        "fill": "#D9EEE8",
+        "stroke": "#263B3A",
+        "stroke_width": 5,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 400,
+        "y": 90,
+        "width": 1,
+        "height": 290,
+        "fill": "#263B3A",
+        "stroke": "#263B3A",
+        "stroke_width": 4,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 180,
+        "y": 235,
+        "width": 440,
+        "height": 1,
+        "fill": "#263B3A",
+        "stroke": "#263B3A",
+        "stroke_width": 4,
+        "rotation": 0
+      },
+      {
+        "kind": "circle",
+        "x": 490,
+        "y": 120,
+        "width": 62,
+        "height": 62,
+        "fill": "#F2C66D",
+        "stroke": "#F2C66D",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "triangle",
+        "x": 260,
+        "y": 175,
+        "width": 205,
+        "height": 145,
+        "fill": "#83A99A",
+        "stroke": "#83A99A",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "triangle",
+        "x": 380,
+        "y": 198,
+        "width": 175,
+        "height": 122,
+        "fill": "#668D7D",
+        "stroke": "#668D7D",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 145,
+        "y": 380,
+        "width": 510,
+        "height": 18,
+        "fill": "#263B3A",
+        "stroke": "#263B3A",
+        "stroke_width": 1,
+        "rotation": 0
+      }
+    ]
+  },
+  "final": {
+    "title": "Look Up, Look Far",
+    "summary": "A tiny visual reminder to pause your near focus and look at something across the room.",
+    "background": "#F5F0E6",
+    "ink": "#263B3A",
+    "art_label": "A quiet window frames a faraway hill beneath a bright sky.",
+    "caption": "Let your eyes travel to the far hill.",
+    "paragraphs": [
+      "Pause for a moment. The dark lines outline the window; the green hill beyond it is your distant focus. Find it and let your gaze rest there."
+    ],
+    "shapes": [
+      {
+        "kind": "rect",
+        "x": 180,
+        "y": 90,
+        "width": 440,
+        "height": 290,
+        "fill": "#D9EEE8",
+        "stroke": "#263B3A",
+        "stroke_width": 5,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 400,
+        "y": 90,
+        "width": 1,
+        "height": 290,
+        "fill": "#263B3A",
+        "stroke": "#263B3A",
+        "stroke_width": 4,
+        "rotation": 0
+      },
+      {
+        "kind": "line",
+        "x": 180,
+        "y": 235,
+        "width": 440,
+        "height": 1,
+        "fill": "#263B3A",
+        "stroke": "#263B3A",
+        "stroke_width": 4,
+        "rotation": 0
+      },
+      {
+        "kind": "circle",
+        "x": 490,
+        "y": 120,
+        "width": 62,
+        "height": 62,
+        "fill": "#F2C66D",
+        "stroke": "#F2C66D",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "triangle",
+        "x": 260,
+        "y": 175,
+        "width": 205,
+        "height": 145,
+        "fill": "#83A99A",
+        "stroke": "#83A99A",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "triangle",
+        "x": 380,
+        "y": 198,
+        "width": 175,
+        "height": 122,
+        "fill": "#668D7D",
+        "stroke": "#668D7D",
+        "stroke_width": 1,
+        "rotation": 0
+      },
+      {
+        "kind": "rect",
+        "x": 145,
+        "y": 380,
+        "width": 510,
+        "height": 18,
+        "fill": "#263B3A",
+        "stroke": "#263B3A",
+        "stroke_width": 1,
+        "rotation": 0
+      }
+    ]
+  },
+  "sources": [],
+  "draft_review": {
+    "passed": true,
+    "summary": "The poster is a clear, bounded visual reminder to rest near focus by looking across the room. Its window, hill, sky, and caption support the message, and all supplied machine checks pass.",
+    "issues": [],
+    "improvement": "Add a simple legend or brief instruction distinguishing the window frame from the far hill, so viewers can identify the intended distant focus at a glance."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "The poster is useful and understandable: its window-and-hill illustration and revised paragraph identify the distant hill as the focus. All supplied machine checks pass, and the artifact stays within the bounded poster format.",
+    "issues": [],
+    "improvement": "Consider adding a small visual cue, such as a subtle outline around the hill, to make the intended distant focus stand out immediately."
+  },
+  "changes": "Changed paragraphs. The original draft is retained unchanged.",
+  "cost_usd": 0.006468574999999999,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38441329300",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-13T17:47:04Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.00168155
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-13T17:47:39Z",
+      "status": "passed",
+      "summary": "The poster is a clear, bounded visual reminder to rest near focus by looking across the room. Its window, hill, sky, and caption support the message, and all supplied machine checks pass.",
+      "checks": [],
+      "cost_usd": 0.001480925
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-13T17:48:16Z",
+      "status": "passed",
+      "summary": "Changed paragraphs. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.001760675
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-13T17:48:51Z",
+      "status": "passed",
+      "summary": "The poster is useful and understandable: its window-and-hill illustration and revised paragraph identify the distant hill as the focus. All supplied machine checks pass, and the artifact stays within the bounded poster format.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "visible-illustration",
+          "passed": true,
+          "detail": "Every shape lies within the illustration viewBox before rotation."
+        },
+        {
+          "id": "illustrated-story",
+          "passed": true,
+          "detail": "Illustration has at least two shape colours and a readable caption."
+        },
+        {
+          "id": "accessible-poster",
+          "passed": true,
+          "detail": "Illustration has a descriptive text alternative and a distinct text colour."
+        }
+      ],
+      "cost_usd": 0.001545425
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-13T17:49:07.603Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}
