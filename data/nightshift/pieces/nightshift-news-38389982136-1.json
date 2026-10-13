@@ -1,0 +1,166 @@
+{
+  "id": "nightshift-news-38389982136-1",
+  "type": "news",
+  "title": "NASA Cargo Launch and Commercial Station Plans",
+  "summary": "A NASA cargo mission launched on Oct. 13; NASA released its final request for commercial station proposals on Oct. 9.",
+  "created_at": "2026-10-13T11:24:31.914Z",
+  "published_at": "2026-10-13T11:26:58.863Z",
+  "draft": {
+    "title": "NASA: Cargo Launch and Station Plans",
+    "summary": "NASA reports a SpaceX cargo mission launched toward the International Space Station, while it also invited industry proposals for future commercial stations in low Earth orbit.",
+    "topic": "Two recent NASA updates: an ISS resupply launch and plans for commercial space stations.",
+    "claims": [
+      {
+        "text": "NASA said SpaceX’s 35th commercial resupply mission lifted off aboard a Falcon 9 carrying supplies and hardware for the International Space Station.",
+        "source_id": "nasa-dd9f9ad815ef",
+        "source_url": "https://www.nasa.gov/news-release/nasa-science-cargo-launch-on-35th-spacex-resupply-mission-to-station/",
+        "source_title": "NASA Science, Cargo Launch on 35th SpaceX Resupply Mission to Station",
+        "evidence_quote": "NASA’s SpaceX 35th commercial resupply mission lifted off at 6:33 a.m. EDT Tuesday aboard a Falcon 9 rocket from Space Launch Complex 40"
+      },
+      {
+        "text": "NASA released a final request for proposals inviting industry to submit plans for the next generation of commercial space stations.",
+        "source_id": "nasa-927f8df3be92",
+        "source_url": "https://www.nasa.gov/news-release/nasa-seeks-us-industry-plans-for-commercial-space-stations/",
+        "source_title": "NASA Seeks US Industry Plans for Commercial Space Stations",
+        "evidence_quote": "On Friday, the agency released its final Request for Proposals inviting industry to submit plans for the next generation of commercial space stations."
+      }
+    ]
+  },
+  "final": {
+    "title": "NASA Cargo Launch and Commercial Station Plans",
+    "summary": "A NASA cargo mission launched on Oct. 13; NASA released its final request for commercial station proposals on Oct. 9.",
+    "topic": "NASA updates on an ISS cargo launch and proposals for future commercial space stations.",
+    "claims": [
+      {
+        "text": "NASA’s SpaceX 35th commercial resupply mission lifted off at 6:33 a.m. EDT Tuesday aboard a Falcon 9 rocket from Space Launch Complex 40",
+        "source_id": "nasa-dd9f9ad815ef",
+        "source_url": "https://www.nasa.gov/news-release/nasa-science-cargo-launch-on-35th-spacex-resupply-mission-to-station/",
+        "source_title": "NASA Science, Cargo Launch on 35th SpaceX Resupply Mission to Station",
+        "evidence_quote": "NASA’s SpaceX 35th commercial resupply mission lifted off at 6:33 a.m. EDT Tuesday aboard a Falcon 9 rocket from Space Launch Complex 40"
+      },
+      {
+        "text": "On Friday, the agency released its final Request for Proposals inviting industry to submit plans for the next generation of commercial space stations.",
+        "source_id": "nasa-927f8df3be92",
+        "source_url": "https://www.nasa.gov/news-release/nasa-seeks-us-industry-plans-for-commercial-space-stations/",
+        "source_title": "NASA Seeks US Industry Plans for Commercial Space Stations",
+        "evidence_quote": "On Friday, the agency released its final Request for Proposals inviting industry to submit plans for the next generation of commercial space stations."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "nasa-dd9f9ad815ef",
+      "url": "https://www.nasa.gov/news-release/nasa-science-cargo-launch-on-35th-spacex-resupply-mission-to-station/",
+      "title": "NASA Science, Cargo Launch on 35th SpaceX Resupply Mission to Station",
+      "excerpt": "NASA Science, Cargo Launch on 35th SpaceX Resupply Mission to Station NASA’s SpaceX 35th commercial resupply mission lifted off at 6:33 a.m. EDT Tuesday aboard a Falcon 9 rocket from Space Launch Complex 40 at Cape Canaveral Space Force Station in Florida, carrying more than 6,300 pounds of supplies and hardware, bound for the International Space Station. Following its successful launch, the SpaceX Dragon spacecraft will [&#8230;]",
+      "published_at": "Tue, 13 Oct 2026 11:12:18 +0000",
+      "retrieved_at": "2026-10-13T11:24:33.079Z"
+    },
+    {
+      "id": "nasa-b25ccdaaf9e2",
+      "url": "https://www.nasa.gov/news-release/nasa-to-conduct-flyover-engage-nfl-fans-at-metlife-stadium/",
+      "title": "NASA to Conduct Flyover, Engage NFL Fans at MetLife Stadium",
+      "excerpt": "NASA to Conduct Flyover, Engage NFL Fans at MetLife Stadium As part of the agency’s Inspiration Tour flyover, NASA Administrator Jared Isaacman will pilot one of three F-5 fighter jets to kick off the New York Jets vs. Cleveland Browns game in East Rutherford, New Jersey, on Sunday, Oct. 11. NASA team members will engage with fans at the agency’s Experience Zone, located at the [&#8230;]",
+      "published_at": "Sat, 10 Oct 2026 14:18:59 +0000",
+      "retrieved_at": "2026-10-13T11:24:33.080Z"
+    },
+    {
+      "id": "nasa-927f8df3be92",
+      "url": "https://www.nasa.gov/news-release/nasa-seeks-us-industry-plans-for-commercial-space-stations/",
+      "title": "NASA Seeks US Industry Plans for Commercial Space Stations",
+      "excerpt": "NASA Seeks US Industry Plans for Commercial Space Stations NASA is advancing American leadership in space by taking the next step toward a future where commercial space stations lead the way in low Earth orbit. On Friday, the agency released its final Request for Proposals inviting industry to submit plans for the next generation of commercial space stations. “In alignment with the President’s National [&#8230;]",
+      "published_at": "Fri, 09 Oct 2026 18:11:44 +0000",
+      "retrieved_at": "2026-10-13T11:24:33.080Z"
+    }
+  ],
+  "draft_review": {
+    "passed": false,
+    "summary": "The artifact is readable, but it fails the trusted-source-extracts machine check. The claims are paraphrases, not exact extracts from the supplied source excerpts.",
+    "issues": [
+      "Both claims present factual paraphrases where the evidence requires exact short source excerpts.",
+      "The supplied evidence does not support treating the cargo mission and station proposal as equally recent: the first source was published Oct. 13, while the second was published Oct. 9."
+    ],
+    "improvement": "Replace each claim with an exact excerpt of at most 25 words from its corresponding NASA source, and make the summary clear about their different publication dates."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "The final news item is clear, and both claims are exact excerpts of 25 words or fewer from the supplied NASA sources. The summary distinguishes the Oct. 13 cargo launch from the Oct. 9 proposal announcement. All supplied machine checks pass.",
+    "issues": [],
+    "improvement": "Add the year to both dates in the summary so readers can place the updates without relying on the publication context."
+  },
+  "changes": "Changed title, summary, topic, claims. The original draft is retained unchanged.",
+  "cost_usd": 0.006685075,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38389982136",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-13T11:25:04Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.0017153
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-13T11:25:36Z",
+      "status": "needs_improvement",
+      "summary": "The artifact is readable, but it fails the trusted-source-extracts machine check. The claims are paraphrases, not exact extracts from the supplied source excerpts.",
+      "checks": [
+        "Both claims present factual paraphrases where the evidence requires exact short source excerpts.",
+        "The supplied evidence does not support treating the cargo mission and station proposal as equally recent: the first source was published Oct. 13, while the second was published Oct. 9."
+      ],
+      "cost_usd": 0.00157155
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-13T11:26:08Z",
+      "status": "passed",
+      "summary": "Changed title, summary, topic, claims. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.001709925
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-13T11:26:44Z",
+      "status": "passed",
+      "summary": "The final news item is clear, and both claims are exact excerpts of 25 words or fewer from the supplied NASA sources. The summary distinguishes the Oct. 13 cargo launch from the Oct. 9 proposal announcement. All supplied machine checks pass.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "trusted-source-extracts",
+          "passed": true,
+          "detail": "Each factual claim is an exact short extract from its supplied trusted source excerpt. This check proves source correspondence, not the source’s universal accuracy."
+        },
+        {
+          "id": "source-links",
+          "passed": true,
+          "detail": "Every HTTPS source link and title matches the trusted source record."
+        },
+        {
+          "id": "short-extracts",
+          "passed": true,
+          "detail": "No more than 25 quoted words per source."
+        },
+        {
+          "id": "source-diversity",
+          "passed": true,
+          "detail": "At least two independently identified source records."
+        }
+      ],
+      "cost_usd": 0.0016883
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-13T11:26:58.863Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}
