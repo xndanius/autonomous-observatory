@@ -1,0 +1,201 @@
+{
+  "id": "nightshift-song-38397401458-1",
+  "type": "song",
+  "title": "Reset Chime with a Breath",
+  "summary": "An 8-second triangle melody rises to a high note, pauses briefly, then descends to its opening pitch.",
+  "created_at": "2026-10-13T12:27:30.329Z",
+  "published_at": "2026-10-13T12:29:57.228Z",
+  "draft": {
+    "title": "Eight-Second Reset Chime",
+    "summary": "A gentle 8-second triangle melody: follow it up, then back to its opening pitch for a quick reset.",
+    "tempo_bpm": 120,
+    "instrument": "triangle",
+    "notes": [
+      {
+        "midi": 60,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 72,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 62,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 60,
+        "duration_beats": 2,
+        "rest": false
+      }
+    ],
+    "chords": []
+  },
+  "final": {
+    "title": "Reset Chime with a Breath",
+    "summary": "An 8-second triangle melody rises to a high note, pauses briefly, then descends to its opening pitch.",
+    "tempo_bpm": 120,
+    "instrument": "triangle",
+    "notes": [
+      {
+        "midi": 60,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 72,
+        "duration_beats": 1.5,
+        "rest": false
+      },
+      {
+        "midi": 72,
+        "duration_beats": 0.5,
+        "rest": true
+      },
+      {
+        "midi": 67,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 62,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 60,
+        "duration_beats": 2,
+        "rest": false
+      }
+    ],
+    "chords": []
+  },
+  "sources": [],
+  "draft_review": {
+    "passed": true,
+    "summary": "The bounded song passes all supplied machine checks. It lasts exactly 8 seconds at 120 BPM, has eight audible notes across five pitches, and its rising-then-falling melody returns to its opening pitch. The evidence supports that it is runnable with Play and Stop controls.",
+    "issues": [],
+    "improvement": "Add a brief rest after the highest note to make the turn from ascent to descent easier to hear while keeping the total duration at 8 seconds."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "The final chime is useful and understandable as a short reset cue: its melody rises, pauses at the peak, then returns to the opening pitch. Supplied deterministic checks pass, and the evidence supports that it is playable with Play and Stop controls. The total duration remains exactly 8 seconds at 120 BPM, with eight audible notes across five distinct pitches.",
+    "issues": [],
+    "improvement": "Make the breath audible by lengthening the rest after the high note and shortening another note by the same amount, keeping the total duration exactly 8 seconds."
+  },
+  "changes": "Changed title, summary, notes. The original draft is retained unchanged.",
+  "cost_usd": 0.006141825,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38397401458",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-13T12:28:08Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.00152105
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-13T12:28:42Z",
+      "status": "passed",
+      "summary": "The bounded song passes all supplied machine checks. It lasts exactly 8 seconds at 120 BPM, has eight audible notes across five pitches, and its rising-then-falling melody returns to its opening pitch. The evidence supports that it is runnable with Play and Stop controls.",
+      "checks": [],
+      "cost_usd": 0.0015413
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-13T12:29:10Z",
+      "status": "passed",
+      "summary": "Changed title, summary, notes. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.0015673
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-13T12:29:45Z",
+      "status": "passed",
+      "summary": "The final chime is useful and understandable as a short reset cue: its melody rises, pauses at the peak, then returns to the opening pitch. Supplied deterministic checks pass, and the evidence supports that it is playable with Play and Stop controls. The total duration remains exactly 8 seconds at 120 BPM, with eight audible notes across five distinct pitches.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "audible-length",
+          "passed": true,
+          "detail": "The composition lasts 8.00 seconds; allowed range 8–75."
+        },
+        {
+          "id": "melody",
+          "passed": true,
+          "detail": "At least eight audible notes and three different pitches."
+        },
+        {
+          "id": "chord-timing",
+          "passed": true,
+          "detail": "Every distinct-pitch chord finishes within the melody."
+        },
+        {
+          "id": "polyphony",
+          "passed": true,
+          "detail": "No more than three simultaneous chord events."
+        },
+        {
+          "id": "playable-web-audio",
+          "passed": true,
+          "detail": "Browser synthesizer uses bounded MIDI pitches, finite durations, a gain envelope and explicit Play/Stop."
+        }
+      ],
+      "cost_usd": 0.001512175
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-13T12:29:57.228Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}
