@@ -1,0 +1,155 @@
+{
+  "id": "nightshift-tool-38432695318-1",
+  "type": "tool",
+  "title": "Quick Box Count",
+  "summary": "Enter the total number of items and how many fit in each box; any partly filled box counts as one.",
+  "created_at": "2026-10-13T16:42:37.460Z",
+  "published_at": "2026-10-13T16:45:08.505Z",
+  "draft": {
+    "title": "Quick Box Count",
+    "summary": "Find the boxes needed for a shipment; any partly filled box counts as one.",
+    "chore": "packing-boxes",
+    "source": "ceil(x / y)",
+    "inputs": [
+      {
+        "name": "x",
+        "label": "Items",
+        "default": 17,
+        "min": 0,
+        "max": 1000000,
+        "step": 1
+      },
+      {
+        "name": "y",
+        "label": "Box capacity",
+        "default": 6,
+        "min": 1,
+        "max": 1000000,
+        "step": 1
+      }
+    ],
+    "result_label": "Boxes needed",
+    "decimals": 0
+  },
+  "final": {
+    "title": "Quick Box Count",
+    "summary": "Enter the total number of items and how many fit in each box; any partly filled box counts as one.",
+    "chore": "packing-boxes",
+    "source": "ceil(x / y)",
+    "inputs": [
+      {
+        "name": "x",
+        "label": "Items",
+        "default": 17,
+        "min": 0,
+        "max": 1000000,
+        "step": 1
+      },
+      {
+        "name": "y",
+        "label": "Box capacity",
+        "default": 6,
+        "min": 1,
+        "max": 1000000,
+        "step": 1
+      }
+    ],
+    "result_label": "Boxes needed",
+    "decimals": 0
+  },
+  "sources": [],
+  "draft_review": {
+    "passed": true,
+    "summary": "Quick Box Count is a clear, bounded tool for estimating shipment boxes. Its source uses valid arithmetic, and all reported machine checks and independent examples pass.",
+    "issues": [],
+    "improvement": "Add a short input instruction explaining that Items is the total item count and Box capacity is the number that fit in each box."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "Quick Box Count is understandable and useful for estimating shipment boxes. The executable source uses valid bounded arithmetic, and all reported machine checks and independent examples pass.",
+    "issues": [],
+    "improvement": "Add a concise example, such as 17 items with capacity 6 needing 3 boxes, to make the result easier to interpret."
+  },
+  "changes": "Changed summary. The original draft is retained unchanged.",
+  "cost_usd": 0.006073075,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38432695318",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-13T16:43:14Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.0015318
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-13T16:43:51Z",
+      "status": "passed",
+      "summary": "Quick Box Count is a clear, bounded tool for estimating shipment boxes. Its source uses valid arithmetic, and all reported machine checks and independent examples pass.",
+      "checks": [],
+      "cost_usd": 0.0014743
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-13T16:44:24Z",
+      "status": "passed",
+      "summary": "Changed summary. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.0015978
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-13T16:44:55Z",
+      "status": "passed",
+      "summary": "Quick Box Count is understandable and useful for estimating shipment boxes. The executable source uses valid bounded arithmetic, and all reported machine checks and independent examples pass.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "customer-inputs",
+          "passed": true,
+          "detail": "Inputs match the selected concrete customer chore."
+        },
+        {
+          "id": "input-domain",
+          "passed": true,
+          "detail": "Defaults and input ranges respect independently defined physical and numeric domains."
+        },
+        {
+          "id": "display-units",
+          "passed": true,
+          "detail": "Labels state canonical units; integer-result chores display whole counts/cents."
+        },
+        {
+          "id": "safe-expression",
+          "passed": true,
+          "detail": "Source parses as bounded arithmetic and uses only declared inputs."
+        },
+        {
+          "id": "independent-fixtures",
+          "passed": true,
+          "detail": "17/17 independently computed golden and edge/interior examples pass."
+        },
+        {
+          "id": "default-calculation",
+          "passed": true,
+          "detail": "The displayed defaults compute a finite real result."
+        }
+      ],
+      "cost_usd": 0.0014691749999999999
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-13T16:45:08.505Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}
