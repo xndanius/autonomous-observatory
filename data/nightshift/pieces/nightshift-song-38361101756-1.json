@@ -1,0 +1,196 @@
+{
+  "id": "nightshift-song-38361101756-1",
+  "type": "song",
+  "title": "Eight-Second Focus Chime",
+  "summary": "A gentle triangle melody for a quick reset: 8 notes across 8 seconds at 120 BPM, rising and settling back to its opening pitch. Adjust your device volume before playing.",
+  "created_at": "2026-10-13T07:11:34.599Z",
+  "published_at": "2026-10-13T07:14:20.011Z",
+  "draft": {
+    "title": "Eight-Second Focus Chime",
+    "summary": "A gentle triangle melody for a quick reset: 8 notes across 8 seconds at 120 BPM, rising and settling back to its opening pitch.",
+    "tempo_bpm": 120,
+    "instrument": "triangle",
+    "notes": [
+      {
+        "midi": 60,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 72,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 62,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 60,
+        "duration_beats": 2,
+        "rest": false
+      }
+    ],
+    "chords": []
+  },
+  "final": {
+    "title": "Eight-Second Focus Chime",
+    "summary": "A gentle triangle melody for a quick reset: 8 notes across 8 seconds at 120 BPM, rising and settling back to its opening pitch. Adjust your device volume before playing.",
+    "tempo_bpm": 120,
+    "instrument": "triangle",
+    "notes": [
+      {
+        "midi": 60,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 72,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 67,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 64,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 62,
+        "duration_beats": 2,
+        "rest": false
+      },
+      {
+        "midi": 60,
+        "duration_beats": 2,
+        "rest": false
+      }
+    ],
+    "chords": []
+  },
+  "sources": [],
+  "draft_review": {
+    "passed": true,
+    "summary": "The bounded song is understandable and runnable from the supplied evidence. Its eight audible notes span four pitches, and 16 beats at 120 BPM gives the stated 8-second duration. All machine checks pass.",
+    "issues": [],
+    "improvement": "Add a volume control so listeners can adjust the chime level before playing."
+  },
+  "final_review": {
+    "passed": true,
+    "summary": "The chime is understandable and runnable from the supplied evidence. Its eight audible notes use four distinct pitches, and 16 beats at 120 BPM gives the stated 8-second duration. All machine checks pass. The final summary adds a clear device-volume instruction.",
+    "issues": [],
+    "improvement": "Consider adding an in-player volume control so listeners can adjust the chime without changing their device volume."
+  },
+  "changes": "Changed summary. The original draft is retained unchanged.",
+  "cost_usd": 0.006332325,
+  "cost_accounting": "Estimated from actual CLI token counters; not an invoice",
+  "run_url": "https://github.com/xndanius/autonomous-observatory/actions/runs/38361101756",
+  "steps": [
+    {
+      "stage": "draft",
+      "at": "2026-10-13T07:12:11Z",
+      "status": "passed",
+      "summary": "Original composition/configuration prepared.",
+      "checks": [],
+      "cost_usd": 0.00155905
+    },
+    {
+      "stage": "check",
+      "at": "2026-10-13T07:12:43Z",
+      "status": "passed",
+      "summary": "The bounded song is understandable and runnable from the supplied evidence. Its eight audible notes span four pitches, and 16 beats at 120 BPM gives the stated 8-second duration. All machine checks pass.",
+      "checks": [],
+      "cost_usd": 0.0015066749999999999
+    },
+    {
+      "stage": "improvement",
+      "at": "2026-10-13T07:13:27Z",
+      "status": "passed",
+      "summary": "Changed summary. The original draft is retained unchanged.",
+      "checks": [],
+      "cost_usd": 0.001721675
+    },
+    {
+      "stage": "final_check",
+      "at": "2026-10-13T07:14:06Z",
+      "status": "passed",
+      "summary": "The chime is understandable and runnable from the supplied evidence. Its eight audible notes use four distinct pitches, and 16 beats at 120 BPM gives the stated 8-second duration. All machine checks pass. The final summary adds a clear device-volume instruction.",
+      "checks": [
+        {
+          "id": "bounded-payload",
+          "passed": true,
+          "detail": "Only documented bounded data fields are present."
+        },
+        {
+          "id": "audible-length",
+          "passed": true,
+          "detail": "The composition lasts 8.00 seconds; allowed range 8–75."
+        },
+        {
+          "id": "melody",
+          "passed": true,
+          "detail": "At least eight audible notes and three different pitches."
+        },
+        {
+          "id": "chord-timing",
+          "passed": true,
+          "detail": "Every distinct-pitch chord finishes within the melody."
+        },
+        {
+          "id": "polyphony",
+          "passed": true,
+          "detail": "No more than three simultaneous chord events."
+        },
+        {
+          "id": "playable-web-audio",
+          "passed": true,
+          "detail": "Browser synthesizer uses bounded MIDI pitches, finite durations, a gain envelope and explicit Play/Stop."
+        }
+      ],
+      "cost_usd": 0.001544925
+    },
+    {
+      "stage": "publish",
+      "at": "2026-10-13T07:14:20.011Z",
+      "status": "published",
+      "summary": "Protected publication and exact public read-back.",
+      "cost_usd": 0,
+      "checks": []
+    }
+  ]
+}
