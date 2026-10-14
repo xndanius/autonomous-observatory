@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "phase": "active",
+  "phase": "paused",
   "attempt_count": 35,
   "published_count": 20,
   "next_piece_at": "2026-10-13T20:57:18.192Z",
@@ -15,5 +15,7 @@
   ],
   "rebuild_approved_at": "2026-10-12T11:34:17Z",
   "bootstrap_commissioned_at": "2026-10-12T12:06:36.448822+00:00",
-  "last_attempt_at": "2026-10-13T19:57:18.192Z"
+  "last_attempt_at": "2026-10-13T19:57:18.192Z",
+  "retired_at": "2026-10-14T04:41:54.931625+00:00",
+  "retired_reason": "Danielius closed this as a failed experiment on 14 October 2026. Do not restart without his new explicit instruction."
 }

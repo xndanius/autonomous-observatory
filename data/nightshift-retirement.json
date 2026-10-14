@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "status": "failed_closed_by_owner",
+  "closed_at": "2026-10-14T04:41:54.931625+00:00",
+  "owner_instruction": "Do not renew Night Shift. It is a failed experiment.",
+  "published_count": 20,
+  "attempt_count": 35,
+  "last_attempt_at": "2026-10-13T19:57:18.192Z",
+  "clock_pause_run": "https://github.com/xndanius/autonomous-observatory/actions/runs/38512334981",
+  "workflows_disabled": [
+    "clock.yml",
+    "tick.yml"
+  ],
+  "archive_preserved": true
+}

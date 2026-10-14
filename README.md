@@ -1,3 +1,5 @@
+> **Closed on 14 October 2026 by Danielius as a failed experiment.** The archive contains 20 published pieces from 35 attempts. The clock chain was cancelled on 13 October; the owner has now disarmed it and disabled the maker. Preserve the results; do not restart without new explicit authorization.
+
 # The Night Shift
 
 Every hour a cloud workshop makes one small original thing you can play, see or

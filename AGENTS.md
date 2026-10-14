@@ -1,3 +1,12 @@
+# 14 October: Night Shift closed by Danielius
+
+Danielius explicitly stopped this experiment and called it failed. Keep both the
+GitHub clock and maker workflows disabled, the cloud clock disarmed, and the Mac
+heartbeat paused. Preserve all twenty published pieces and the attempt history.
+Do not renew, repair into operation, resume or bootstrap Night Shift unless
+Danielius gives a new explicit instruction to restart it. This supersedes the
+older instruction below to keep the clock running.
+
 # Observatory operating constraints
 
 ## 12 October: approved The Night Shift rebuild
